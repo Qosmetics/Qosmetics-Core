@@ -10,7 +10,7 @@ namespace Qosmetics::Core::Redecoration
         /// @param contract the prefab contract (field name w/o underscore prefix!)
         /// @param priority the priority of this redecoration
         /// @param chain whether to continue chaining after this redecoration, following priority
-        Registration(std::string contract, int priority = 0, bool chain = true) : contract(contract), priority(priority), chain(chain){};
+        Registration(std::string contract, int priority = 0) : contract(contract), priority(priority){};
 
         /// @brief the method that will be called when this registration is used
         /// @param prefab the object to redecorate
@@ -19,9 +19,9 @@ namespace Qosmetics::Core::Redecoration
 
         virtual void Register() const = 0;
 
-        bool get_chain() const { return chain; }
         int get_priority() const { return priority; }
         std::string get_contract() const { return contract; }
+        virtual bool get_chain() const = 0;
         virtual System::Type* get_prefabType() const = 0;
         virtual System::Type* get_containerType() const = 0;
 
@@ -53,7 +53,7 @@ REDECORATION_REGISTRATION(saberModelControllerPrefab, 10, true, GlobalNamespace:
 #define REDECORATION_REGISTRATION(contract_, priority_, chain_, prefabType_, containerType_)                                                                                \
     struct redecoration_registration_##contract_##priority_ : public Qosmetics::Core::Redecoration::Registration                                                            \
     {                                                                                                                                                                       \
-        redecoration_registration_##contract_##priority_() : Registration(#contract_, nullptr, nullptr priority_, chain_)                                                   \
+        redecoration_registration_##contract_##priority_() : Registration(#contract_, priority_)                                                                            \
         {                                                                                                                                                                   \
             Qosmetics::Core::Redecoration::Register(this);                                                                                                                  \
         }                                                                                                                                                                   \
@@ -62,6 +62,7 @@ REDECORATION_REGISTRATION(saberModelControllerPrefab, 10, true, GlobalNamespace:
         {                                                                                                                                                                   \
             return redecoration_registration_##contract_##priority_::Redecorate(reinterpret_cast<prefabType_>(contract_));                                                  \
         }                                                                                                                                                                   \
+        bool get_chain() const override { return chain_; }                                                                                                                  \
         System::Type* get_prefabType() const override { return csTypeOf(prefabType_); }                                                                                     \
         System::Type* get_containerType() const override { return csTypeOf(containerType_); }                                                                               \
     };                                                                                                                                                                      \
