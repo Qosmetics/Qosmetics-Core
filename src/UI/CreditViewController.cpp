@@ -112,7 +112,7 @@ namespace Qosmetics::Core
             patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
             auto placeholderText = CreateText(patronTexts->get_transform(), "Fetching patreon supporters...");
 
-            StartCoroutine(reinterpret_cast<System::Collections::IEnumerator*>(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters())));
+            StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters()));
         }
     }
 
