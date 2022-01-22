@@ -24,7 +24,7 @@
     UnityEngine::Object::Instantiate(identifier, parent_clone_##identifier->get_transform());                                       \
     auto type_##identifier = il2cpp_utils::GetSystemType(il2cpp_utils::ExtractType(identifier->klass));                             \
     auto clone_##identifier = parent_clone_##identifier->GetComponentsInChildren(type_##identifier)[0];                             \
-    clone_##identifier->set_name(identifier->get_name());                                                                           \
+    clone_##identifier->get_gameObject()->set_name(identifier->get_name());                                                         \
     reinterpret_cast<UnityEngine::Component*&>(self->dyn__##identifier()) = clone_##identifier;                                     \
     self->dyn__##identifier()->get_gameObject()->SetActive(true)
 
