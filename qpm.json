@@ -5,7 +5,7 @@
     "name": "Qosmetics Core",
     "id": "qosmetics-core",
     "version": "0.1.0",
-    "url": null,
+    "url": "https://github.com/Qosmetics/Qosmetics-Core",
     "additionalData": {
       "overrideSoName": "libqosmetics-core.so"
     }
