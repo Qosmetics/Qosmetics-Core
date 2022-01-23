@@ -17,8 +17,6 @@ namespace Qosmetics::Core::Redecoration
         /// @return the redecorated object (should be the same object)
         virtual Il2CppObject* Redecorate(Il2CppObject* prefab) const = 0;
 
-        virtual void Register() const = 0;
-
         int get_priority() const { return priority; }
         std::string get_contract() const { return contract; }
         virtual bool get_chain() const = 0;
@@ -50,22 +48,22 @@ REDECORATION_REGISTRATION(saberModelControllerPrefab, 10, true, GlobalNamespace:
     return saberModelControllerPrefab;
 }
 */
-#define REDECORATION_REGISTRATION(contract_, priority_, chain_, prefabType_, containerType_)                                                                                \
-    struct redecoration_registration_##contract_##priority_ : public Qosmetics::Core::Redecoration::Registration                                                            \
-    {                                                                                                                                                                       \
-        redecoration_registration_##contract_##priority_() : Registration(#contract_, priority_)                                                                            \
-        {                                                                                                                                                                   \
-            Qosmetics::Core::Redecoration::Register(this);                                                                                                                  \
-        }                                                                                                                                                                   \
-        prefabType_ Redecorate(prefabType_ contract_) const;                                                                                                                \
-        Il2CppObject* Redecorate(Il2CppObject* contract_) const override                                                                                                    \
-        {                                                                                                                                                                   \
-            return redecoration_registration_##contract_##priority_::Redecorate(reinterpret_cast<prefabType_>(contract_));                                                  \
-        }                                                                                                                                                                   \
-        bool get_chain() const override { return chain_; }                                                                                                                  \
-        System::Type* get_prefabType() const override { return csTypeOf(prefabType_); }                                                                                     \
-        System::Type* get_containerType() const override { return csTypeOf(containerType_); }                                                                               \
-    };                                                                                                                                                                      \
-    static redecoration_registration_##contract_##priority_ redecoration_registration_##contract_##priority_ Instance = redecoration_registration_##contract_##priority_(); \
+#define REDECORATION_REGISTRATION(contract_, priority_, chain_, prefabType_, containerType_)                                                                                 \
+    struct redecoration_registration_##contract_##priority_ : public Qosmetics::Core::Redecoration::Registration                                                             \
+    {                                                                                                                                                                        \
+        redecoration_registration_##contract_##priority_() : Registration(#contract_, priority_)                                                                             \
+        {                                                                                                                                                                    \
+            Qosmetics::Core::Redecoration::Register(this);                                                                                                                   \
+        }                                                                                                                                                                    \
+        prefabType_ Redecorate(prefabType_ contract_) const;                                                                                                                 \
+        Il2CppObject* Redecorate(Il2CppObject* contract_) const override                                                                                                     \
+        {                                                                                                                                                                    \
+            return redecoration_registration_##contract_##priority_::Redecorate(reinterpret_cast<prefabType_>(contract_));                                                   \
+        }                                                                                                                                                                    \
+        bool get_chain() const override { return chain_; }                                                                                                                   \
+        System::Type* get_prefabType() const override { return csTypeOf(prefabType_); }                                                                                      \
+        System::Type* get_containerType() const override { return csTypeOf(containerType_); }                                                                                \
+    };                                                                                                                                                                       \
+    static redecoration_registration_##contract_##priority_ redecoration_registration_##contract_##priority_##Instance = redecoration_registration_##contract_##priority_(); \
     prefabType_ redecoration_registration_##contract_##priority_::Redecorate(prefabType_) const
 #endif
