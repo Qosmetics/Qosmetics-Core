@@ -43,7 +43,9 @@
     {
       "id": "zip",
       "versionRange": "^1.7.4",
-      "additionalData": {}
+      "additionalData": {
+        "private": true
+      }
     }
   ],
   "additionalData": {}
