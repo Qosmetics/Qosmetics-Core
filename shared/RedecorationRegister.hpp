@@ -65,5 +65,5 @@ REDECORATION_REGISTRATION(saberModelControllerPrefab, 10, true, GlobalNamespace:
         System::Type* get_containerType() const override { return csTypeOf(containerType_); }                                                                                \
     };                                                                                                                                                                       \
     static redecoration_registration_##contract_##priority_ redecoration_registration_##contract_##priority_##Instance = redecoration_registration_##contract_##priority_(); \
-    prefabType_ redecoration_registration_##contract_##priority_::Redecorate(prefabType_) const
+    prefabType_ redecoration_registration_##contract_##priority_::Redecorate(prefabType_ contract_) const
 #endif
