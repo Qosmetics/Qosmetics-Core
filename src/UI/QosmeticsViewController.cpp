@@ -1,4 +1,5 @@
 #include "UI/QosmeticsViewController.hpp"
+#include "logging.hpp"
 
 #include "FlowCoordinatorRegister_Internal.hpp"
 #include "HMUI/ViewController_AnimationDirection.hpp"
@@ -32,7 +33,7 @@ namespace Qosmetics::Core
                 }
             }
 
-            flowCoordinators = Array<HMUI::FlowCoordinator*>::NewLength(registrations.size());
+            flowCoordinators = ArrayW<HMUI::FlowCoordinator*>(registrations.size());
             for (auto& ptr : flowCoordinators)
                 ptr = nullptr;
         }
@@ -47,11 +48,14 @@ namespace Qosmetics::Core
             auto* fcType = reg->get_flowCoordinatorType();
             if (fcType == type)
             {
+                DEBUG("Found the correct object");
                 if (flowCoordinators[i] == nullptr)
                 {
+                    DEBUG("Creating flowcoordinator");
                     flowCoordinators[i] = CreateFlowCoordinator(fcType);
                 }
 
+                DEBUG("Presenting %p on parent %p", flowCoordinators[i], qosmeticsFlowCoordinator);
                 qosmeticsFlowCoordinator->PresentFlowCoordinator(flowCoordinators[i], nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
 
                 break;

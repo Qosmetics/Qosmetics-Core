@@ -26,7 +26,6 @@ namespace Qosmetics::Core::Redecoration
         bool operator<(const Registration& rhs) const;
 
     private:
-        bool chain;
         int priority;
         std::string contract;
     };
