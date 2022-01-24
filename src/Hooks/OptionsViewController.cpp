@@ -1,10 +1,10 @@
 #include "UI/QosmeticsFlowCoordinator.hpp"
+#include "assets.hpp"
 #include "hooks.hpp"
 #include "logging.hpp"
 #include "questui/shared/ArrayUtil.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 #include "questui/shared/QuestUI.hpp"
-#include "sprites.hpp"
 
 #include "GlobalNamespace/OptionsViewController.hpp"
 #include "HMUI/ViewController_AnimationDirection.hpp"
@@ -65,7 +65,7 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
 
         button->get_onClick()->AddListener(il2cpp_utils::MakeDelegate<UnityEngine::Events::UnityAction*>(classof(UnityEngine::Events::UnityAction*), (Il2CppObject*)nullptr, PresentQosmeticsFlowCoordinator));
 
-        SetButtonSprites(button, Base64ToSprite(qosmetics_inactive), Base64ToSprite(qosmetics_active));
+        SetButtonSprites(button, VectorToSprite(std::vector<uint8_t>(MenuIcon_png::getData(), MenuIcon_png::getData() + MenuIcon_png::getLength())), VectorToSprite(std::vector<uint8_t>(MenuIconSelected_png::getData(), MenuIconSelected_png::getData() + MenuIconSelected_png::getLength())));
 
         UnityEngine::Object::Destroy(button->GetComponentInChildren<Polyglot::LocalizedTextMeshProUGUI*>());
 
