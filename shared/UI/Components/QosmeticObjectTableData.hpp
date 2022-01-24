@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Data/Descriptor.hpp"
+#include "../../Data/Descriptor.hpp"
 #include "DeletionConfirmationModal.hpp"
 #include "HMUI/TableCell.hpp"
 #include "HMUI/TableView.hpp"
@@ -9,11 +9,10 @@
 #include "custom-types/shared/macros.hpp"
 #include <functional>
 
-#define GET_FIND_METHOD(mPtr) \
-    il2cpp_utils::il2cpp_type_check::MetadataGetter<mPtr>::get()
-
+#ifndef DECLARE_OVERRIDE_METHOD_MATCH
 #define DECLARE_OVERRIDE_METHOD_MATCH(retval, method, mptr, ...) \
     DECLARE_OVERRIDE_METHOD(retval, method, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
+#endif
 
 ___DECLARE_TYPE_WRAPPER_INHERITANCE(Qosmetics::Core, QosmeticObjectTableData, Il2CppTypeEnum::IL2CPP_TYPE_CLASS, UnityEngine::MonoBehaviour, "Qosmetics::Core", {classof(HMUI::TableView::IDataSource*)}, 0, nullptr,
 
