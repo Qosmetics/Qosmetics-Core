@@ -29,16 +29,16 @@ namespace Qosmetics::Core::FlowCoordinator
 /// {
 ///     return std::make_pair(QuestUI::BeatSaberUI::Base64ToSprite(saber_inactive), QuestUI::BeatSaberUI::Base64ToSprite(saber_active));
 /// }
-#define QOSMETICS_FLOWCOORDINATOR_REGISTER(name_, typename)                                                                              \
-    struct flowcoordinator_registration_##name_ : public Qosmetics::Core::FlowCoordinator::Registration                                  \
-    {                                                                                                                                    \
-        flowcoordinator_registration_##name_() : Qosmetics::Core::FlowCoordinator::Registration(#name_)                                  \
-        {                                                                                                                                \
-            Qosmetics::Core::FlowCoordinator::Register(this);                                                                            \
-        }                                                                                                                                \
-        System::Type* get_flowCoordinatorType() const override { return csTypeOf(typename); }                                            \
-        std::pair<UnityEngine::Sprite*, UnityEngine::Sprite*> get_sprites();                                                             \
-    };                                                                                                                                   \
-    static flowcoordinator_registration_##name_ flowcoordinator_registration_##name_ _Instance = flowcoordinator_registration_##name_(); \
-    std::pair<UnityEngine::Sprite*, UnityEngine::Sprite*> get_sprites() const
+#define QOSMETICS_FLOWCOORDINATOR_REGISTER(name_, typename)                                                                               \
+    struct flowcoordinator_registration_##name_ : public Qosmetics::Core::FlowCoordinator::Registration                                   \
+    {                                                                                                                                     \
+        flowcoordinator_registration_##name_() : Qosmetics::Core::FlowCoordinator::Registration(#name_)                                   \
+        {                                                                                                                                 \
+            Qosmetics::Core::FlowCoordinator::Register(this);                                                                             \
+        }                                                                                                                                 \
+        System::Type* get_flowCoordinatorType() const override { return csTypeOf(typename); }                                             \
+        std::pair<UnityEngine::Sprite*, UnityEngine::Sprite*> get_sprites() const override;                                               \
+    };                                                                                                                                    \
+    static flowcoordinator_registration_##name_ flowcoordinator_registration_##name_##_Instance = flowcoordinator_registration_##name_(); \
+    std::pair<UnityEngine::Sprite*, UnityEngine::Sprite*> flowcoordinator_registration_##name_::get_sprites() const
 #endif
