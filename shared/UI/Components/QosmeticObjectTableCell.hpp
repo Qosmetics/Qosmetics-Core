@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Data/Descriptor.hpp"
+#include "../../Data/Descriptor.hpp"
+#include "DeletionConfirmationModal.hpp"
 #include "HMUI/HoverHint.hpp"
 #include "HMUI/TableCell.hpp"
+#include "QosmeticObjectTableData.hpp"
 #include "TMPro/TextMeshProUGUI.hpp"
-#include "UI/Components/DeletionConfirmationModal.hpp"
-#include "UI/Components/QosmeticObjectTableData.hpp"
 #include "custom-types/shared/macros.hpp"
 #include <functional>
 

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Data/Descriptor.hpp"
+#include "DeletionConfirmationModal.hpp"
 #include "HMUI/TableCell.hpp"
 #include "HMUI/TableView.hpp"
 #include "HMUI/TableView_IDataSource.hpp"
-#include "UI/Components/DeletionConfirmationModal.hpp"
 #include "UnityEngine/MonoBehaviour.hpp"
 #include "custom-types/shared/macros.hpp"
 #include <functional>
