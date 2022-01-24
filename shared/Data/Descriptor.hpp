@@ -5,6 +5,7 @@
 
 namespace Qosmetics::Core
 {
+    struct DescriptorComparator;
     class Descriptor
     {
     public:
@@ -13,15 +14,25 @@ namespace Qosmetics::Core
         Descriptor(const rapidjson::Value& val, std::string_view filePath);
         Descriptor(const rapidjson::Value& val);
 
-        std::string_view get_author();
-        std::string_view get_name();
-        std::string_view get_description();
-        std::string_view get_filePath();
+        std::string_view get_author() const;
+        std::string_view get_name() const;
+        std::string_view get_description() const;
+        std::string_view get_filePath() const;
 
     private:
         std::string author = "";
         std::string name = "";
         std::string description = "";
         std::string filePath = "";
+
+        friend DescriptorComparator;
+    };
+
+    struct DescriptorComparator
+    {
+        bool operator()(const Descriptor& lhs, const Descriptor& rhs) const
+        {
+            return lhs.name < rhs.name;
+        }
     };
 }

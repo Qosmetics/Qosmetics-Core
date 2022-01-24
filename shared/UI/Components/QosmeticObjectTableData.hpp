@@ -8,6 +8,7 @@
 #include "UnityEngine/MonoBehaviour.hpp"
 #include "custom-types/shared/macros.hpp"
 #include <functional>
+#include <set>
 
 #ifndef DECLARE_OVERRIDE_METHOD_MATCH
 #define DECLARE_OVERRIDE_METHOD_MATCH(retval, method, mptr, ...) \
@@ -16,6 +17,7 @@
 
 ___DECLARE_TYPE_WRAPPER_INHERITANCE(Qosmetics::Core, QosmeticObjectTableData, Il2CppTypeEnum::IL2CPP_TYPE_CLASS, UnityEngine::MonoBehaviour, "Qosmetics::Core", {classof(HMUI::TableView::IDataSource*)}, 0, nullptr,
 
+                                    DECLARE_INSTANCE_FIELD(HMUI::TableView*, tableView);
                                     DECLARE_INSTANCE_FIELD(Il2CppString*, reuseIdentifier);
                                     DECLARE_INSTANCE_FIELD(float, cellSize);
                                     DECLARE_INSTANCE_FIELD(DeletionConfirmationModal*, deletionConfirmationModal);
@@ -26,14 +28,9 @@ ___DECLARE_TYPE_WRAPPER_INHERITANCE(Qosmetics::Core, QosmeticObjectTableData, Il
                                     DECLARE_OVERRIDE_METHOD_MATCH(float, CellSize, &HMUI::TableView::IDataSource::CellSize);
                                     DECLARE_OVERRIDE_METHOD_MATCH(int, NumberOfCells, &HMUI::TableView::IDataSource::NumberOfCells);
 
-                                    void Refresh();
-
-                                    std::function<HMUI::TableCell*(HMUI::TableView* tableView, int idx)> getCellForIdx = nullptr;
-                                    std::function<void()> refresh = nullptr;
-
-                                    private
+                                    public
                                     :
 
-                                    std::vector<Descriptor> objectDescriptors = {};
+                                    std::set<Descriptor, DescriptorComparator> objectDescriptors = {};
 
 )

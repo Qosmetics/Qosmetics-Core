@@ -26,8 +26,6 @@ namespace Qosmetics::Core
     QosmeticObjectTableData::CellForIdx(
         HMUI::TableView* tableView, int idx)
     {
-        if (getCellForIdx(tableView, idx)) return getCellForIdx(tableView, idx);
-
         auto tableCell = reinterpret_cast<QosmeticObjectTableCell*>(tableView->DequeueReusableCellForIdentifier(reuseIdentifier));
 
         if (!tableCell)
@@ -39,13 +37,8 @@ namespace Qosmetics::Core
         tableCell->tableData = this;
         tableCell->deletionConfirmationModal = deletionConfirmationModal;
         tableCell->set_reuseIdentifier(reuseIdentifier);
-        tableCell->SetDescriptor(objectDescriptors[idx]);
+        tableCell->SetDescriptor(*std::next(objectDescriptors.begin(), idx));
 
         return tableCell;
-    }
-
-    void QosmeticObjectTableData::Refresh()
-    {
-        if (refresh) refresh();
     }
 }

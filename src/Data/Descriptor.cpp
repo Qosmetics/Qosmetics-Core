@@ -22,9 +22,9 @@ namespace Qosmetics::Core
         filePath = val["filePath"].GetString();
     }
 
-    std::string_view Descriptor::get_author() { return author; }
-    std::string_view Descriptor::get_name() { return name; }
-    std::string_view Descriptor::get_description() { return description; }
-    std::string_view Descriptor::get_filePath() { return filePath; }
+    std::string_view Descriptor::get_author() const { return author; }
+    std::string_view Descriptor::get_name() const { return name; }
+    std::string_view Descriptor::get_description() const { return description; }
+    std::string_view Descriptor::get_filePath() const { return filePath; }
 
 }
