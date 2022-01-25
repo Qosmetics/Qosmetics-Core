@@ -9,7 +9,7 @@ namespace Qosmetics::Core::Config
         std::string memberName;
 
         // Serialize your config values into the passed member, it already will have your memberName so you just have to add to it
-        virtual void SaveConfig(const rapidjson::Value& member, rapidjson::Document::AllocatorType& allocator) const = 0;
+        virtual void SaveConfig(rapidjson::Value& member, rapidjson::Document::AllocatorType& allocator) const = 0;
         // Deserialize your config values from the passed member
         virtual bool LoadConfig(const rapidjson::Value& member) const = 0;
         // Method that is ran when the profile is changed in the user profile switcher, this is seperate because config load shouldn't trigger certain things
@@ -24,7 +24,7 @@ namespace Qosmetics::Core::Config
 /// example usage:
 /// struct SaberPlayerConfigRegistration : public Qosmetics::Core::Config::Registration
 /// {
-///     void SaveConfig(const rapidjson::Value& member) const override
+///     void SaveConfig(rapidjson::Value& member, rapidjson::Document::AllocatorType& allocator) const override
 ///     {
 ///         /// do stuff here to serialize your config into the passed member
 ///     }
@@ -40,10 +40,10 @@ namespace Qosmetics::Core::Config
 ///     }
 /// };
 /// QOSMETICS_CONFIG(SaberPlayerConfigRegistration, "saberConfig");
-#define QOSMETICS_CONFIG(typename_, memberName_)                     \
+#define QOSMETICS_CONFIG_REGISTER(typename_, memberName_)            \
     struct config_registration_##typename : public typename_         \
     {                                                                \
         config_registration_##typename() : typename_(memberName_){}; \
-    }                                                                \
-    static config_registration_##typename config_registration_##typename _Instance = config_registration_##typename()
+    };                                                               \
+    static config_registration_##typename config_registration_##typename##_Instance = config_registration_##typename()
 #endif
