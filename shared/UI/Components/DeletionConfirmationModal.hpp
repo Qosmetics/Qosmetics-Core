@@ -16,6 +16,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, DeletionConfirmationModal, HMUI::ModalVie
                       void Show(QosmeticObjectTableCell* cellToDelete);
                       void Dismiss();
                       void Confirm();
+                      void Setup();
 
                       QosmeticObjectTableCell * currentCell;
 

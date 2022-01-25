@@ -38,6 +38,10 @@ namespace Qosmetics::Core
         tableCell->deletionConfirmationModal = deletionConfirmationModal;
         tableCell->set_reuseIdentifier(reuseIdentifier);
         tableCell->SetDescriptor(*std::next(objectDescriptors.begin(), idx));
+        if (onSelect)
+            tableCell->onSelect = onSelect;
+        if (onDelete)
+            tableCell->onDelete = onDelete;
 
         return tableCell;
     }

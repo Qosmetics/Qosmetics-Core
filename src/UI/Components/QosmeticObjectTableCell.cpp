@@ -54,7 +54,7 @@ namespace Qosmetics::Core
 
         auto layout = cellHorizontal->get_gameObject()->GetComponent<LayoutElement*>();
         layout->set_preferredHeight(12.0f);
-        layout->set_preferredWidth(200.0f);
+        layout->set_preferredWidth(100.0f);
 
         auto t = get_transform();
 
@@ -67,15 +67,16 @@ namespace Qosmetics::Core
 
         auto buttonHorizontal = CreateHorizontalLayoutGroup(cellHorizontal->get_transform());
 
-        auto selectBtn = CreateUIButton(buttonHorizontal->get_transform(), "Select", Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
-        auto deleteBtn = CreateUIButton(buttonHorizontal->get_transform(), "Delete", Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
+        auto selectBtn = CreateUIButton(buttonHorizontal->get_transform(), "Select", Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
+        auto deleteBtn = CreateUIButton(buttonHorizontal->get_transform(), "Delete", Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
 
         hover = AddHoverHint(get_gameObject(), "---");
     }
 
     void QosmeticObjectTableCell::Select()
     {
-        if (onSelect) onSelect(this);
+        if (onSelect)
+            onSelect(this);
     }
 
     void QosmeticObjectTableCell::AttemptDelete()
@@ -85,7 +86,8 @@ namespace Qosmetics::Core
 
     void QosmeticObjectTableCell::Delete()
     {
-        if (onDelete) onDelete(this);
+        if (onDelete)
+            onDelete(this);
     }
 
     void QosmeticObjectTableCell::SetDescriptor(Descriptor descriptor)

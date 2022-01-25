@@ -10,10 +10,11 @@ namespace Qosmetics::Core
     class Manifest
     {
     public:
-        Manifest(std::string filePath) : filePath(filePath)
+        Manifest(std::string_view filePath) : filePath(filePath)
         {
             std::vector<uint8_t> data = {};
-            if (!ZipUtils::GetBytesFromZipFile(filePath, "package.json", data)) return;
+            if (!ZipUtils::GetBytesFromZipFile(filePath, "package.json", data))
+                return;
             rapidjson::Document d;
             d.Parse((char*)data.data(), data.size());
 

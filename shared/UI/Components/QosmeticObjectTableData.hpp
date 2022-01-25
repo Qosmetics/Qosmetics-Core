@@ -31,6 +31,8 @@ ___DECLARE_TYPE_WRAPPER_INHERITANCE(Qosmetics::Core, QosmeticObjectTableData, Il
                                     public
                                     :
 
+                                    std::function<void(HMUI::TableCell*)> onSelect = nullptr;
+                                    std::function<void(HMUI::TableCell*)> onDelete = nullptr;
                                     std::set<Descriptor, DescriptorComparator> objectDescriptors = {};
 
 )
