@@ -5,7 +5,7 @@ namespace Qosmetics::Core::Config
 {
     struct Registration
     {
-        Registration(std::string memberName) : memberName(memberName){};
+        Registration(std::string_view memberName) : memberName(memberName){};
         std::string memberName;
 
         // Serialize your config values into the passed member, it already will have your memberName so you just have to add to it
