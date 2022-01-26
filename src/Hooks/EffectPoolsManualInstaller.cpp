@@ -7,7 +7,7 @@
 #include "GlobalNamespace/EffectPoolsManualInstaller.hpp"
 #include "GlobalNamespace/NoteDebris.hpp"
 
-#include "Zenject/Dicontainer.hpp"
+#include "Zenject/DiContainer.hpp"
 
 MAKE_AUTO_HOOK_ORIG_MATCH(EffectPoolsManualInstaller_ManualInstallBindings, &GlobalNamespace::EffectPoolsManualInstaller::ManualInstallBindings, void, GlobalNamespace::EffectPoolsManualInstaller* self, Zenject::DiContainer* container, bool shortBeatEffect)
 {
