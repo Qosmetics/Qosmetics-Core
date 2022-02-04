@@ -1,6 +1,7 @@
 #include "Utils/ZipUtils.hpp"
 #include "beatsaber-hook/shared/utils/utils.h"
 #include "logging.hpp"
+#include "zip/shared/zip.h"
 
 namespace Qosmetics::Core::ZipUtils
 {

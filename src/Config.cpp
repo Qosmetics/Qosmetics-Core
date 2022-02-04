@@ -60,10 +60,15 @@ namespace Qosmetics::Core::Config
             return false;
         }
 
+        DEBUG("Had %lu config registrations:", registrations.size());
         for (auto* reg : registrations)
-            if (!reg->LoadConfig(doc))
+        {
+            DEBUG("loading %s", reg->memberName.c_str());
+            auto valItr = doc.FindMember(reg->memberName);
+            // if member not found or couldn't properly load config, something failed
+            if (valItr == doc.MemberEnd() || !reg->LoadConfig(valItr->value))
                 foundEverything = false;
-
+        }
         return foundEverything;
     }
 
@@ -92,8 +97,10 @@ namespace Qosmetics::Core::Config
         }
 
         rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+        DEBUG("Had %lu config registrations:", registrations.size());
         for (auto* reg : registrations)
         {
+            DEBUG("saving %s", reg->memberName.c_str());
             auto memberItr = doc.FindMember(reg->memberName);
             if (memberItr == doc.MemberEnd())
             {

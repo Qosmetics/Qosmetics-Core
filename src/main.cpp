@@ -8,6 +8,7 @@
 #include "HMUI/CurvedTextMeshPro.hpp"
 #include "HMUI/ImageView.hpp"
 
+#include "ConfigRegister_Internal.hpp"
 ModInfo modInfo = {ID, VERSION};
 
 extern "C" void setup(ModInfo& info)
@@ -17,6 +18,8 @@ extern "C" void setup(ModInfo& info)
 
 extern "C" void load()
 {
+    if (!Qosmetics::Core::Config::LoadConfig())
+        Qosmetics::Core::Config::SaveConfig();
     il2cpp_functions::Class_Init(classof(HMUI::ImageView*));
     il2cpp_functions::Class_Init(classof(HMUI::CurvedTextMeshPro*));
 

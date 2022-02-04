@@ -17,6 +17,9 @@ namespace Qosmetics::Core::Config
     };
 
     void Register(const Registration* registration);
+
+    /// @brief Make Qosmetics save it's config for the current user
+    void SaveConfig();
 }
 
 #ifndef QOSMETICS_CONFIG
@@ -40,10 +43,13 @@ namespace Qosmetics::Core::Config
 ///     }
 /// };
 /// QOSMETICS_CONFIG(SaberPlayerConfigRegistration, "saberConfig");
-#define QOSMETICS_CONFIG_REGISTER(typename_, memberName_)            \
-    struct config_registration_##typename : public typename_         \
-    {                                                                \
-        config_registration_##typename() : typename_(memberName_){}; \
-    };                                                               \
+#define QOSMETICS_CONFIG_REGISTER(typename_, memberName_)         \
+    struct config_registration_##typename : public typename_      \
+    {                                                             \
+        config_registration_##typename() : typename_(memberName_) \
+        {                                                         \
+            Qosmetics::Core::Config::Register(this);              \
+        };                                                        \
+    };                                                            \
     static config_registration_##typename config_registration_##typename##_Instance = config_registration_##typename()
 #endif

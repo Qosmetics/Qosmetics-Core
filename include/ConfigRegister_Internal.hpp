@@ -4,7 +4,6 @@
 namespace Qosmetics::Core::Config
 {
     bool LoadConfig();
-    void SaveConfig();
     bool LoadSpecificConfig(std::string_view name);
     void SaveSpecificConfig(std::string_view name);
 
