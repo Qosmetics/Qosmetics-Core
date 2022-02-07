@@ -2,6 +2,7 @@
 #include "ConfigRegister_Internal.hpp"
 #include "Utils/FileUtils.hpp"
 #include "Utils/UIUtils.hpp"
+#include "diglett/shared/Diglett.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 #include "questui/shared/CustomTypes/Components/List/QuestUITableView.hpp"
 #include "static-defines.hpp"
@@ -20,10 +21,11 @@ namespace Qosmetics::Core
     {
         if (firstActivation)
         {
-            UIUtils::AddHeader(get_transform(), "Profile Switcher", qosmetics_purple);
+            auto localization = Localization::GetSelected();
+            UIUtils::AddHeader(get_transform(), localization->Get("QosmeticsCore:Settings:Profile"), qosmetics_purple);
             auto vertical = CreateVerticalLayoutGroup(get_transform());
 
-            CreateText(vertical->get_transform(), "Switch user config to quickly change which config you're using!");
+            CreateText(vertical->get_transform(), localization->Get("QosmeticsCore:Settings:ProfileMessage"));
 
             userList = CreateScrollableList(vertical->get_transform(), std::bind(&ProfileSwitcherViewController::SelectUser, this, std::placeholders::_1));
             userList->set_listStyle(CustomListTableData::ListStyle::Simple);

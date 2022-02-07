@@ -2,6 +2,7 @@
 #include "FlowCoordinatorRegister_Internal.hpp"
 #include "UI/QosmeticsFlowCoordinator.hpp"
 #include "UI/QosmeticsViewController.hpp"
+#include "diglett/shared/Diglett.hpp"
 #include "questui/shared/ArrayUtil.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 
@@ -44,7 +45,7 @@ namespace Qosmetics::Core
             int count = registrations.size();
             if (count <= 0)
             {
-                auto text = CreateText(horizontal->get_transform(), "No Qosmetics modules were installed,\nmake sure to install any of the modules for them to show up here!");
+                auto text = CreateText(horizontal->get_transform(), Localization::GetSelected()->Get("QosmeticsCore:Misc:ModulesMissing"));
                 text->set_alignment(TMPro::TextAlignmentOptions::Center);
             }
             else

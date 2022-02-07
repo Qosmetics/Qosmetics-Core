@@ -28,7 +28,7 @@ namespace Qosmetics::Core
             ProvideInitialViewControllers(qosmeticsViewController, profileSwitcherViewController, creditViewController, nullptr, nullptr);
 
             set_showBackButton(true);
-            SetTitle(il2cpp_utils::newcsstr("Qosmetics"), HMUI::ViewController::AnimationType::In);
+            SetTitle("Qosmetics", HMUI::ViewController::AnimationType::In);
         }
 
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();

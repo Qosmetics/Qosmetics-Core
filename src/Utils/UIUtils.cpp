@@ -13,7 +13,7 @@ using namespace UnityEngine::UI;
 
 namespace Qosmetics::Core::UIUtils
 {
-    TMPro::TextMeshProUGUI* AddHeader(UnityEngine::Transform* parent, std::string_view title, const UnityEngine::Color& color)
+    TMPro::TextMeshProUGUI* AddHeader(UnityEngine::Transform* parent, StringW title, const UnityEngine::Color& color)
     {
         VerticalLayoutGroup* vertical = CreateVerticalLayoutGroup(parent);
         vertical->get_rectTransform()->set_anchoredPosition({0.0f, 45.0f});

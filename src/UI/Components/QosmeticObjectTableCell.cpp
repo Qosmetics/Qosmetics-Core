@@ -1,4 +1,5 @@
 #include "UI/Components/QosmeticObjectTableCell.hpp"
+#include "diglett/shared/Diglett.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 
 #include "HMUI/Touchable.hpp"
@@ -67,8 +68,9 @@ namespace Qosmetics::Core
 
         auto buttonHorizontal = CreateHorizontalLayoutGroup(cellHorizontal->get_transform());
 
-        auto selectBtn = CreateUIButton(buttonHorizontal->get_transform(), "Select", Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
-        auto deleteBtn = CreateUIButton(buttonHorizontal->get_transform(), "Delete", Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
+        auto localization = Localization::GetSelected();
+        auto selectBtn = CreateUIButton(buttonHorizontal->get_transform(), localization->Get("QosmeticsCore:QosmeticsTable:Select"), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
+        auto deleteBtn = CreateUIButton(buttonHorizontal->get_transform(), localization->Get("QosmeticsCore:QosmeticsTable:Delete"), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
 
         hover = AddHoverHint(get_gameObject(), "---");
     }

@@ -1,6 +1,7 @@
 #include "UI/CreditViewController.hpp"
 #include "Data/Patrons.hpp"
 #include "Utils/UIUtils.hpp"
+#include "diglett/shared/Diglett.hpp"
 #include "logging.hpp"
 #include "questui/shared/ArrayUtil.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
@@ -30,7 +31,7 @@ using namespace QuestUI::BeatSaberUI;
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
 
-HorizontalLayoutGroup* make_patron_display(UnityEngine::Transform* parent, std::vector<std::string>& names, std::string title, UnityEngine::Color headercolor)
+HorizontalLayoutGroup* make_patron_display(UnityEngine::Transform* parent, std::vector<std::string>& names, StringW title, UnityEngine::Color headercolor)
 {
     auto banner = CreateHorizontalLayoutGroup(parent->get_transform());
     auto bannerText = CreateText(banner->get_transform(), title);
@@ -83,6 +84,7 @@ namespace Qosmetics::Core
     {
         if (firstActivation)
         {
+            auto localization = Localization::GetSelected();
             get_gameObject()->AddComponent<HMUI::Touchable*>();
             container = CreateScrollableSettingsContainer(get_transform());
             ExternalComponents* components = container->GetComponent<ExternalComponents*>();
@@ -92,11 +94,11 @@ namespace Qosmetics::Core
             auto vertical = container->GetComponentInChildren<VerticalLayoutGroup*>();
             vertical->set_spacing(5.0f);
 
-            UIUtils::AddHeader(get_transform(), "Patrons & Donators", qosmetics_purple);
+            UIUtils::AddHeader(get_transform(), localization->Get("QosmeticsCore:Credit:PatreonHeader"), qosmetics_purple);
             auto explHorizontal = CreateHorizontalLayoutGroup(container->get_transform());
             auto explVertical = CreateVerticalLayoutGroup(explHorizontal->get_transform());
 
-            auto mainText = CreateText(explVertical->get_transform(), "<color=#ff4040><size=6><b>Qosmetics Patreon Supporters & Donators</b></size></color>\n<size=3>These Patrons and Donators have donated to show their support,\n and have received a place here to thank them for this.\n This support is greatly appreciated and will help justify time spent on developing Qosmetics & other mods.\n A massive thanks goes out to all these people!\n\n If you'd also like to support development, the patreon can be found at:</size>");
+            auto mainText = CreateText(explVertical->get_transform(), u"<color=#ff4040><size=6><b>" + localization->Get("QosmeticsCore:Credit:PatreonMessageHeader") + u"</b></size></color>\n<size=3>" + localization->Get("QosmeticsCore:Credit:PatreonMessageBody") + u"</size>");
             mainText->get_gameObject()->AddComponent<LayoutElement*>()->set_preferredHeight(40.f);
             mainText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
 
@@ -106,11 +108,11 @@ namespace Qosmetics::Core
             patreonText->set_defaultColor(Color(1.0f, 0.25f, 0.25f, 1.0f));
             patreonText->set_highlightColor(Color(1.0f, 0.5f, 0.5f, 1.0f));
 
-            AddHoverHint(patreonText->get_gameObject(), "Open in Browser");
+            AddHoverHint(patreonText->get_gameObject(), localization->Get("QosmeticsCore:Credit:OpenToBrowser"));
 
             auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
             patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), "Fetching patreon supporters...");
+            auto placeholderText = CreateText(patronTexts->get_transform(), localization->Get("QosmeticsCore:Credit:Fetching"));
 
             StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters()));
         }
@@ -126,45 +128,51 @@ namespace Qosmetics::Core
 
         auto patronTextsT = patronTexts->get_transform()->get_parent();
         Object::DestroyImmediate(patronTextsT->get_gameObject());
+
+        auto localization = Localization::GetSelected();
         if (!patrons.any())
         {
             auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
             patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), "There were no patrons found, you can be the first to appear here!");
+            auto placeholderText = CreateText(patronTexts->get_transform(), localization->Get("QosmeticsCore:Credit:Fetching"));
         }
         else
         {
             if (patrons.legendary.size() > 0)
             {
                 SETUP_WRAPPER();
-                auto banner = make_patron_display(vertical->get_transform(), patrons.legendary, "<color=#000000>Legendary patrons</color> <color=#222222><size=2>(Tier 4)</size></color>", Color(0.9f, 0.75f, 0.25f, 1.0f));
+                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Legendary") + u"</color> <color=#222222><size=2>(" + localization->Get("QosmeticsCore:Credit:Tier4") + u")</size></color>";
+                auto banner = make_patron_display(vertical->get_transform(), patrons.legendary, patreontext, Color(0.9f, 0.75f, 0.25f, 1.0f));
                 auto bannerimageView = banner->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
-                auto origMat = QuestUI::ArrayUtil::First(UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>(),
-                                                         [](UnityEngine::Material* x)
-                                                         {
-                                                             return to_utf8(csstrtostr(x->get_name())) == "AnimatedButton";
-                                                         });
+                auto origMat = UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>().FirstOrDefault(
+                    [](UnityEngine::Material* x)
+                    {
+                        return x->get_name() == "AnimatedButton";
+                    });
                 auto dupe = Object::Instantiate(origMat);
-                dupe->SetColor(Shader::PropertyToID(il2cpp_utils::newcsstr("_ShineColor")), Color(0.9f, 0.75f, 0.25f, 1.0f));
+                dupe->SetColor(Shader::PropertyToID("_ShineColor"), Color(0.9f, 0.75f, 0.25f, 1.0f));
                 bannerimageView->set_material(dupe);
             }
 
             if (patrons.amazing.size() > 0)
             {
                 SETUP_WRAPPER();
-                make_patron_display(vertical->get_transform(), patrons.amazing, "<color=#000000>Amazing patrons</color> <color=#222222><size=2>(Tier 3)</size></color>", Color(0.4f, 0.45f, 0.8f, 1.0f));
+                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Amazing") + u"</color> <color=#222222><size=2>(" + localization->Get("QosmeticsCore:Credit:Tier3") + u")</size></color>";
+                make_patron_display(vertical->get_transform(), patrons.amazing, patreontext, Color(0.4f, 0.45f, 0.8f, 1.0f));
             }
 
             if (patrons.enthusiastic.size() > 0)
             {
                 SETUP_WRAPPER();
-                make_patron_display(vertical->get_transform(), patrons.enthusiastic, "<color=#000000>Enthusiastic patrons</color> <color=#222222><size=2>(Tier 2)</size></color>", Color(0.5f, 0.55f, 0.9f, 1.0f));
+                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Enthusiastic") + u"</color> <color=#222222><size=2>(" + localization->Get("QosmeticsCore:Credit:Tier2") + u")</size></color>";
+                make_patron_display(vertical->get_transform(), patrons.enthusiastic, patreontext, Color(0.5f, 0.55f, 0.9f, 1.0f));
             }
 
             if (patrons.paypal.size() > 0)
             {
                 SETUP_WRAPPER();
-                make_patron_display(vertical->get_transform(), patrons.paypal, "<color=#000000>Paypal donators</color>", Color(0.0f, 0.6f, 0.85f, 1.0f));
+                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Paypal") + u"</color>";
+                make_patron_display(vertical->get_transform(), patrons.paypal, patreontext, Color(0.0f, 0.6f, 0.85f, 1.0f));
             }
         }
         co_return;

@@ -1,5 +1,6 @@
 #include "UI/Components/DeletionConfirmationModal.hpp"
 #include "UI/Components/QosmeticObjectTableCell.hpp"
+#include "diglett/shared/Diglett.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 
 #include "System/Action.hpp"
@@ -37,15 +38,16 @@ namespace Qosmetics::Core
 
     void DeletionConfirmationModal::Setup()
     {
+        auto localization = Localization::GetSelected();
         auto vertical = CreateVerticalLayoutGroup(get_transform());
         vertical->set_padding(RectOffset::New_ctor(2, 2, 2, 2));
-        auto headerText = CreateText(vertical->get_transform(), "Are you sure you want to delete this?");
+        auto headerText = CreateText(vertical->get_transform(), localization->Get("QosmeticsCore:DeletionConfirmation:AreYouSure"));
         headerText->set_alignment(TMPro::TextAlignmentOptions::Center);
-        objectName = CreateText(vertical->get_transform(), "Placeholder");
+        objectName = CreateText(vertical->get_transform(), "---");
         objectName->set_alignment(TMPro::TextAlignmentOptions::Center);
         auto buttonHorizontal = CreateHorizontalLayoutGroup(vertical->get_transform());
-        auto confirmBtn = CreateUIButton(buttonHorizontal->get_transform(), "<color=#ff0404>Confirm</color>", std::bind(&DeletionConfirmationModal::Confirm, this));
-        auto cancelBtn = CreateUIButton(buttonHorizontal->get_transform(), "<color=#04ff04>Cancel</color>", std::bind(&DeletionConfirmationModal::Dismiss, this));
+        auto confirmBtn = CreateUIButton(buttonHorizontal->get_transform(), u"<color=#ff0404>" + localization->Get("QosmeticsCore:DeletionConfirmation:Confirm") + u"</color>", std::bind(&DeletionConfirmationModal::Confirm, this));
+        auto cancelBtn = CreateUIButton(buttonHorizontal->get_transform(), u"<color=#04ff04>" + localization->Get("QosmeticsCore:DeletionConfirmation:Cancel") + u"</color>", std::bind(&DeletionConfirmationModal::Dismiss, this));
     }
 
     void DeletionConfirmationModal::Show(QosmeticObjectTableCell* cellToDelete)

@@ -9,6 +9,7 @@
       ],
       "includePath": [
         "${workspaceFolder}/extern/includes/libil2cpp/il2cpp/libil2cpp",
+        "${workspaceFolder}/extern/includes/questui/shared/cppcodec",
         "${workspaceFolder}/extern/includes/codegen/include",
         "${workspaceFolder}/extern/includes",
         "${workspaceFolder}/include",

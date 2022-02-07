@@ -1,4 +1,5 @@
 #include "UI/QosmeticsViewController.hpp"
+#include "diglett/shared/Diglett.hpp"
 #include "logging.hpp"
 
 #include "FlowCoordinatorRegister_Internal.hpp"
@@ -20,7 +21,7 @@ namespace Qosmetics::Core
             auto horizontal = CreateHorizontalLayoutGroup(get_transform());
             if (registrations.size() == 0)
             {
-                auto text = CreateText(horizontal->get_transform(), "No Qosmetics modules were installed,\nmake sure to install any of the modules for them to show up here!");
+                auto text = CreateText(horizontal->get_transform(), Localization::GetSelected()->Get("QosmeticsCore:Misc:ModulesMissing"));
                 text->set_alignment(TMPro::TextAlignmentOptions::Center);
             }
             else

@@ -46,6 +46,11 @@
       "additionalData": {
         "private": true
       }
+    },
+    {
+      "id": "diglett",
+      "versionRange": "^1.0.0",
+      "additionalData": {}
     }
   ],
   "additionalData": {}

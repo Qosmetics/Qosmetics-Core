@@ -1,5 +1,6 @@
 #include "UI/QosmeticsFlowCoordinator.hpp"
 #include "assets.hpp"
+#include "diglett/shared/Diglett.hpp"
 #include "hooks.hpp"
 #include "logging.hpp"
 #include "questui/shared/ArrayUtil.hpp"
@@ -38,7 +39,7 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
         bool questUIExists = QuestUI::GetModsCount() > 0;
         Button* baseButton = self->dyn__settingsButton();
         Button* button = Object::Instantiate(baseButton);
-        button->set_name(il2cpp_utils::newcsstr("Qosmetics Settings"));
+        button->set_name("Qosmetics Settings");
 
         UnityEngine::Transform* wrapper = self->get_transform()->Find(il2cpp_utils::newcsstr("Wrapper"));
         button->get_transform()->SetParent(wrapper, false);
@@ -69,6 +70,6 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
 
         UnityEngine::Object::Destroy(button->GetComponentInChildren<Polyglot::LocalizedTextMeshProUGUI*>());
 
-        button->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText(il2cpp_utils::newcsstr("Qosmetics Settings"));
+        button->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText(Localization::GetSelected()->Get("QosmeticsCore:Settings:QosmeticsSettings"));
     }
 }

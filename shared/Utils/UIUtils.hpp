@@ -13,7 +13,7 @@ namespace Qosmetics::Core::UIUtils
     /// @param title the text to display
     /// @param color the color to use for the fade, goes from full color to full transparent
     /// @return the text object that is in the header
-    TMPro::TextMeshProUGUI* AddHeader(UnityEngine::Transform* parent, std::string_view title, const UnityEngine::Color& color);
+    TMPro::TextMeshProUGUI* AddHeader(UnityEngine::Transform* parent, StringW title, const UnityEngine::Color& color);
 
     /// @brief sets the color for a given title view, can turn off the button animation if needed
     /// @param titleView the titleview to set the color for
