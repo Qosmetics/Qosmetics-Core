@@ -19,6 +19,7 @@ MAKE_AUTO_HOOK_ORIG_MATCH(SaberModelContainer_Start, &GlobalNamespace::SaberMode
     MAKE_CLONE_AND_PARENT(saber);
 
     static auto self_type = il2cpp_utils::GetSystemType(il2cpp_utils::ExtractType(self->klass));
+    auto container = self->dyn__container();
     REDECORATE(saberModelControllerPrefab);
     REDECORATE(saber);
     SaberModelContainer_Start(self);

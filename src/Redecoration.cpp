@@ -3,17 +3,19 @@
 
 namespace Qosmetics::Core::Redecoration
 {
-    void Redecorate(Il2CppObject*& object, std::string_view name, System::Type* objectType, System::Type* containerType)
+    void Redecorate(Il2CppObject*& object, std::string_view name, System::Type* objectType, System::Type* containerType, Zenject::DiContainer* container)
     {
         auto optvecref = GetRegistrations(name.data());
-        if (optvecref == std::nullopt) return;
+        if (optvecref == std::nullopt)
+            return;
         auto& vec = optvecref->get();
 
         for (auto* reg : vec)
         {
-            if (reg->get_prefabType() != objectType || reg->get_containerType() != containerType) continue;
+            if (reg->get_prefabType() != objectType || reg->get_containerType() != containerType)
+                continue;
 
-            object = reg->Redecorate(object);
+            object = reg->Redecorate(object, container);
         }
     }
 }

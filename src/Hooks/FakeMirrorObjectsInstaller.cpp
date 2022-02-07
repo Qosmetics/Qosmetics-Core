@@ -20,6 +20,7 @@ MAKE_AUTO_HOOK_ORIG_MATCH(FakeMirrorObjectsInstaller_InstallBindings, &GlobalNam
     MAKE_CLONE_AND_PARENT(mirroredObstacleControllerPrefab);
 
     static auto self_type = il2cpp_utils::GetSystemType(il2cpp_utils::ExtractType(self->klass));
+    auto container = self->get_Container();
     REDECORATE(mirroredGameNoteControllerPrefab);
     REDECORATE(mirroredBombNoteControllerPrefab);
     REDECORATE(mirroredObstacleControllerPrefab);

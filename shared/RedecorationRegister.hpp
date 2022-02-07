@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Zenject/DiContainer.hpp"
 #include "beatsaber-hook/shared/utils/typedefs.h"
 
 namespace Qosmetics::Core::Redecoration
@@ -15,7 +16,7 @@ namespace Qosmetics::Core::Redecoration
         /// @brief the method that will be called when this registration is used
         /// @param prefab the object to redecorate
         /// @return the redecorated object (should be the same object)
-        virtual Il2CppObject* Redecorate(Il2CppObject* prefab) const = 0;
+        virtual Il2CppObject* Redecorate(Il2CppObject* prefab, Zenject::DiContainer* container) const = 0;
 
         int get_priority() const { return priority; }
         std::string get_contract() const { return contract; }
@@ -54,15 +55,15 @@ REDECORATION_REGISTRATION(saberModelControllerPrefab, 10, true, GlobalNamespace:
         {                                                                                                                                                                    \
             Qosmetics::Core::Redecoration::Register(this);                                                                                                                   \
         }                                                                                                                                                                    \
-        prefabType_ Redecorate(prefabType_ contract_) const;                                                                                                                 \
-        Il2CppObject* Redecorate(Il2CppObject* contract_) const override                                                                                                     \
+        prefabType_ Redecorate(prefabType_ contract_, Zenject::DiContainer* container) const;                                                                                \
+        Il2CppObject* Redecorate(Il2CppObject* contract_, Zenject::DiContainer* container) const override                                                                    \
         {                                                                                                                                                                    \
-            return redecoration_registration_##contract_##priority_::Redecorate(reinterpret_cast<prefabType_>(contract_));                                                   \
+            return redecoration_registration_##contract_##priority_::Redecorate(reinterpret_cast<prefabType_>(contract_), container);                                        \
         }                                                                                                                                                                    \
         bool get_chain() const override { return chain_; }                                                                                                                   \
         System::Type* get_prefabType() const override { return csTypeOf(prefabType_); }                                                                                      \
         System::Type* get_containerType() const override { return csTypeOf(containerType_); }                                                                                \
     };                                                                                                                                                                       \
     static redecoration_registration_##contract_##priority_ redecoration_registration_##contract_##priority_##Instance = redecoration_registration_##contract_##priority_(); \
-    prefabType_ redecoration_registration_##contract_##priority_::Redecorate(prefabType_ contract_) const
+    prefabType_ redecoration_registration_##contract_##priority_::Redecorate(prefabType_ contract_, Zenject::DiContainer* container) const
 #endif

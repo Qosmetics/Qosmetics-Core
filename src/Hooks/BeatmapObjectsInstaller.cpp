@@ -21,6 +21,7 @@ MAKE_AUTO_HOOK_ORIG_MATCH(BeatmapObjectsInstaller_InstallBindings, &GlobalNamesp
     MAKE_CLONE_AND_PARENT(obstaclePrefab);
 
     static auto self_type = il2cpp_utils::GetSystemType(il2cpp_utils::ExtractType(self->klass));
+    auto container = self->get_Container();
     REDECORATE(normalBasicNotePrefab);
     REDECORATE(proModeNotePrefab);
     REDECORATE(bombNotePrefab);

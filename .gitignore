@@ -7,3 +7,4 @@ qpm.shared.json
 mod.template.json
 *.log
 mod.json
+*.qmod

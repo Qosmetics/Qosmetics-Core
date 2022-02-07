@@ -24,4 +24,4 @@
     UnityEngine::Object::Destroy(parent_clone_##identifier);
 
 #define REDECORATE(identifier) \
-    Qosmetics::Core::Redecoration::Redecorate(reinterpret_cast<Il2CppObject*&>(self->dyn__##identifier()), #identifier, type_##identifier, self_type)
+    Qosmetics::Core::Redecoration::Redecorate(reinterpret_cast<Il2CppObject*&>(self->dyn__##identifier()), #identifier, type_##identifier, self_type, container)
