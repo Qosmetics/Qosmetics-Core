@@ -10,6 +10,7 @@ namespace Qosmetics::Core
     class Manifest
     {
     public:
+        Manifest() : filePath(){};
         Manifest(std::string_view filePath) : filePath(filePath)
         {
             std::vector<uint8_t> data = {};

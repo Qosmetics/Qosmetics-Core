@@ -20,4 +20,10 @@ namespace Qosmetics::Core::UIUtils
     /// @param color the color to set
     /// @param buttonanim whether the button animation should work (this prevents colors from being weird)
     void SetTitleColor(HMUI::TitleViewController* titleView, const UnityEngine::Color& color, bool buttonanim = false);
+
+    /// @brief creates a spinning loading indicator
+    /// @param parent what to parent it to
+    /// @return the indicator gameObject
+    UnityEngine::GameObject* CreateLoadingIndicator(UnityEngine::Transform* parent);
+
 }

@@ -62,4 +62,16 @@ namespace Qosmetics::Core::UIUtils
         HMUI::ButtonStaticAnimations* anim = BackButtonBG_T->get_parent()->get_gameObject()->GetComponent<HMUI::ButtonStaticAnimations*>();
         anim->set_enabled(buttonanim);
     }
+
+    UnityEngine::GameObject* CreateLoadingIndicator(UnityEngine::Transform* parent)
+    {
+        auto original = UnityEngine::Resources::FindObjectsOfTypeAll<GameObject*>().First([](auto el)
+                                                                                          { return el->get_name() == "LoadingIndicator"; });
+        auto loadingIndicator = UnityEngine::Object::Instantiate(original, parent, false);
+        static ConstString QosmeticsLoadingIndicator("QosmeticsLoadingIndicator");
+        loadingIndicator->set_name(QosmeticsLoadingIndicator);
+
+        loadingIndicator->AddComponent<LayoutElement*>();
+        return loadingIndicator;
+    }
 }

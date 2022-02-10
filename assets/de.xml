@@ -3,9 +3,9 @@
     <string name="QosmeticsCore:Settings:Profile">Profile Switcher</string>
     <string name="QosmeticsCore:Settings:ProfileMessage">Switch user config to quickly change which config you're using!</string>
     
-    <string name="QosmeticsCore:Credit:PatreonHeader">Patrons &amp Donators</string>
-    <string name="QosmeticsCore:Credit:PatreonMessageHeader">Qosmetics Patreon Supporters &amp Donators</string>
-    <string name="QosmeticsCore:Credit:PatreonMessageBody">These Patrons and Donators have donated to show their support,\n and have received a place here to thank them for this.\n This support is greatly appreciated and will help justify time spent on developing Qosmetics &amp other mods.\n A massive thanks goes out to all these people!\n\n If you'd also like to support development, the patreon can be found at:</string>
+    <string name="QosmeticsCore:Credit:PatreonHeader">Patrons & Donators</string>
+    <string name="QosmeticsCore:Credit:PatreonMessageHeader">Qosmetics Patreon Supporters & Donators</string>
+    <string name="QosmeticsCore:Credit:PatreonMessageBody">These Patrons and Donators have donated to show their support,\n and have received a place here to thank them for this.\n This support is greatly appreciated and will help justify time spent on developing Qosmetics & other mods.\n A massive thanks goes out to all these people!\n\n If you'd also like to support development, the patreon can be found at:</string>
     <string name="QosmeticsCore:Credit:Fetching">Fetching patreon supporters...</string>
     <string name="QosmeticsCore:Credit:Missing">There were no patrons found, you can be the first to appear here!</string>
     <string name="QosmeticsCore:Credit:Legendary">Legendary patrons</string>
@@ -26,5 +26,6 @@
     <string name="QosmeticsCore:QosmeticsTable:Default">Default</string>
     <string name="QosmeticsCore:QosmeticsTable:Refresh">Refresh</string>
     
+    <string name="QosmeticsCore:Misc:Loading">Loading</string>
     <string name="QosmeticsCore:Misc:ModulesMissing">No Qosmetics modules were installed,\nmake sure to install any of the modules for them to show up here!</string>
 </resources>
