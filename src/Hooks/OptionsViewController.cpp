@@ -1,3 +1,4 @@
+#include "Data/Creators.hpp"
 #include "UI/QosmeticsFlowCoordinator.hpp"
 #include "assets.hpp"
 #include "diglett/shared/Diglett.hpp"
@@ -33,6 +34,7 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
 {
     OptionsViewController_DidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
 
+    Qosmetics::Core::Creators::Download();
     if (firstActivation)
     {
 

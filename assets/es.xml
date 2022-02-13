@@ -1,6 +1,8 @@
 <resources>
     <string name="QosmeticsCore:Settings:QosmeticsSettings">Qosmetics Settings</string>
     <string name="QosmeticsCore:Settings:Profile">Profile Switcher</string>
+    <string name="QosmeticsCore:Settings:ProfileName">Type a name...</string>
+    <string name="QosmeticsCore:Settings:AddProfile">Add</string>
     <string name="QosmeticsCore:Settings:ProfileMessage">Switch user config to quickly change which config you're using!</string>
     
     <string name="QosmeticsCore:Credit:PatreonHeader">Patrons & Donators</string>

@@ -31,12 +31,14 @@ namespace Qosmetics::Core
             SetTitle("Qosmetics", HMUI::ViewController::AnimationType::In);
         }
 
+        creditViewController->get_gameObject()->SetActive(true);
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         UIUtils::SetTitleColor(titleView, qosmetics_purple);
     }
 
     void QosmeticsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)
     {
+        creditViewController->get_gameObject()->SetActive(false);
         this->parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         UIUtils::SetTitleColor(titleView, beatsaber_light_blue, true);

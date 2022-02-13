@@ -1,5 +1,6 @@
 #pragma once
 
+#include "HMUI/InputFieldView.hpp"
 #include "HMUI/ViewController.hpp"
 #include "custom-types/shared/coroutine.hpp"
 #include "custom-types/shared/macros.hpp"
@@ -12,9 +13,11 @@
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, ProfileSwitcherViewController, HMUI::ViewController,
                       DECLARE_INSTANCE_FIELD(QuestUI::CustomListTableData*, userList);
+                      DECLARE_INSTANCE_FIELD(HMUI::InputFieldView*, textField);
 
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
+                      void ConfirmAddUser();
                       void AddUser(std::string_view user);
                       void RefreshUsers();
                       void SelectUser(int idx);

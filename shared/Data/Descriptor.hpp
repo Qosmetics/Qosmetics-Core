@@ -18,12 +18,14 @@ namespace Qosmetics::Core
         std::string_view get_name() const;
         std::string_view get_description() const;
         std::string_view get_filePath() const;
+        std::string_view get_coverImage() const;
 
     private:
         std::string author = "";
         std::string name = "";
         std::string description = "";
         std::string filePath = "";
+        std::string coverImage = "";
 
         friend DescriptorComparator;
     };

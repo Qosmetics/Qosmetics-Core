@@ -1,10 +1,26 @@
 #include "UI/Components/QosmeticObjectTableCell.hpp"
 #include "diglett/shared/Diglett.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
+#include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
 
 #include "HMUI/Touchable.hpp"
 #include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/Networking/DownloadHandler.hpp"
+#include "UnityEngine/Networking/DownloadHandlerTexture.hpp"
+#include "UnityEngine/Networking/UnityWebRequest.hpp"
+#include "UnityEngine/Networking/UnityWebRequestTexture.hpp"
+#include "UnityEngine/Sprite.hpp"
+#include "UnityEngine/SpriteMeshType.hpp"
+#include "UnityEngine/Texture2D.hpp"
 #include "UnityEngine/UI/LayoutElement.hpp"
+
+#include "Data/Creators.hpp"
+
+#include "Utils/RainbowUtils.hpp"
+#include "Utils/ZipUtils.hpp"
+
+#include "assets.hpp"
+#include "logging.hpp"
 
 DEFINE_TYPE(Qosmetics::Core, QosmeticObjectTableCell);
 
@@ -50,27 +66,26 @@ namespace Qosmetics::Core
     {
         get_gameObject()->AddComponent<HMUI::Touchable*>();
         set_interactable(false);
+        auto bgHost = CreateHost(get_transform(), {0.0f, 0}, {100.0f, 12.0f});
+        auto bg = bgHost->get_gameObject()->AddComponent<QuestUI::Backgroundable*>();
+        bg->ApplyBackgroundWithAlpha("round-rect-panel", 0.8f);
 
-        auto cellHorizontal = CreateHorizontalLayoutGroup(get_transform());
+        auto imageHost = CreateHost(get_transform(), {-42.5f, 0}, {9.0f, 9.0f});
+        image = CreateImage(imageHost->get_transform(), nullptr, {0, 0}, {0, 0});
+        image->dyn__skew() = 0.18f;
 
-        auto layout = cellHorizontal->get_gameObject()->GetComponent<LayoutElement*>();
-        layout->set_preferredHeight(12.0f);
-        layout->set_preferredWidth(100.0f);
-
-        auto t = get_transform();
-
-        auto textVertical = CreateVerticalLayoutGroup(cellHorizontal->get_transform());
-        name = CreateText(textVertical->get_transform(), "---", {0, 0}, {0, 0});
-        sub = CreateText(textVertical->get_transform(), "---", {0, 0}, {0, 0});
-
-        auto paddingHorizontal = CreateHorizontalLayoutGroup(cellHorizontal->get_transform());
-        SetHorizontalFitMode(paddingHorizontal, ContentSizeFitter::FitMode::Unconstrained);
-
-        auto buttonHorizontal = CreateHorizontalLayoutGroup(cellHorizontal->get_transform());
+        auto textHost = CreateHost(get_transform(), {-5.0f, 0}, {62.5f, 12.0f});
+        textHost->set_childAlignment(UnityEngine::TextAnchor::MiddleLeft);
+        name = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
+        sub = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
 
         auto localization = Localization::GetSelected();
-        auto selectBtn = CreateUIButton(buttonHorizontal->get_transform(), localization->Get("QosmeticsCore:QosmeticsTable:Select"), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
-        auto deleteBtn = CreateUIButton(buttonHorizontal->get_transform(), localization->Get("QosmeticsCore:QosmeticsTable:Delete"), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
+        auto selectBtn = CreateClickableImage(CreateHost(get_transform(), {32.5f, 0}, {8.0, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_SelectIcon_png_start, _binary_SelectIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
+        selectBtn->dyn__skew() = 0.18f;
+        selectBtn->set_highlightColor({0.2f, 0.8f, 0.2f, 1.0f});
+        auto deleteBtn = CreateClickableImage(CreateHost(get_transform(), {42.5f, 0}, {8.0, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_DeleteIcon_png_start, _binary_DeleteIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
+        deleteBtn->set_highlightColor({0.8f, 0.2f, 0.2f, 1.0f});
+        deleteBtn->dyn__skew() = 0.18f;
 
         hover = AddHoverHint(get_gameObject(), "---");
     }
@@ -95,24 +110,86 @@ namespace Qosmetics::Core
     void QosmeticObjectTableCell::SetDescriptor(Descriptor descriptor)
     {
         this->descriptor = descriptor;
-        set_name(to_utf16(descriptor.get_name()));
-        set_sub(to_utf16(descriptor.get_author()));
-        set_hover(to_utf16(descriptor.get_description()));
+        set_name(descriptor.get_name());
+        set_sub(descriptor.get_author());
+        set_hover(descriptor.get_description());
+        auto coverImage = descriptor.get_coverImage();
+        DEBUG("Got Cover image %s for object %s", descriptor.get_coverImage().data(), descriptor.get_name().data());
+        if (coverImage != "")
+            LoadPreviewImage();
+        else
+            set_sprite(tableData->DefaultSprite());
     }
 
-    void QosmeticObjectTableCell::set_name(std::u16string_view name)
+    void QosmeticObjectTableCell::set_name(std::string_view name)
     {
-        this->name->set_text(il2cpp_utils::newcsstr(name));
+        if (RainbowUtils::shouldRainbow(name))
+            this->name->set_text(u"<i>" + to_utf16(RainbowUtils::rainbowify(name)) + u"</i>");
+        else
+            this->name->set_text(u"<i>" + to_utf16(name) + u"</i>");
     }
 
-    void QosmeticObjectTableCell::set_sub(std::u16string_view sub)
+    void QosmeticObjectTableCell::set_sub(std::string_view sub)
     {
-        this->sub->set_text(il2cpp_utils::newcsstr(sub));
+        auto color = Creators::GetCreatorColor(std::string(sub));
+        if (RainbowUtils::shouldRainbow(color))
+        {
+            this->sub->set_text(u"<i>" + to_utf16(RainbowUtils::rainbowify(sub)) + u"</i>");
+        }
+        else
+        {
+            this->sub->set_text(u"<i>" + to_utf16(sub) + u"</i>");
+        }
+        this->sub->set_color(color);
     }
 
-    void QosmeticObjectTableCell::set_hover(std::u16string_view hover)
+    void QosmeticObjectTableCell::set_hover(std::string_view hover)
     {
-        this->hover->set_text(il2cpp_utils::newcsstr(hover));
+        this->hover->set_text(u"<i>" + to_utf16(hover) + u"</i>");
     }
 
+    void QosmeticObjectTableCell::set_sprite(UnityEngine::Sprite* sprite)
+    {
+        image->set_sprite(sprite);
+    }
+
+    custom_types::Helpers::Coroutine QosmeticObjectTableCell::DownloadPreviewImage()
+    {
+        UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequestTexture::GetTexture(descriptor.get_coverImage());
+        co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
+        auto downloadHandlerTexture = reinterpret_cast<UnityEngine::Networking::DownloadHandlerTexture*>(www->get_downloadHandler());
+        auto texture = downloadHandlerTexture->get_texture();
+        auto sprite = Sprite::Create(texture, Rect(0.0f, 0.0f, (float)texture->get_width(), (float)texture->get_height()), Vector2(0.5f, 0.5f), 1024.0f, 1u, SpriteMeshType::FullRect, Vector4(0.0f, 0.0f, 0.0f, 0.0f), false);
+        tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
+        set_sprite(sprite);
+        co_return;
+    }
+
+    void QosmeticObjectTableCell::LoadPreviewImage()
+    {
+        // check if image already cached
+        auto sprite = tableData->GetCachedSprite(descriptor.get_filePath());
+        if (sprite)
+        {
+            set_sprite(sprite);
+            return;
+        }
+
+        // check to see if it's a url
+        if (descriptor.get_coverImage().find("http") != std::string::npos)
+        {
+            DEBUG("Image was url, downloading texture...");
+            StartCoroutine(custom_types::Helpers::CoroutineHelper::New(DownloadPreviewImage()));
+            return;
+        }
+
+        // else just load the image from the zip
+        std::vector<uint8_t> bytes;
+        if (ZipUtils::GetBytesFromZipFile(descriptor.get_filePath(), descriptor.get_coverImage(), bytes))
+        {
+            auto sprite = VectorToSprite(bytes);
+            tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
+            set_sprite(sprite);
+        }
+    }
 }

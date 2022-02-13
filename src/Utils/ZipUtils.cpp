@@ -22,18 +22,11 @@ namespace Qosmetics::Core::ZipUtils
             zip_stat(z, fileName.data(), 0, &st);
 
             zip_file* f = zip_fopen(z, st.name, 0);
-            char* file = new char[st.size];
-
-            zip_fread(f, file, st.size);
-            INFO("Found %d bytes", (int)st.size);
+            out.resize(st.size);
+            zip_fread(f, out.data(), st.size);
+            INFO("Found %lu bytes", st.size);
             zip_fclose(f);
 
-            for (int i = 0; i < st.size; i++)
-            {
-                out.push_back((uint8_t)file[i]);
-            }
-
-            delete[](file);
             return true;
         }
     }

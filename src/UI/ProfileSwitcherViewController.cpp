@@ -7,6 +7,7 @@
 #include "questui/shared/CustomTypes/Components/List/QuestUITableView.hpp"
 #include "static-defines.hpp"
 
+#include "UnityEngine/UI/LayoutElement.hpp"
 #include "HMUI/TableView_ScrollPositionType.hpp"
 
 DEFINE_TYPE(Qosmetics::Core, ProfileSwitcherViewController);
@@ -15,6 +16,7 @@ using namespace UnityEngine;
 using namespace QuestUI;
 using namespace QuestUI::BeatSaberUI;
 
+// TODO: implement adding profiles in game
 namespace Qosmetics::Core
 {
     void ProfileSwitcherViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -27,12 +29,24 @@ namespace Qosmetics::Core
 
             CreateText(vertical->get_transform(), localization->Get("QosmeticsCore:Settings:ProfileMessage"));
 
+            auto addUserHorizontal = CreateHorizontalLayoutGroup(vertical);
+            textField = CreateStringSetting(addUserHorizontal->get_transform(), localization->Get("QosmeticsCore:Settings:ProfileName"), "", nullptr);
+            auto layout = textField->GetComponent<UnityEngine::UI::LayoutElement*>();
+            layout->set_preferredWidth(60.0f);
+            auto confirm = CreateUIButton(addUserHorizontal->get_transform(), localization->Get("QosmeticsCore:Settings:AddProfile"), std::bind(&ProfileSwitcherViewController::ConfirmAddUser, this));
             userList = CreateScrollableList(vertical->get_transform(), std::bind(&ProfileSwitcherViewController::SelectUser, this, std::placeholders::_1));
             userList->set_listStyle(CustomListTableData::ListStyle::Simple);
             userList->cellSize = 8.5f;
 
             RefreshUsers();
         }
+    }
+
+    void ProfileSwitcherViewController::ConfirmAddUser()
+    {
+        AddUser(static_cast<std::string>(textField->get_text()));
+        textField->set_text("");
+        textField->UpdatePlaceholder();
     }
 
     void ProfileSwitcherViewController::AddUser(std::string_view user)

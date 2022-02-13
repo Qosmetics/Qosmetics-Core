@@ -120,11 +120,10 @@ namespace Qosmetics::Core
 
     custom_types::Helpers::Coroutine CreditViewController::GetPatreonSupporters()
     {
-        UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequest::Get(il2cpp_utils::newcsstr(patron_url));
+        UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequest::Get(patron_url);
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
         auto downloadHandler = www->get_downloadHandler();
-        auto text = to_utf8(csstrtostr(downloadHandler->get_text()));
-        auto patrons = Qosmetics::Core::Patrons::Parse(text);
+        auto patrons = Qosmetics::Core::Patrons::Parse(static_cast<std::string>(downloadHandler->get_text()));
 
         auto patronTextsT = patronTexts->get_transform()->get_parent();
         Object::DestroyImmediate(patronTextsT->get_gameObject());
