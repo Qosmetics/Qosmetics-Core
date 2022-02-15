@@ -29,6 +29,8 @@ ___DECLARE_TYPE_WRAPPER_INHERITANCE(Qosmetics::Core, QosmeticObjectTableData, Il
 
                                     DECLARE_CTOR(ctor);
 
+                                    DECLARE_INSTANCE_METHOD(void, Start);
+                                    DECLARE_INSTANCE_METHOD(void, DidSelectCellWithIdx, HMUI::TableView* tableView, int idx);
                                     DECLARE_INSTANCE_METHOD(UnityEngine::Sprite*, DefaultSprite);
                                     DECLARE_INSTANCE_METHOD(UnityEngine::Sprite*, GetCachedSprite, StringW key);
                                     DECLARE_INSTANCE_METHOD(void, AddCachedSprite, StringW key, UnityEngine::Sprite* sprite);

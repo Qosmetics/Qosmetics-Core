@@ -33,7 +33,8 @@ using namespace QuestUI::BeatSaberUI;
     if (!obj##SizeFitter)                                                             \
         obj##SizeFitter = obj->get_gameObject()->AddComponent<ContentSizeFitter*>();  \
     obj##SizeFitter->set_horizontalFit(mode)
-
+UnityEngine::Color highlightedColor = UnityEngine::Color(0.0f, 0.0f, 0.0f, 0.8f);
+UnityEngine::Color idleColor = UnityEngine::Color(1.0f, 1.0f, 1.0f, 0.8f);
 VerticalLayoutGroup* CreateHost(Transform* parent, Vector2 anchoredPos,
                                 Vector2 size)
 {
@@ -65,10 +66,11 @@ namespace Qosmetics::Core
     void QosmeticObjectTableCell::Setup()
     {
         get_gameObject()->AddComponent<HMUI::Touchable*>();
-        set_interactable(false);
         auto bgHost = CreateHost(get_transform(), {0.0f, 0}, {100.0f, 12.0f});
         auto bg = bgHost->get_gameObject()->AddComponent<QuestUI::Backgroundable*>();
         bg->ApplyBackgroundWithAlpha("round-rect-panel", 0.8f);
+        backgroundImage = bg->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
+        backgroundImage->set_color(idleColor);
 
         auto imageHost = CreateHost(get_transform(), {-42.5f, 0}, {9.0f, 9.0f});
         image = CreateImage(imageHost->get_transform(), nullptr, {0, 0}, {0, 0});
@@ -80,14 +82,19 @@ namespace Qosmetics::Core
         sub = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
 
         auto localization = Localization::GetSelected();
-        auto selectBtn = CreateClickableImage(CreateHost(get_transform(), {32.5f, 0}, {8.0f, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_SelectIcon_png_start, _binary_SelectIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
-        selectBtn->dyn__skew() = 0.18f;
-        selectBtn->set_highlightColor({0.2f, 0.8f, 0.2f, 1.0f});
+        // auto selectBtn = CreateClickableImage(CreateHost(get_transform(), {32.5f, 0}, {8.0f, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_SelectIcon_png_start, _binary_SelectIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
+        // selectBtn->dyn__skew() = 0.18f;
+        // selectBtn->set_highlightColor({0.2f, 0.8f, 0.2f, 1.0f});
         auto deleteBtn = CreateClickableImage(CreateHost(get_transform(), {42.5f, 0}, {6.0f, 6.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_DeleteIcon_png_start, _binary_DeleteIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
         deleteBtn->set_highlightColor({0.8f, 0.2f, 0.2f, 1.0f});
         deleteBtn->dyn__skew() = 0.18f;
 
         hover = AddHoverHint(get_gameObject(), "---");
+    }
+
+    void QosmeticObjectTableCell::HighlightDidChange(HMUI::SelectableCell::TransitionType transitionType)
+    {
+        backgroundImage->set_color(get_highlighted() ? highlightedColor : idleColor);
     }
 
     void QosmeticObjectTableCell::Select()

@@ -7,9 +7,17 @@
 #include "HMUI/TableCell.hpp"
 #include "QosmeticObjectTableData.hpp"
 #include "TMPro/TextMeshProUGUI.hpp"
+#include "UnityEngine/EventSystems/BaseEventData.hpp"
+#include "UnityEngine/EventSystems/PointerEventData.hpp"
 #include "custom-types/shared/coroutine.hpp"
 #include "custom-types/shared/macros.hpp"
+#include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
 #include <functional>
+
+#ifndef DECLARE_OVERRIDE_METHOD_MATCH
+#define DECLARE_OVERRIDE_METHOD_MATCH(retval, method, mptr, ...) \
+    DECLARE_OVERRIDE_METHOD(retval, method, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
+#endif
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticObjectTableCell, HMUI::TableCell,
 
@@ -17,9 +25,13 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticObjectTableCell, HMUI::TableCell,
                       DECLARE_INSTANCE_FIELD(TMPro::TextMeshProUGUI*, sub);
                       DECLARE_INSTANCE_FIELD(HMUI::HoverHint*, hover);
                       DECLARE_INSTANCE_FIELD(HMUI::ImageView*, image);
+                      DECLARE_INSTANCE_FIELD(HMUI::ImageView*, backgroundImage);
 
                       DECLARE_INSTANCE_FIELD(DeletionConfirmationModal*, deletionConfirmationModal);
                       DECLARE_INSTANCE_FIELD(QosmeticObjectTableData*, tableData);
+
+                      DECLARE_OVERRIDE_METHOD_MATCH(void, HighlightDidChange, &HMUI::SelectableCell::HighlightDidChange, HMUI::SelectableCell::TransitionType transitionType);
+
                       public
                       :
 

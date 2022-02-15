@@ -1,12 +1,11 @@
 #include "Utils/RainbowUtils.hpp"
-#define RAINBOW_COLORS_COUNT 12
-#define RAINBOW_COLORS_LEN 16
+#define RAINBOW_COLORS 12
 
 namespace Qosmetics::Core::RainbowUtils
 {
-    static inline int rainbowIndex = rand() % RAINBOW_COLORS_COUNT;
+    static inline int rainbowIndex = rand() % RAINBOW_COLORS;
     static constexpr int colorSegmentSize = 24;
-    static const char colorPrefix[RAINBOW_COLORS_COUNT][RAINBOW_COLORS_LEN] = {
+    static const char colorPrefix[RAINBOW_COLORS][16] = {
         "<color=#ff6060>",
         "<color=#ffa060>",
         "<color=#ffff60>",
@@ -39,11 +38,11 @@ namespace Qosmetics::Core::RainbowUtils
         for (int i = 0; i < size; i++)
         {
             auto currentStart = &result[i * colorSegmentSize];
-            memcpy(currentStart, colorPrefix[rainbowIndex], RAINBOW_COLORS_LEN - 1);
-            currentStart[15] = in[RAINBOW_COLORS_LEN - 1];
-            memcpy(&currentStart[RAINBOW_COLORS_LEN], "</color>", 8);
+            memcpy(currentStart, colorPrefix[rainbowIndex], 15);
+            currentStart[15] = in[i];
+            memcpy(&currentStart[16], "</color>", 8);
             rainbowIndex++;
-            rainbowIndex %= RAINBOW_COLORS_COUNT;
+            rainbowIndex %= RAINBOW_COLORS;
         }
         return result;
     }

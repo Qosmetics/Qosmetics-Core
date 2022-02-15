@@ -3,6 +3,8 @@
 #include "assets.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 
+#include "System/Action_2.hpp"
+
 DEFINE_TYPE(Qosmetics::Core, QosmeticObjectTableData);
 
 namespace Qosmetics::Core
@@ -14,6 +16,28 @@ namespace Qosmetics::Core
         cellSize = 12.0f;
 
         previewToSpriteDict = StringToSpriteDict::New_ctor();
+    }
+
+    void QosmeticObjectTableData::Start()
+    {
+        using DelegateType = System::Action_2<HMUI::TableView*, int>;
+        std::function<void(HMUI::TableView*, int)> fun = std::bind(&QosmeticObjectTableData::DidSelectCellWithIdx, this, std::placeholders::_1, std::placeholders::_2);
+        auto delegate = il2cpp_utils::MakeDelegate<DelegateType*>(classof(DelegateType*), fun);
+        tableView->add_didSelectCellWithIdxEvent(delegate);
+    }
+
+    void QosmeticObjectTableData::DidSelectCellWithIdx(HMUI::TableView* tableView, int idx)
+    {
+        if (onSelect)
+        {
+            auto& desc = *std::next(objectDescriptors.begin(), idx);
+            ListW<QosmeticObjectTableCell*> visibleCells(reinterpret_cast<List<QosmeticObjectTableCell*>*>(tableView->dyn__visibleCells()));
+
+            auto cell = std::find_if(visibleCells.begin(), visibleCells.end(), [desc](auto x)
+                                     { return desc.get_filePath() == x->descriptor.get_filePath(); });
+            if (cell != visibleCells.end())
+                (*cell)->Select();
+        }
     }
 
     float QosmeticObjectTableData::CellSize()
@@ -33,7 +57,6 @@ namespace Qosmetics::Core
         if (!tableCell)
         {
             tableCell = QosmeticObjectTableCell::CreateNewCell();
-            tableCell->set_interactable(false);
         }
 
         tableCell->tableData = this;
