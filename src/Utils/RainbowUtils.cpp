@@ -1,11 +1,12 @@
 #include "Utils/RainbowUtils.hpp"
-#define RAINBOW_COLORS 12
+#define RAINBOW_COLORS_COUNT 12
+#define RAINBOW_COLORS_LEN 16
 
 namespace Qosmetics::Core::RainbowUtils
 {
-    static inline int rainbowIndex = rand() % RAINBOW_COLORS;
+    static inline int rainbowIndex = rand() % RAINBOW_COLORS_COUNT;
     static constexpr int colorSegmentSize = 24;
-    static const char colorPrefix[RAINBOW_COLORS][16] = {
+    static const char colorPrefix[RAINBOW_COLORS_COUNT][RAINBOW_COLORS_LEN] = {
         "<color=#ff6060>",
         "<color=#ffa060>",
         "<color=#ffff60>",
@@ -21,7 +22,7 @@ namespace Qosmetics::Core::RainbowUtils
 
     bool shouldRainbow(std::string_view name)
     {
-        return toLower(name).find("rainbow") != std::string::npos;
+        return toLower(std::string(name)).find("rainbow") != std::string::npos;
     }
 
     bool shouldRainbow(UnityEngine::Color& color)
@@ -38,21 +39,19 @@ namespace Qosmetics::Core::RainbowUtils
         for (int i = 0; i < size; i++)
         {
             auto currentStart = &result[i * colorSegmentSize];
-            memcpy(currentStart, colorPrefix[rainbowIndex], 15);
-            currentStart[15] = in[i];
-            memcpy(&currentStart[16], "</color>", 8);
+            memcpy(currentStart, colorPrefix[rainbowIndex], RAINBOW_COLORS_LEN - 1);
+            currentStart[15] = in[RAINBOW_COLORS_LEN - 1];
+            memcpy(&currentStart[RAINBOW_COLORS_LEN], "</color>", 8);
             rainbowIndex++;
-            rainbowIndex %= RAINBOW_COLORS;
+            rainbowIndex %= RAINBOW_COLORS_COUNT;
         }
         return result;
     }
 
-    std::string toLower(std::string_view in)
+    std::string toLower(std::string in)
     {
-        std::string result(in);
-        for (auto& c : result)
+        for (auto& c : in)
             c = tolower(c);
-        return result;
+        return in;
     }
-
 }
