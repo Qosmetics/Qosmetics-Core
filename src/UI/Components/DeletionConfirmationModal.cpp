@@ -59,7 +59,6 @@ namespace Qosmetics::Core
 
     void DeletionConfirmationModal::Dismiss()
     {
-        /// TODO: any other things that need to be done ?
         Hide(true, nullptr);
     }
 

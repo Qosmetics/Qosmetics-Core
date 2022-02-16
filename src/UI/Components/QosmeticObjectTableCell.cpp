@@ -33,8 +33,8 @@ using namespace QuestUI::BeatSaberUI;
     if (!obj##SizeFitter)                                                             \
         obj##SizeFitter = obj->get_gameObject()->AddComponent<ContentSizeFitter*>();  \
     obj##SizeFitter->set_horizontalFit(mode)
-UnityEngine::Color highlightedColor = UnityEngine::Color(0.0f, 0.0f, 0.0f, 0.8f);
-UnityEngine::Color idleColor = UnityEngine::Color(1.0f, 1.0f, 1.0f, 0.8f);
+UnityEngine::Color highlightedColor = UnityEngine::Color(0.0f, 0.0f, 0.5f, 0.8f);
+UnityEngine::Color idleColor = UnityEngine::Color(0.0f, 0.0f, 0.0f, 0.8f);
 VerticalLayoutGroup* CreateHost(Transform* parent, Vector2 anchoredPos,
                                 Vector2 size)
 {
@@ -68,9 +68,11 @@ namespace Qosmetics::Core
         get_gameObject()->AddComponent<HMUI::Touchable*>();
         auto bgHost = CreateHost(get_transform(), {0.0f, 0}, {100.0f, 12.0f});
         auto bg = bgHost->get_gameObject()->AddComponent<QuestUI::Backgroundable*>();
-        bg->ApplyBackgroundWithAlpha("round-rect-panel", 0.8f);
+        bg->ApplyBackgroundWithAlpha("title-gradient", 0.8f);
         backgroundImage = bg->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
         backgroundImage->set_color(idleColor);
+        backgroundImage->set_color0({1.0f, 1.0f, 1.0f, 1.0f});
+        backgroundImage->set_color1({1.0f, 1.0f, 1.0f, 1.0f});
 
         auto imageHost = CreateHost(get_transform(), {-42.5f, 0}, {9.0f, 9.0f});
         image = CreateImage(imageHost->get_transform(), nullptr, {0, 0}, {0, 0});

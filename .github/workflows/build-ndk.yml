@@ -170,5 +170,3 @@ jobs:
 #        path: ./${{ env.qmodName }}.qmod
 #        # if not found error obviously
 #        if-no-files-found: error
-
-    # TODO: Add auto-populating releases, auto update versions, auto publish package on release

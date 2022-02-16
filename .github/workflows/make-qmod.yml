@@ -181,5 +181,3 @@ jobs:
         avatar-url: "http://github.com/${{ env.CI_REPOSITORY_OWNER }}.png"
         # file to upload is the qmod
         filename: ./${{ env.qmodName }}.qmod
-        
-    # TODO: Add auto-populating releases, auto update versions, auto publish package on release
