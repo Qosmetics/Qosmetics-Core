@@ -14,9 +14,9 @@ namespace Qosmetics::Core::ZipUtils
             if (index == -1)
             {
                 return false;
-                INFO("file '%s' did not exist in zip, are you sure you passed in the right name?", fileName.data());
+                INFO("file '{}' did not exist in zip, are you sure you passed in the right name?", fileName);
             }
-            INFO("Reading file '%s'", fileName.data());
+            INFO("Reading file '{}'", fileName);
             struct zip_stat st;
             zip_stat_init(&st);
             zip_stat(z, fileName.data(), 0, &st);
@@ -24,7 +24,7 @@ namespace Qosmetics::Core::ZipUtils
             zip_file* f = zip_fopen(z, st.name, 0);
             out.resize(st.size);
             zip_fread(f, out.data(), st.size);
-            INFO("Found %lu bytes", st.size);
+            INFO("Found {} bytes", st.size);
             zip_fclose(f);
 
             return true;
@@ -35,13 +35,13 @@ namespace Qosmetics::Core::ZipUtils
     {
         if (zipPath.ends_with("/"))
         {
-            ERROR("Path '%s' was a folder path!", zipPath.data());
+            ERROR("Path '{}' was a folder path!", zipPath.data());
             return false;
         }
 
         if (!fileexists(zipPath) && !direxists(zipPath))
         {
-            ERROR("Path '%s' did not exist!", zipPath.data());
+            ERROR("Path '{}' did not exist!", zipPath.data());
             return false;
         }
         if (fileName == "")

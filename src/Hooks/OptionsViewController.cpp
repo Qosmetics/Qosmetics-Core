@@ -1,7 +1,8 @@
 #include "Data/Creators.hpp"
 #include "UI/QosmeticsFlowCoordinator.hpp"
 #include "assets.hpp"
-#include "diglett/shared/Diglett.hpp"
+#include "diglett/shared/Localization.hpp"
+#include "diglett/shared/Util.hpp"
 #include "hooks.hpp"
 #include "logging.hpp"
 #include "questui/shared/ArrayUtil.hpp"
@@ -72,6 +73,6 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
 
         UnityEngine::Object::Destroy(button->GetComponentInChildren<Polyglot::LocalizedTextMeshProUGUI*>());
 
-        button->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText(Localization::GetSelected()->Get("QosmeticsCore:Settings:QosmeticsSettings"));
+        button->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText(Diglett::Localization::get_instance()->get("QosmeticsCore:Settings:QosmeticsSettings"));
     }
 }

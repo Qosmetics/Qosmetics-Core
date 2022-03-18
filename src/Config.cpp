@@ -42,8 +42,8 @@ namespace Qosmetics::Core::Config
     bool LoadSpecificConfig(std::string_view name)
     {
         bool foundEverything = true;
-        std::string configPath = string_format("%s/%s.json", userconfig_path, name.data());
-        INFO("Loading specific config from path %s", configPath.c_str());
+        std::string configPath = fmt::format("{}/{}.json", userconfig_path, name);
+        INFO("Loading specific config from path {}", configPath);
 
         if (!fileexists(configPath))
         {
@@ -56,14 +56,14 @@ namespace Qosmetics::Core::Config
         doc.Parse(content);
         if (doc.GetParseError() != 0)
         {
-            ERROR("Doc failed to parse config file, error code: %d", doc.GetParseError());
+            ERROR("Doc failed to parse config file, error code: {}", doc.GetParseError());
             return false;
         }
 
-        DEBUG("Had %lu config registrations:", registrations.size());
+        DEBUG("Had {} config registrations:", registrations.size());
         for (auto* reg : registrations)
         {
-            DEBUG("loading %s", reg->memberName.c_str());
+            DEBUG("loading {}", reg->memberName);
             auto valItr = doc.FindMember(reg->memberName);
             // if member not found or couldn't properly load config, something failed
             if (valItr == doc.MemberEnd() || !reg->LoadConfig(valItr->value))
@@ -87,7 +87,7 @@ namespace Qosmetics::Core::Config
 
     void SaveSpecificConfig(std::string_view name)
     {
-        std::string configPath = string_format("%s/%s.json", userconfig_path, name.data());
+        std::string configPath = fmt::format("{}/{}.json", userconfig_path, name);
         rapidjson::Document doc;
         doc.SetObject();
         if (fileexists(configPath))
@@ -97,10 +97,10 @@ namespace Qosmetics::Core::Config
         }
 
         rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-        DEBUG("Had %lu config registrations:", registrations.size());
+        DEBUG("Had {} config registrations:", registrations.size());
         for (auto* reg : registrations)
         {
-            DEBUG("saving %s", reg->memberName.c_str());
+            DEBUG("saving {}", reg->memberName);
             auto memberItr = doc.FindMember(reg->memberName);
             if (memberItr == doc.MemberEnd())
             {

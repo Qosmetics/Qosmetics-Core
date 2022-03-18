@@ -1,7 +1,8 @@
 #include "UI/CreditViewController.hpp"
 #include "Data/Patrons.hpp"
 #include "Utils/UIUtils.hpp"
-#include "diglett/shared/Diglett.hpp"
+#include "diglett/shared/Localization.hpp"
+#include "diglett/shared/Util.hpp"
 #include "logging.hpp"
 #include "questui/shared/ArrayUtil.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
@@ -84,7 +85,7 @@ namespace Qosmetics::Core
     {
         if (firstActivation)
         {
-            auto localization = Localization::GetSelected();
+            auto localization = Diglett::Localization::get_instance();
             get_gameObject()->AddComponent<HMUI::Touchable*>();
             container = CreateScrollableSettingsContainer(get_transform());
             ExternalComponents* components = container->GetComponent<ExternalComponents*>();
@@ -94,11 +95,12 @@ namespace Qosmetics::Core
             auto vertical = container->GetComponentInChildren<VerticalLayoutGroup*>();
             vertical->set_spacing(5.0f);
 
-            UIUtils::AddHeader(get_transform(), localization->Get("QosmeticsCore:Credit:PatreonHeader"), qosmetics_purple);
+            UIUtils::AddHeader(get_transform(), localization->get("QosmeticsCore:Credit:PatreonHeader"), qosmetics_purple);
+
             auto explHorizontal = CreateHorizontalLayoutGroup(container->get_transform());
             auto explVertical = CreateVerticalLayoutGroup(explHorizontal->get_transform());
 
-            auto mainText = CreateText(explVertical->get_transform(), u"<color=#ff4040><size=6><b>" + localization->Get("QosmeticsCore:Credit:PatreonMessageHeader") + u"</b></size></color>\n<size=3>" + localization->Get("QosmeticsCore:Credit:PatreonMessageBody") + u"</size>");
+            auto mainText = CreateText(explVertical->get_transform(), u"<color=#ff4040><size=6><b>" + localization->get("QosmeticsCore:Credit:PatreonMessageHeader") + u"</b></size></color>\n<size=3>" + localization->get("QosmeticsCore:Credit:PatreonMessageBody") + u"</size>");
             mainText->get_gameObject()->AddComponent<LayoutElement*>()->set_preferredHeight(40.f);
             mainText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
 
@@ -108,11 +110,11 @@ namespace Qosmetics::Core
             patreonText->set_defaultColor(Color(1.0f, 0.25f, 0.25f, 1.0f));
             patreonText->set_highlightColor(Color(1.0f, 0.5f, 0.5f, 1.0f));
 
-            AddHoverHint(patreonText->get_gameObject(), localization->Get("QosmeticsCore:Credit:OpenToBrowser"));
+            AddHoverHint(patreonText->get_gameObject(), localization->get("QosmeticsCore:Credit:OpenToBrowser"));
 
             auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
             patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), localization->Get("QosmeticsCore:Credit:Fetching"));
+            auto placeholderText = CreateText(patronTexts->get_transform(), localization->get("QosmeticsCore:Credit:Fetching"));
 
             StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters()));
         }
@@ -128,19 +130,19 @@ namespace Qosmetics::Core
         auto patronTextsT = patronTexts->get_transform()->get_parent();
         Object::DestroyImmediate(patronTextsT->get_gameObject());
 
-        auto localization = Localization::GetSelected();
+        auto localization = Diglett::Localization::get_instance();
         if (!patrons.any())
         {
             auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
             patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), localization->Get("QosmeticsCore:Credit:Fetching"));
+            auto placeholderText = CreateText(patronTexts->get_transform(), localization->get("QosmeticsCore:Credit:Fetching"));
         }
         else
         {
             if (patrons.legendary.size() > 0)
             {
                 SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Legendary") + u"</color> <color=#222222><size=2>(" + localization->Get("QosmeticsCore:Credit:Tier4") + u")</size></color>";
+                StringW patreontext = u"<color=#000000>" + localization->get("QosmeticsCore:Credit:Legendary") + u"</color> <color=#222222><size=2>(" + localization->get("QosmeticsCore:Credit:Tier4") + u")</size></color>";
                 auto banner = make_patron_display(vertical->get_transform(), patrons.legendary, patreontext, Color(0.9f, 0.75f, 0.25f, 1.0f));
                 auto bannerimageView = banner->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
                 auto origMat = UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>().FirstOrDefault(
@@ -156,21 +158,21 @@ namespace Qosmetics::Core
             if (patrons.amazing.size() > 0)
             {
                 SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Amazing") + u"</color> <color=#222222><size=2>(" + localization->Get("QosmeticsCore:Credit:Tier3") + u")</size></color>";
+                StringW patreontext = u"<color=#000000>" + localization->get("QosmeticsCore:Credit:Amazing") + u"</color> <color=#222222><size=2>(" + localization->get("QosmeticsCore:Credit:Tier3") + u")</size></color>";
                 make_patron_display(vertical->get_transform(), patrons.amazing, patreontext, Color(0.4f, 0.45f, 0.8f, 1.0f));
             }
 
             if (patrons.enthusiastic.size() > 0)
             {
                 SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Enthusiastic") + u"</color> <color=#222222><size=2>(" + localization->Get("QosmeticsCore:Credit:Tier2") + u")</size></color>";
+                StringW patreontext = u"<color=#000000>" + localization->get("QosmeticsCore:Credit:Enthusiastic") + u"</color> <color=#222222><size=2>(" + localization->get("QosmeticsCore:Credit:Tier2") + u")</size></color>";
                 make_patron_display(vertical->get_transform(), patrons.enthusiastic, patreontext, Color(0.5f, 0.55f, 0.9f, 1.0f));
             }
 
             if (patrons.paypal.size() > 0)
             {
                 SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>" + localization->Get("QosmeticsCore:Credit:Paypal") + u"</color>";
+                StringW patreontext = u"<color=#000000>" + localization->get("QosmeticsCore:Credit:Paypal") + u"</color>";
                 make_patron_display(vertical->get_transform(), patrons.paypal, patreontext, Color(0.0f, 0.6f, 0.85f, 1.0f));
             }
         }

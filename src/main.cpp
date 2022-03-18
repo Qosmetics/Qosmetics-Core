@@ -10,8 +10,12 @@
 #include "HMUI/ImageView.hpp"
 
 #include "ConfigRegister_Internal.hpp"
+#include "diglett/shared/Conversions.hpp"
 #include "diglett/shared/Register.hpp"
-ModInfo modInfo = {ID, VERSION};
+
+#include <fmt/format.h>
+
+ModInfo modInfo = {MOD_ID, VERSION};
 
 extern "C" void setup(ModInfo& info)
 {
@@ -31,10 +35,18 @@ extern "C" void load()
 
     QuestUI::Register::RegisterGameplaySetupMenu<Qosmetics::Core::GameplaySetupView*>(modInfo, "Qosmetics");
 
-    Diglett::Register::RegisterLocales<Diglett::Languages::German>(logger, ASSET_TO_XML(de_xml));
-    Diglett::Register::RegisterLocales<Diglett::Languages::English>(logger, ASSET_TO_XML(en_xml));
-    Diglett::Register::RegisterLocales<Diglett::Languages::Spanish>(logger, ASSET_TO_XML(es_xml));
-    Diglett::Register::RegisterLocales<Diglett::Languages::French>(logger, ASSET_TO_XML(fr_xml));
-    Diglett::Register::RegisterLocales<Diglett::Languages::Japanese>(logger, ASSET_TO_XML(ja_xml));
-    Diglett::Register::RegisterLocales<Diglett::Languages::Korean>(logger, ASSET_TO_XML(ko_xml));
+    Diglett::RegisterAsset(ASSET_TO_STR(de_xml), Diglett::Language::GERMAN);
+    Diglett::RegisterAsset(ASSET_TO_STR(en_xml), Diglett::Language::ENGLISH);
+    Diglett::RegisterAsset(ASSET_TO_STR(es_xml), Diglett::Language::SPANISH);
+    Diglett::RegisterAsset(ASSET_TO_STR(fr_xml), Diglett::Language::FRENCH);
+    Diglett::RegisterAsset(ASSET_TO_STR(ja_xml), Diglett::Language::JAPANESE);
+    Diglett::RegisterAsset(ASSET_TO_STR(ko_xml), Diglett::Language::KOREAN);
+
+    if (!Paper::Logger::IsInited())
+    {
+        mkpath("/sdcard/Android/data/com.beatgames.beatsaber/files/logs/paper");
+        Paper::Logger::Init("/sdcard/Android/data/com.beatgames.beatsaber/files/logs/paper");
+    }
+
+    INFO("Boats and hoes");
 }

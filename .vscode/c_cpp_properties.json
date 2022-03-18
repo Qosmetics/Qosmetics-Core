@@ -2,7 +2,7 @@
   "configurations": [
     {
       "defines": [
-        "ID=\"QosmeticsCore\"",
+        "MOD_ID=\"QosmeticsCore\"",
         "VERSION=\"0.1.0\"",
         "__GNUC__",
         "__aarch64__"
@@ -11,6 +11,7 @@
         "${workspaceFolder}/extern/includes/libil2cpp/il2cpp/libil2cpp",
         "${workspaceFolder}/extern/includes/questui/shared/cppcodec",
         "${workspaceFolder}/extern/includes/codegen/include",
+        "${workspaceFolder}/extern/includes/fmt/fmt/include",
         "${workspaceFolder}/extern/includes",
         "${workspaceFolder}/include",
         "${workspaceFolder}/shared",

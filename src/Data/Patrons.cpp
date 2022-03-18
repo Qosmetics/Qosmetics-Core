@@ -9,13 +9,14 @@ void get_string_vector(rapidjson::Document& doc, std::string_view identifier, st
     {
         for (auto& name : memberItr->value.GetArray())
         {
-            INFO("Found %s", name.GetString());
-            out.emplace_back(name.GetString());
+            std::string nameString(name.GetString(), name.GetStringLength());
+            INFO("Found {}", nameString);
+            out.emplace_back(nameString);
         }
     }
     else
     {
-        ERROR("Couldn't find member %s in doc", identifier.data());
+        ERROR("Couldn't find member {} in doc", identifier);
     }
 }
 
@@ -35,7 +36,7 @@ namespace Qosmetics::Core
         }
         else
         {
-            ERROR("Doc parse Error %d, data:\n%s", doc.GetParseError(), json.c_str());
+            ERROR("Doc parse Error {}, data:\n{}", doc.GetParseError(), json);
         }
 
         return result;

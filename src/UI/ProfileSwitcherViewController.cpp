@@ -2,7 +2,10 @@
 #include "ConfigRegister_Internal.hpp"
 #include "Utils/FileUtils.hpp"
 #include "Utils/UIUtils.hpp"
-#include "diglett/shared/Diglett.hpp"
+#include "diglett/shared/Localization.hpp"
+#include "diglett/shared/Util.hpp"
+#include "logging.hpp"
+
 #include "questui/shared/BeatSaberUI.hpp"
 #include "questui/shared/CustomTypes/Components/List/QuestUITableView.hpp"
 #include "static-defines.hpp"
@@ -22,14 +25,14 @@ namespace Qosmetics::Core
     {
         if (firstActivation)
         {
-            auto localization = Localization::GetSelected();
-            UIUtils::AddHeader(get_transform(), localization->Get("QosmeticsCore:Settings:Profile"), qosmetics_purple);
+            auto localization = Diglett::Localization::get_instance();
+            UIUtils::AddHeader(get_transform(), localization->get("QosmeticsCore:Settings:Profile"), qosmetics_purple);
             auto vertical = CreateVerticalLayoutGroup(get_transform());
 
-            CreateText(vertical->get_transform(), localization->Get("QosmeticsCore:Settings:ProfileMessage"));
+            CreateText(vertical->get_transform(), localization->get("QosmeticsCore:Settings:ProfileMessage"));
 
             auto addUserHorizontal = CreateHorizontalLayoutGroup(vertical);
-            textField = CreateStringSetting(addUserHorizontal->get_transform(), localization->Get("QosmeticsCore:Settings:ProfileName"), "",
+            textField = CreateStringSetting(addUserHorizontal->get_transform(), localization->get("QosmeticsCore:Settings:ProfileName"), "",
                                             [&](auto v)
                                             {
                                                 if (static_cast<std::u16string_view>(v).size() > 15)
@@ -39,7 +42,7 @@ namespace Qosmetics::Core
                                             });
             auto layout = textField->GetComponent<UnityEngine::UI::LayoutElement*>();
             layout->set_preferredWidth(60.0f);
-            auto confirm = CreateUIButton(addUserHorizontal->get_transform(), localization->Get("QosmeticsCore:Settings:AddProfile"), std::bind(&ProfileSwitcherViewController::ConfirmAddUser, this));
+            auto confirm = CreateUIButton(addUserHorizontal->get_transform(), localization->get("QosmeticsCore:Settings:AddProfile"), std::bind(&ProfileSwitcherViewController::ConfirmAddUser, this));
             userList = CreateScrollableList(vertical->get_transform(), {60.0f, 58.5f}, std::bind(&ProfileSwitcherViewController::SelectUser, this, std::placeholders::_1));
             userList->set_listStyle(CustomListTableData::ListStyle::Simple);
             userList->cellSize = 8.5f;

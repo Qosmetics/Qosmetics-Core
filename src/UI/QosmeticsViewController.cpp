@@ -1,5 +1,6 @@
 #include "UI/QosmeticsViewController.hpp"
-#include "diglett/shared/Diglett.hpp"
+#include "diglett/shared/Localization.hpp"
+#include "diglett/shared/Util.hpp"
 #include "logging.hpp"
 
 #include "FlowCoordinatorRegister_Internal.hpp"
@@ -21,7 +22,7 @@ namespace Qosmetics::Core
             auto horizontal = CreateHorizontalLayoutGroup(get_transform());
             if (registrations.size() == 0)
             {
-                auto text = CreateText(horizontal->get_transform(), Localization::GetSelected()->Get("QosmeticsCore:Misc:ModulesMissing"));
+                auto text = CreateText(horizontal->get_transform(), Diglett::Localization::get_instance()->get("QosmeticsCore:Misc:ModulesMissing"));
                 text->set_alignment(TMPro::TextAlignmentOptions::Center);
             }
             else
@@ -56,7 +57,7 @@ namespace Qosmetics::Core
                     flowCoordinators[i] = CreateFlowCoordinator(fcType);
                 }
 
-                DEBUG("Presenting %p on parent %p", flowCoordinators[i], qosmeticsFlowCoordinator);
+                DEBUG("Presenting {} on parent {}", fmt::ptr(flowCoordinators[i]), fmt::ptr(qosmeticsFlowCoordinator));
                 qosmeticsFlowCoordinator->PresentFlowCoordinator(flowCoordinators[i], nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
 
                 break;

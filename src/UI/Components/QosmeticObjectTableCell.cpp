@@ -1,5 +1,6 @@
 #include "UI/Components/QosmeticObjectTableCell.hpp"
-#include "diglett/shared/Diglett.hpp"
+#include "diglett/shared/Localization.hpp"
+#include "diglett/shared/Util.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 #include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
 
@@ -83,7 +84,6 @@ namespace Qosmetics::Core
         name = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
         sub = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
 
-        auto localization = Localization::GetSelected();
         // auto selectBtn = CreateClickableImage(CreateHost(get_transform(), {32.5f, 0}, {8.0f, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_SelectIcon_png_start, _binary_SelectIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
         // selectBtn->dyn__skew() = 0.18f;
         // selectBtn->set_highlightColor({0.2f, 0.8f, 0.2f, 1.0f});
@@ -123,7 +123,7 @@ namespace Qosmetics::Core
         set_sub(descriptor.get_author());
         set_hover(descriptor.get_description());
         auto coverImage = descriptor.get_coverImage();
-        DEBUG("Got Cover image %s for object %s", descriptor.get_coverImage().data(), descriptor.get_name().data());
+        DEBUG("Got Cover image {} for object {}", descriptor.get_coverImage(), descriptor.get_name());
         if (coverImage != "")
             LoadPreviewImage();
         else

@@ -39,8 +39,9 @@ namespace Qosmetics::Core::FileUtils
             while ((files = readdir(fileDir)) != NULL)
             {
                 char* fileName = files->d_name;
-                INFO("Found file %s", fileName);
-                if (!strcmp(fileName, ".") || !strcmp(fileName, "..")) continue;
+                INFO("Found file {}", fileName);
+                if (!strcmp(fileName, ".") || !strcmp(fileName, ".."))
+                    continue;
                 if (GetExtension(fileName) == extension)
                 {
                     out.push_back(fileName);
