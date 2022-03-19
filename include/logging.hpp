@@ -10,7 +10,7 @@ namespace Qosmetics::Core
     {
     public:
         static Logger& getLogger();
-        static LoggerContextObject& getContextLogger(const char* fun, const char* file, int line);
+        [[deprecated]] static LoggerContextObject& getContextLogger(const char* fun, const char* file, int line);
     };
 }
 

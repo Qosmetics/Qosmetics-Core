@@ -5,6 +5,7 @@
 
 #include "GlobalNamespace/BeatmapObjectsInstaller.hpp"
 #include "GlobalNamespace/BombNoteController.hpp"
+#include "GlobalNamespace/BurstSliderGameNoteController.hpp"
 #include "GlobalNamespace/GameNoteController.hpp"
 #include "GlobalNamespace/ObstacleController.hpp"
 
@@ -12,11 +13,17 @@ MAKE_AUTO_HOOK_ORIG_MATCH(BeatmapObjectsInstaller_InstallBindings, &GlobalNamesp
 {
     auto normalBasicNotePrefab = self->dyn__normalBasicNotePrefab();
     auto proModeNotePrefab = self->dyn__proModeNotePrefab();
+    auto burstSliderHeadNotePrefab = self->dyn__burstSliderHeadNotePrefab();
+    auto burstSliderNotePrefab = self->dyn__burstSliderNotePrefab();
+    auto burstSliderFillPrefab = self->dyn__burstSliderFillPrefab();
     auto bombNotePrefab = self->dyn__bombNotePrefab();
     auto obstaclePrefab = self->dyn__obstaclePrefab();
 
     MAKE_CLONE_AND_PARENT(normalBasicNotePrefab);
     MAKE_CLONE_AND_PARENT(proModeNotePrefab);
+    MAKE_CLONE_AND_PARENT(burstSliderHeadNotePrefab);
+    MAKE_CLONE_AND_PARENT(burstSliderNotePrefab);
+    MAKE_CLONE_AND_PARENT(burstSliderFillPrefab);
     MAKE_CLONE_AND_PARENT(bombNotePrefab);
     MAKE_CLONE_AND_PARENT(obstaclePrefab);
 
@@ -24,6 +31,9 @@ MAKE_AUTO_HOOK_ORIG_MATCH(BeatmapObjectsInstaller_InstallBindings, &GlobalNamesp
     auto container = self->get_Container();
     REDECORATE(normalBasicNotePrefab);
     REDECORATE(proModeNotePrefab);
+    REDECORATE(burstSliderHeadNotePrefab);
+    REDECORATE(burstSliderNotePrefab);
+    REDECORATE(burstSliderFillPrefab);
     REDECORATE(bombNotePrefab);
     REDECORATE(obstaclePrefab);
 
@@ -31,6 +41,9 @@ MAKE_AUTO_HOOK_ORIG_MATCH(BeatmapObjectsInstaller_InstallBindings, &GlobalNamesp
 
     self->dyn__normalBasicNotePrefab() = normalBasicNotePrefab;
     self->dyn__proModeNotePrefab() = proModeNotePrefab;
+    self->dyn__burstSliderHeadNotePrefab() = burstSliderHeadNotePrefab;
+    self->dyn__burstSliderNotePrefab() = burstSliderNotePrefab;
+    self->dyn__burstSliderFillPrefab() = burstSliderFillPrefab;
     self->dyn__bombNotePrefab() = bombNotePrefab;
     self->dyn__obstaclePrefab() = obstaclePrefab;
 }
