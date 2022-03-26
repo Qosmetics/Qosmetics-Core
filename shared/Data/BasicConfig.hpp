@@ -8,5 +8,7 @@ namespace Qosmetics::Core
     public:
         BasicConfig(){};
         BasicConfig(const rapidjson::Value& val){};
+
+        virtual rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator) = 0;
     };
 }

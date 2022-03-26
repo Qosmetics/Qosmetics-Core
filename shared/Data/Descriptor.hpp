@@ -13,6 +13,8 @@ namespace Qosmetics::Core
         Descriptor(const Descriptor& other);
         Descriptor(const rapidjson::Value& val, std::string_view filePath);
         Descriptor(const rapidjson::Value& val);
+        Descriptor(std::string author, std::string name, std::string description, std::string filePath, std::string coverImage) : author(author), name(name), description(description), filePath(filePath), coverImage(coverImage){};
+        rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator) const;
 
         std::string_view get_author() const;
         std::string_view get_name() const;

@@ -18,6 +18,18 @@ namespace Qosmetics::Core::BundleUtils
     /// @return coroutine
     custom_types::Helpers::Coroutine LoadBundleFromZipAsync(std::string_view filePath, std::string_view fileName, UnityEngine::AssetBundle*& out);
 
+    /// @brief Loads a bundle from a bundle file as a coroutine
+    /// @param filePath the full path to the file
+    /// @param out reference to the asset bundle pointer variable
+    /// @return coroutine
+    custom_types::Helpers::Coroutine LoadBundleFromFileAsync(std::string_view filePath, UnityEngine::AssetBundle*& out);
+
+    /// @brief Loads a bundle from memory bytes
+    /// @param bytes the byte array
+    /// @param out reference to the asset bundle pointer variable
+    /// @return coroutine
+    custom_types::Helpers::Coroutine LoadBundleFromMemoryAsync(ArrayW<uint8_t> bytes, UnityEngine::AssetBundle*& out);
+
     /// @brief loads an asset from a bundle as a coroutine
     /// @param bundle the bundle to load from
     /// @param name the name of the object to load
