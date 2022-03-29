@@ -51,6 +51,11 @@
       "id": "paper",
       "versionRange": "^1.0.1",
       "additionalData": {}
+    },
+    {
+      "id": "diglett",
+      "versionRange": "^2.0.0",
+      "additionalData": {}
     }
   ],
   "additionalData": {}

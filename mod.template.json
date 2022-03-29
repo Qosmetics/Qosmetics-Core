@@ -8,7 +8,13 @@
     "packageVersion": "1.20.0",
     "coverImage": "cover.gif",
     "description": "Qosmetics Core module that handles menu placement and generic utils for other modules",
-    "dependencies": [],
+    "dependencies": [
+        {
+            "version": "^9.0.4",
+            "id": "tinyxml2",
+            "downloadIfMissing": "https://github.com/MillzyDev/NDK-tinyxml2/releases/download/v9.0.4/tinyxml2.qmod"
+        }
+    ],
     "modFiles": [],
     "libraryFiles": [],
     "fileCopies": []
