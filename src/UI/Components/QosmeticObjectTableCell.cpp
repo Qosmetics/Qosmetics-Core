@@ -114,6 +114,7 @@ namespace Qosmetics::Core
     {
         if (onDelete)
             onDelete(this);
+        deletionConfirmationModal->Hide(true, nullptr);
     }
 
     void QosmeticObjectTableCell::SetDescriptor(Descriptor descriptor)
