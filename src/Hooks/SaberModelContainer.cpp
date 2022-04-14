@@ -1,27 +1,37 @@
-#include "Redecoration.hpp"
-#include "RedecorationMacros.hpp"
+#include "SaberModelFactoryRegister_Internal.hpp"
 #include "hooks.hpp"
 #include "logging.hpp"
 
+#include "SaberModelController.hpp"
+
+#include "GlobalNamespace/ColorManager.hpp"
 #include "GlobalNamespace/Saber.hpp"
 #include "GlobalNamespace/SaberModelContainer.hpp"
-#include "GlobalNamespace/SaberModelController.hpp"
 
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Object.hpp"
 #include "UnityEngine/Transform.hpp"
 
+#include "Zenject/DiContainer.hpp"
+
 MAKE_AUTO_HOOK_ORIG_MATCH(SaberModelContainer_Start, &GlobalNamespace::SaberModelContainer::Start, void, GlobalNamespace::SaberModelContainer* self)
 {
-    auto saberModelControllerPrefab = self->dyn__saberModelControllerPrefab();
-    MAKE_CLONE_AND_PARENT(saberModelControllerPrefab);
+    auto registrations = Qosmetics::Core::SaberModelFactoryRegister::GetRegistrations();
+    if (registrations.size() == 0)
+    {
+        SaberModelContainer_Start(self);
+        return;
+    }
+    auto reg = registrations[0];
 
-    static auto self_type = il2cpp_utils::GetSystemType(il2cpp_utils::ExtractType(self->klass));
-    auto container = self->dyn__container();
+    auto saber = self->dyn__saber();
+    auto colorManager = self->dyn__container()->TryResolve<GlobalNamespace::ColorManager*>();
 
-    REDECORATE(saberModelControllerPrefab);
+    auto customSaber = reg->MakeSaber(saber->get_saberType());
 
-    SaberModelContainer_Start(self);
-
-    self->dyn__saberModelControllerPrefab() = saberModelControllerPrefab;
+    auto* initMethod = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass(customSaber), "Init", 2);
+    if (initMethod)
+        il2cpp_utils::RunMethod(customSaber, initMethod, self->get_transform(), saber);
+    else
+        ERROR("Could not Find Init method on type {}::{}(UnityEngine::Transform* parent, GlobalNamespace::Saber* saber), make sure it's defined!", customSaber->klass->namespaze, customSaber->klass->name);
 }
