@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SaberModelFactoryRegister.hpp"
+#include <vector>
 
 namespace Qosmetics::Core::SaberModelFactoryRegister
 {
