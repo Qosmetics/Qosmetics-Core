@@ -35,15 +35,15 @@ SABERMODELFACTORY_REGISTRATION(QosmeticsSabers, 10)
     return go->AddComponent<Qosmetics::Core::SaberModelController*>();
 }
 */
-#define SABERMODELFACTORY_REGISTRATION(identifier, priority)                                                                                                                                    \
-    struct sabermodelfactory_registration_##identifier_##priority_ : Qosmetics::Core::SaberModelFactoryRegister::SaberModelFactory                                                              \
-    {                                                                                                                                                                                           \
-        sabermodelfactory_registration_##identifier_##priority_() : Qosmetics::Core::SaberModelFactoryRegister::SaberModelFactory(#identifier, priority)                                        \
-        {                                                                                                                                                                                       \
-            Qosmetics::Core::SaberModelFactoryRegister::Register(this);                                                                                                                         \
-        }                                                                                                                                                                                       \
-        Qosmetics::Core::SaberModelController* MakeSaber(GlobalNamespace::SaberType saberType) const override;                                                                                  \
-    };                                                                                                                                                                                          \
-    static sabermodelfactory_registration_##identifier_##priority_ sabermodelfactory_registration_##identifier_##priority_Instance = sabermodelfactory_registration_##identifier_##priority_(); \
-    Qosmetics::Core::SaberModelController* sabermodelfactory_registration_##identifier_##priority_::MakeSaber(GlobalNamespace::SaberType saberType) const
+#define SABERMODELFACTORY_REGISTRATION(identifier, priority)                                                                                                                                       \
+    struct sabermodelfactory_registration_##identifier##_##priority : Qosmetics::Core::SaberModelFactoryRegister::SaberModelFactory                                                                \
+    {                                                                                                                                                                                              \
+        sabermodelfactory_registration_##identifier##_##priority() : Qosmetics::Core::SaberModelFactoryRegister::SaberModelFactory(#identifier, priority)                                          \
+        {                                                                                                                                                                                          \
+            Qosmetics::Core::SaberModelFactoryRegister::Register(this);                                                                                                                            \
+        }                                                                                                                                                                                          \
+        Qosmetics::Core::SaberModelController* MakeSaber(GlobalNamespace::SaberType saberType) const override;                                                                                     \
+    };                                                                                                                                                                                             \
+    static sabermodelfactory_registration_##identifier##_##priority sabermodelfactory_registration_##identifier##_##priorityInstance = sabermodelfactory_registration_##identifier##_##priority(); \
+    Qosmetics::Core::SaberModelController* sabermodelfactory_registration_##identifier##_##priority::MakeSaber(GlobalNamespace::SaberType saberType) const
 #endif
