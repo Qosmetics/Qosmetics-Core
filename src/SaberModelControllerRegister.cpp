@@ -1,10 +1,10 @@
-#include "SaberModelFactoryRegister_Internal.hpp"
+#include "SaberModelControllerRegister_Internal.hpp"
 
-namespace Qosmetics::Core::SaberModelFactoryRegister
+namespace Qosmetics::Core::SaberModelControllerRegister
 {
-    std::vector<const SaberModelFactory*> registrations;
+    std::vector<const SaberModelControllerRegistration*> registrations;
 
-    void Register(const SaberModelFactory* registration)
+    void Register(const SaberModelControllerRegistration* registration)
     {
         auto existingItr = std::find_if(registrations.begin(), registrations.end(), [&](auto x)
                                         { return x->identifier == registration->identifier; });
@@ -18,11 +18,11 @@ namespace Qosmetics::Core::SaberModelFactoryRegister
                   { return lhs->operator<(*rhs); });
     }
 
-    bool SaberModelFactory::operator<(const SaberModelFactory& rhs) const
+    bool SaberModelControllerRegistration::operator<(const SaberModelControllerRegistration& rhs) const
     {
         return priority < rhs.priority;
     }
 
-    std::vector<const SaberModelFactory*>& GetRegistrations() { return registrations; }
+    std::vector<const SaberModelControllerRegistration*>& GetRegistrations() { return registrations; }
 
 }
