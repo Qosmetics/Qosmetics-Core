@@ -17,17 +17,24 @@
 MAKE_AUTO_HOOK_ORIG_MATCH(SaberModelContainer_Start, &GlobalNamespace::SaberModelContainer::Start, void, GlobalNamespace::SaberModelContainer* self)
 {
     auto registrations = Qosmetics::Core::SaberModelFactoryRegister::GetRegistrations();
-    if (registrations.size() == 0)
+    Qosmetics::Core::SaberModelController* customSaber = nullptr;
+    auto saber = self->dyn__saber();
+    for (auto reg : registrations)
+    {
+        customSaber = reg->MakeSaber(saber->get_saberType());
+        if (customSaber)
+            break;
+    }
+
+    if (!customSaber)
     {
         SaberModelContainer_Start(self);
         return;
     }
-    auto reg = registrations[0];
 
-    auto saber = self->dyn__saber();
     auto colorManager = self->dyn__container()->TryResolve<GlobalNamespace::ColorManager*>();
-
-    auto customSaber = reg->MakeSaber(saber->get_saberType());
+    customSaber->saber = saber;
+    customSaber->colorManager = colorManager;
 
     auto* initMethod = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass(customSaber), "Init", 2);
     if (initMethod)
