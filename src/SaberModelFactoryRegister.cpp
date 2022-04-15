@@ -13,7 +13,9 @@ namespace Qosmetics::Core::SaberModelFactoryRegister
             registrations.emplace_back(registration);
         }
 
-        std::sort(registrations.begin(), registrations.end());
+        // reverse sort so lowest prio is index 0, highest is last
+        std::sort(registrations.begin(), registrations.end(), [](auto* lhs, auto* rhs) -> bool
+                  { return lhs->operator<(*rhs); });
     }
 
     bool SaberModelFactory::operator<(const SaberModelFactory& rhs) const
@@ -21,6 +23,6 @@ namespace Qosmetics::Core::SaberModelFactoryRegister
         return priority < rhs.priority;
     }
 
-    std::vector<const SaberModelFactory*> GetRegistrations() { return registrations; }
+    std::vector<const SaberModelFactory*>& GetRegistrations() { return registrations; }
 
 }

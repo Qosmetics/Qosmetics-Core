@@ -5,5 +5,5 @@
 
 namespace Qosmetics::Core::SaberModelFactoryRegister
 {
-    std::vector<const SaberModelFactory*> GetRegistrations();
+    std::vector<const SaberModelFactory*>& GetRegistrations();
 }
