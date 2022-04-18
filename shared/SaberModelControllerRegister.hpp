@@ -32,19 +32,14 @@ namespace Qosmetics::Core::SaberModelControllerRegister
     void Register(const SaberModelControllerRegistration* registration);
 }
 
-#ifndef SABERMODELFACTORY_REGISTRATION
+#ifndef SABERMODELCONTROLLER_REGISTRATION
 /*
 macro to be used in a similiar way to a hook, this makes creating registrations far easier than having to manually manage everythinbg, and ensures registrations are used as intended
 
 example usage:
-SABERMODELFACTORY_REGISTRATION(QosmeticsSabers, 10)
-{
-    // This would be an empty saber object that just got the default Qosmetics::Core::SaberModelController script added to it, it's your job to properly implement a class that inherits that sabermodelcontroller and defines the commented out methods from that header.
-    UnityEngine::GameObject* go = UnityEngine::GameObject::New_ctor("LeftSaber")
-    return go->AddComponent<Qosmetics::Core::SaberModelController*>();
-}
+SABERMODELCONTROLLER_REGISTRATION(QosmeticsSabers, 10, Qosmetics::Sabers::SaberModelController*)
 */
-#define SABERMODELFACTORY_REGISTRATION(identifier, priority, modelControllerType)                                                                                              \
+#define SABERMODELCONTROLLER_REGISTRATION(identifier, priority, modelControllerType)                                                                                           \
     template <Qosmetics::Core::SaberModelControllerRegister::ModelController T>                                                                                                \
     struct sabermodelcontroller_registration_##identifier##_##priority : Qosmetics::Core::SaberModelControllerRegister::SaberModelControllerRegistration                       \
     {                                                                                                                                                                          \
