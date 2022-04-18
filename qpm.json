@@ -17,8 +17,7 @@
       "additionalData": {
         "extraFiles": [
           "src/inline-hook"
-        ],
-        "includeQmod": false
+        ]
       }
     },
     {
