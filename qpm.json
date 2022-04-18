@@ -24,7 +24,9 @@
     {
       "id": "codegen",
       "versionRange": "^0.22.0",
-      "additionalData": {}
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
       "id": "custom-types",
