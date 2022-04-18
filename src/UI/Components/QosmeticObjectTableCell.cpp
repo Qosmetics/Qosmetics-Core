@@ -201,5 +201,9 @@ namespace Qosmetics::Core
             tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
             set_sprite(sprite);
         }
+        else // if all fails, just set the default sprite
+        {
+            set_sprite(tableData->DefaultSprite());
+        }
     }
 }
