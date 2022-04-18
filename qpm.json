@@ -17,7 +17,8 @@
       "additionalData": {
         "extraFiles": [
           "src/inline-hook"
-        ]
+        ],
+        "includeQmod": false
       }
     },
     {
@@ -28,12 +29,16 @@
     {
       "id": "custom-types",
       "versionRange": "^0.15.9",
-      "additionalData": {}
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
       "id": "questui",
       "versionRange": "^0.13.5",
-      "additionalData": {}
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
       "id": "modloader",

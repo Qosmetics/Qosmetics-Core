@@ -5,16 +5,10 @@
     "author": "RedBrumbler",
     "version": "${version}",
     "packageId": "com.beatgames.beatsaber",
-    "packageVersion": "1.20.0",
+    "packageVersion": "1.21.0",
     "coverImage": "cover.gif",
     "description": "Qosmetics Core module that handles menu placement and generic utils for other modules",
-    "dependencies": [
-        {
-            "version": "^9.0.4",
-            "id": "tinyxml2",
-            "downloadIfMissing": "https://github.com/MillzyDev/NDK-tinyxml2/releases/download/v9.0.4/tinyxml2.qmod"
-        }
-    ],
+    "dependencies": [],
     "modFiles": [],
     "libraryFiles": [],
     "fileCopies": []
