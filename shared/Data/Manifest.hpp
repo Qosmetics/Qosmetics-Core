@@ -11,7 +11,7 @@ namespace Qosmetics::Core
     {
     public:
         Manifest() : filePath(){};
-        Manifest(std::string filePath, std::string fileName, const Descriptor& descriptor, const T& config) : filePath(filePath), fileName(fileName), descriptor(descriptor), config(std::make_shared<T>(config)){};
+        Manifest(std::string_view filePath, std::string_view fileName, const Descriptor& descriptor, const T& config) : filePath(filePath), fileName(fileName), descriptor(descriptor), config(std::make_shared<T>(config)){};
 
         Manifest(std::string_view filePath) : filePath(filePath)
         {
@@ -39,19 +39,19 @@ namespace Qosmetics::Core
             return doc;
         }
         /// @brief returrns a const reference to the filepath string
-        virtual const std::string& get_filePath() const
+        [[nodiscard]] virtual const std::string& get_filePath() const
         {
             return filePath;
         }
 
         /// @brief returns the fileName, will need appending of _platform though
-        virtual const std::string& get_fileName() const
+        [[nodiscard]] virtual const std::string& get_fileName() const
         {
             return fileName;
         }
 
         /// @brief returns a const reference to the descriptor
-        virtual const Descriptor& get_descriptor() const
+        [[nodiscard]] virtual const Descriptor& get_descriptor() const
         {
             return descriptor;
         }
