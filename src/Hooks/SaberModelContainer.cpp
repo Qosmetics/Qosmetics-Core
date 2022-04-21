@@ -35,13 +35,22 @@ MAKE_AUTO_HOOK_ORIG_MATCH(SaberModelContainer_Start, &GlobalNamespace::SaberMode
     for (auto reg : registrations)
     {
         auto customController = reinterpret_cast<Qosmetics::Core::SaberModelController*>(saberModelControllerGO->AddComponent(reg->get_saberModelControllertype()));
-        if (!customController)
-            ERROR("Failed to Add Custom controller to saber model controller gameobject");
-        customController->colorManager = colorManager;
-        auto* initMethod = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass(customController), "Init", 1);
-        if (initMethod)
-            il2cpp_utils::RunMethod(customController, initMethod, saber);
+        if (customController)
+        {
+            customController->colorManager = colorManager;
+            auto* initMethod = il2cpp_functions::class_get_method_from_name(il2cpp_utils::ExtractClass(customController), "Init", 1);
+            if (initMethod)
+                il2cpp_utils::RunMethod(customController, initMethod, saber);
+            else
+                ERROR("Could not Find Init method on type {}::{}(GlobalNamespace::Saber* saber), make sure it's defined!", customController->klass->namespaze, customController->klass->name);
+        }
         else
-            ERROR("Could not Find Init method on type {}::{}(GlobalNamespace::Saber* saber), make sure it's defined!", customController->klass->namespaze, customController->klass->name);
+        {
+            ERROR("Failed to Add Custom controller to saber model controller gameobject");
+            continue;
+        }
+
+        if (!reg->get_chain())
+            break;
     }
 }

@@ -20,6 +20,7 @@ namespace Qosmetics::Core::SaberModelControllerRegister
     public:
         std::string identifier;
         int priority;
+        virtual bool get_chain() const = 0;
         virtual Il2CppReflectionType* get_saberModelControllertype() const = 0;
 
         SaberModelControllerRegistration(std::string_view identifier, int priority) : identifier(identifier), priority(priority){};
@@ -37,9 +38,9 @@ namespace Qosmetics::Core::SaberModelControllerRegister
 macro to be used in a similiar way to a hook, this makes creating registrations far easier than having to manually manage everythinbg, and ensures registrations are used as intended
 
 example usage:
-SABERMODELCONTROLLER_REGISTRATION(QosmeticsSabers, 10, Qosmetics::Sabers::SaberModelController*)
+SABERMODELCONTROLLER_REGISTRATION(QosmeticsSabers, 10, true, Qosmetics::Sabers::SaberModelController*)
 */
-#define SABERMODELCONTROLLER_REGISTRATION(identifier, priority, modelControllerType)                                                                                           \
+#define SABERMODELCONTROLLER_REGISTRATION(identifier, priority, chain, modelControllerType)                                                                                    \
     template <Qosmetics::Core::SaberModelControllerRegister::ModelController T>                                                                                                \
     struct sabermodelcontroller_registration_##identifier##_##priority : Qosmetics::Core::SaberModelControllerRegister::SaberModelControllerRegistration                       \
     {                                                                                                                                                                          \
@@ -47,6 +48,7 @@ SABERMODELCONTROLLER_REGISTRATION(QosmeticsSabers, 10, Qosmetics::Sabers::SaberM
         {                                                                                                                                                                      \
             Qosmetics::Core::SaberModelControllerRegister::Register(this);                                                                                                     \
         }                                                                                                                                                                      \
+        bool get_chain() const override { return chain; };                                                                                                                     \
         Il2CppReflectionType* get_saberModelControllertype() const override { return csTypeOf(T); };                                                                           \
     };                                                                                                                                                                         \
     static sabermodelcontroller_registration_##identifier##_##priority<modelControllerType> sabermodelcontroller_registration_##identifier##_##priorityInstance = sabermodelcontroller_registration_##identifier##_##priority<modelControllerType>()
