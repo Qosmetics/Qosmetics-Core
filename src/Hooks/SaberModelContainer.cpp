@@ -34,7 +34,8 @@ MAKE_AUTO_HOOK_ORIG_MATCH(SaberModelContainer_Start, &GlobalNamespace::SaberMode
     auto registrations = Qosmetics::Core::SaberModelControllerRegister::GetRegistrations();
     for (auto reg : registrations)
     {
-        auto customController = reinterpret_cast<Qosmetics::Core::SaberModelController*>(saberModelControllerGO->AddComponent(reg->get_saberModelControllertype()));
+        auto type = reg->get_saberModelControllertype();
+        auto customController = reinterpret_cast<Qosmetics::Core::SaberModelController*>(saberModelControllerGO->AddComponent(type));
         if (customController)
         {
             customController->colorManager = colorManager;
