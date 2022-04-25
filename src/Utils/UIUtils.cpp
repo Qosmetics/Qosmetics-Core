@@ -29,7 +29,7 @@ namespace Qosmetics::Core::UIUtils
         layoutelem->set_preferredWidth(90.0f);
 
         Backgroundable* background = horizontal->get_gameObject()->AddComponent<Backgroundable*>();
-        background->ApplyBackgroundWithAlpha(il2cpp_utils::newcsstr("title-gradient"), 1.0f);
+        background->ApplyBackgroundWithAlpha("title-gradient", 1.0f);
 
         auto* imageView = background->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
         imageView->dyn__skew() = 0.18f;
@@ -46,8 +46,8 @@ namespace Qosmetics::Core::UIUtils
     void SetTitleColor(HMUI::TitleViewController* titleView, const UnityEngine::Color& color, bool buttonanim)
     {
         Transform* title_T = titleView->get_transform();
-        Transform* BG_T = title_T->Find(il2cpp_utils::newcsstr("BG"));
-        Transform* BackButtonBG_T = title_T->Find(il2cpp_utils::newcsstr("BackButton/BG"));
+        Transform* BG_T = title_T->Find("BG");
+        Transform* BackButtonBG_T = title_T->Find("BackButton/BG");
 
         HMUI::ImageView* imageView = BG_T->get_gameObject()->GetComponent<HMUI::ImageView*>();
         Color oldColor = imageView->get_color();

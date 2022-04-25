@@ -12,7 +12,7 @@ namespace Qosmetics::Core
     void QosmeticObjectTableData::ctor()
     {
         INVOKE_CTOR();
-        reuseIdentifier = il2cpp_utils::newcsstr("QosmeticObjectCellList");
+        reuseIdentifier = StringW("QosmeticObjectCellList");
         cellSize = 12.0f;
 
         previewToSpriteDict = StringToSpriteDict::New_ctor();

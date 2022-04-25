@@ -51,7 +51,7 @@ namespace Qosmetics::Core::BundleUtils
 
     custom_types::Helpers::Coroutine LoadAssetFromBundleAsync(UnityEngine::AssetBundle* bundle, std::string_view name, System::Type* type, UnityEngine::Object*& out)
     {
-        auto req = bundle->LoadAssetAsync(il2cpp_utils::newcsstr(name), type);
+        auto req = bundle->LoadAssetAsync(name, type);
         req->set_allowSceneActivation(true);
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
 

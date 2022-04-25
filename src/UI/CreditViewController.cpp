@@ -37,7 +37,7 @@ HorizontalLayoutGroup* make_patron_display(UnityEngine::Transform* parent, std::
     auto banner = CreateHorizontalLayoutGroup(parent->get_transform());
     auto bannerText = CreateText(banner->get_transform(), title);
     auto bannerBG = banner->get_gameObject()->AddComponent<QuestUI::Backgroundable*>();
-    bannerBG->ApplyBackgroundWithAlpha(il2cpp_utils::newcsstr("title-gradient"), 1.0f);
+    bannerBG->ApplyBackgroundWithAlpha("title-gradient", 1.0f);
     bannerText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
 
     auto contentSizeFitter = banner->get_gameObject()->GetComponent<ContentSizeFitter*>();
@@ -72,7 +72,7 @@ HorizontalLayoutGroup* make_patron_display(UnityEngine::Transform* parent, std::
     auto horizontal = CreateHorizontalLayoutGroup(container->get_transform());      \
     auto vertical = CreateVerticalLayoutGroup(horizontal->get_transform());         \
     auto bg = vertical->get_gameObject()->AddComponent<QuestUI::Backgroundable*>(); \
-    bg->ApplyBackgroundWithAlpha(il2cpp_utils::newcsstr("title-gradient"), 0.5f);   \
+    bg->ApplyBackgroundWithAlpha("title-gradient", 0.5f);                           \
     HMUI::ImageView* imageView =                                                    \
         bg->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();           \
     imageView->dyn__gradient() = false;                                             \
@@ -105,7 +105,7 @@ namespace Qosmetics::Core
             mainText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
 
             auto patreonText = CreateClickableText(explVertical->get_transform(), "Patreon.com/Qosmetics", true, []()
-                                                   { Application::OpenURL(il2cpp_utils::newcsstr(patreon_url)); });
+                                                   { Application::OpenURL(patreon_url); });
             patreonText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
             patreonText->set_defaultColor(Color(1.0f, 0.25f, 0.25f, 1.0f));
             patreonText->set_highlightColor(Color(1.0f, 0.5f, 0.5f, 1.0f));

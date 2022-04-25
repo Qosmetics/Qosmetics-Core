@@ -56,7 +56,7 @@ namespace Qosmetics::Core
 {
     Qosmetics::Core::QosmeticObjectTableCell* QosmeticObjectTableCell::CreateNewCell()
     {
-        static auto playerTableCellStr = il2cpp_utils::newcsstr<il2cpp_utils::CreationType::Manual>("GlobalLeaderboardTableCell");
+        static ConstString playerTableCellStr("GlobalLeaderboardTableCell");
         auto cellGO = UnityEngine::GameObject::New_ctor();
         auto playerCell = cellGO->AddComponent<QosmeticObjectTableCell*>();
         cellGO->set_name(playerTableCellStr);

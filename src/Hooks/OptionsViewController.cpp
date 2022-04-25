@@ -44,7 +44,7 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
         Button* button = Object::Instantiate(baseButton);
         button->set_name("Qosmetics Settings");
 
-        UnityEngine::Transform* wrapper = self->get_transform()->Find(il2cpp_utils::newcsstr("Wrapper"));
+        UnityEngine::Transform* wrapper = self->get_transform()->Find("Wrapper");
         button->get_transform()->SetParent(wrapper, false);
 
         if (questUIExists)
