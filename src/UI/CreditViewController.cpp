@@ -1,5 +1,7 @@
 #include "UI/CreditViewController.hpp"
 #include "Data/Patrons.hpp"
+#include "Utils/DateUtils.hpp"
+#include "Utils/RainbowUtils.hpp"
 #include "Utils/UIUtils.hpp"
 #include "diglett/shared/Localization.hpp"
 #include "diglett/shared/Util.hpp"
@@ -95,7 +97,14 @@ namespace Qosmetics::Core
             auto vertical = container->GetComponentInChildren<VerticalLayoutGroup*>();
             vertical->set_spacing(5.0f);
 
-            UIUtils::AddHeader(get_transform(), localization->get("QosmeticsCore:Credit:PatreonHeader"), qosmetics_purple);
+            if (DateUtils::isMonth(6))
+            {
+                UIUtils::AddHeader(get_transform(), RainbowUtils::gayify(static_cast<std::string>(localization->get("QosmeticsCore:Credit:PatreonHeader"))), qosmetics_purple);
+            }
+            else
+            {
+                UIUtils::AddHeader(get_transform(), localization->get("QosmeticsCore:Credit:PatreonHeader"), qosmetics_purple);
+            }
 
             auto explHorizontal = CreateHorizontalLayoutGroup(container->get_transform());
             auto explVertical = CreateVerticalLayoutGroup(explHorizontal->get_transform());

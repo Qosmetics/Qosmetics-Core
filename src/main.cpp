@@ -48,5 +48,7 @@ extern "C" void load()
         Paper::Logger::Init("/sdcard/Android/data/com.beatgames.beatsaber/files/logs/paper");
     }
 
+    srand(time(NULL));
+
     INFO("Boats and hoes");
 }

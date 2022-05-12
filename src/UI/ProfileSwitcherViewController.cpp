@@ -1,6 +1,8 @@
 #include "UI/ProfileSwitcherViewController.hpp"
 #include "ConfigRegister_Internal.hpp"
+#include "Utils/DateUtils.hpp"
 #include "Utils/FileUtils.hpp"
+#include "Utils/RainbowUtils.hpp"
 #include "Utils/UIUtils.hpp"
 #include "diglett/shared/Localization.hpp"
 #include "diglett/shared/Util.hpp"
@@ -26,7 +28,16 @@ namespace Qosmetics::Core
         if (firstActivation)
         {
             auto localization = Diglett::Localization::get_instance();
-            UIUtils::AddHeader(get_transform(), localization->get("QosmeticsCore:Settings:Profile"), qosmetics_purple);
+            time_t rawtime = time(nullptr);
+            if (DateUtils::isMonth(6))
+            {
+                UIUtils::AddHeader(get_transform(), RainbowUtils::gayify(static_cast<std::string>(localization->get("QosmeticsCore:Settings:Profile"))), qosmetics_purple);
+            }
+            else
+            {
+                UIUtils::AddHeader(get_transform(), localization->get("QosmeticsCore:Settings:Profile"), qosmetics_purple);
+            }
+
             auto vertical = CreateVerticalLayoutGroup(get_transform());
 
             CreateText(vertical->get_transform(), localization->get("QosmeticsCore:Settings:ProfileMessage"));

@@ -2,6 +2,8 @@
 #include "UI/CreditViewController.hpp"
 #include "UI/ProfileSwitcherViewController.hpp"
 #include "UI/QosmeticsViewController.hpp"
+#include "Utils/DateUtils.hpp"
+#include "Utils/RainbowUtils.hpp"
 #include "Utils/UIUtils.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 #include "static-defines.hpp"
@@ -28,7 +30,10 @@ namespace Qosmetics::Core
             ProvideInitialViewControllers(qosmeticsViewController, profileSwitcherViewController, creditViewController, nullptr, nullptr);
 
             set_showBackButton(true);
-            SetTitle("Qosmetics", HMUI::ViewController::AnimationType::In);
+
+            time_t rawtime = time(nullptr);
+            tm localTime = *localtime(&rawtime);
+            SetTitle(DateUtils::isMonth(6) ? RainbowUtils::gayify("Qosmetics") : "Qosmetics", HMUI::ViewController::AnimationType::In);
         }
 
         creditViewController->get_gameObject()->SetActive(true);
