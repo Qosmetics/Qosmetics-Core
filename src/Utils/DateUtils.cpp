@@ -10,7 +10,6 @@ namespace Qosmetics::Core::DateUtils
 
     bool isMonth(int month)
     {
-        return true;
         return (month - 1) == GetTime().tm_mon;
     }
 
