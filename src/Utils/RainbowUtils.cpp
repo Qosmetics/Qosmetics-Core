@@ -79,17 +79,28 @@ static GaydientImpl<6> pan{{"<color=#f11a85>",
                             "<color=#ffd900>",
                             "<color=#1bb3ff>",
                             "<color=#1bb3ff>"}};
-static GaydientImpl<4> nb{{"<color=#f9ee33>",
-                           "<color=#000000>",
-                           "<color=#9c59cf>",
-                           "<color=#2d2d2d>"}};
+static GaydientImpl<4> nonbinary{{"<color=#f9ee33>",
+                                  "<color=#000000>",
+                                  "<color=#9c59cf>",
+                                  "<color=#2d2d2d>"}};
 static GaydientImpl<6> genderqueer{{"<color=#ac77d0>",
                                     "<color=#ac77d0>",
                                     "<color=#ffffff>",
                                     "<color=#ffffff>",
                                     "<color=#4b8124>",
                                     "<color=#4b8124>"}};
-
+static GaydientImpl<5> genderfluid{{"<color=#ff75a2>",
+                                    "<color=#f5f5f5>",
+                                    "<color=#be18d6>",
+                                    "<color=#2c2c2c>",
+                                    "<color=#333ebd>"}};
+static GaydientImpl<7> agender{{"<color=#000000>",
+                                "<color=#bcc4c6>",
+                                "<color=#ffffff>",
+                                "<color=#b9f480>",
+                                "<color=#ffffff>",
+                                "<color=#bcc4c6>",
+                                "<color=#000000>"}};
 namespace Qosmetics::Core::RainbowUtils
 {
     static constexpr int colorSegmentSize = 24;
