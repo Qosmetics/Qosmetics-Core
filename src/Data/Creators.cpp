@@ -7,6 +7,8 @@
 #include "UnityEngine/Networking/DownloadHandler.hpp"
 #include "UnityEngine/Networking/UnityWebRequest.hpp"
 
+#include "logging.hpp"
+
 UnityEngine::Color FromJson(const rapidjson::Value& v)
 {
     return {v["R"].GetFloat(), v["G"].GetFloat(), v["B"].GetFloat(), 1.0f};
@@ -40,11 +42,27 @@ namespace Qosmetics::Core::Creators
     {
         UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequest::Get(creator_color_url);
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
+
+        bool isHttpError = www->get_isHttpError();
+        bool isNetworkError = www->get_isNetworkError();
+
+        if (isHttpError || isNetworkError)
+        {
+            ERROR("Failed to fetch creators file from resources repository");
+            ERROR("Was http error: {}", isHttpError);
+            ERROR("Was network error: {}", isNetworkError);
+
+            co_return;
+        }
         auto downloadHandler = www->get_downloadHandler();
 
         rapidjson::Document d;
         d.Parse(static_cast<std::string>(downloadHandler->get_text()));
-        ParseCreators(d);
+
+        if (d.GetParseError() == 0)
+            ParseCreators(d);
+
+        co_return;
     }
 
     void Download()

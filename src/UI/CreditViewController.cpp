@@ -21,6 +21,7 @@
 #include "UnityEngine/Material.hpp"
 #include "UnityEngine/Networking/DownloadHandler.hpp"
 #include "UnityEngine/Networking/UnityWebRequest.hpp"
+#include "UnityEngine/Networking/UnityWebRequestAsyncOperation.hpp"
 #include "UnityEngine/RectTransform.hpp"
 #include "UnityEngine/Resources.hpp"
 #include "UnityEngine/Shader.hpp"
@@ -132,19 +133,38 @@ namespace Qosmetics::Core
     custom_types::Helpers::Coroutine CreditViewController::GetPatreonSupporters()
     {
         UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequest::Get(patron_url);
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
+        auto req = www->SendWebRequest();
+        co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
+
+        bool isHttpError = www->get_isHttpError();
+        bool isNetworkError = www->get_isNetworkError();
+
+        auto localization = Diglett::Localization::get_instance();
+
+        if (isHttpError || isNetworkError)
+        {
+            ERROR("Failed to fetch patrons file from resources repository");
+            ERROR("Was http error: {}", isHttpError);
+            ERROR("Was network error: {}", isNetworkError);
+
+            auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
+            patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
+            auto placeholderText = CreateText(patronTexts->get_transform(), localization->get("QosmeticsCore:Credit:Failed"));
+
+            co_return;
+        }
+
         auto downloadHandler = www->get_downloadHandler();
         auto patrons = Qosmetics::Core::Patrons::Parse(static_cast<std::string>(downloadHandler->get_text()));
 
         auto patronTextsT = patronTexts->get_transform()->get_parent();
         Object::DestroyImmediate(patronTextsT->get_gameObject());
 
-        auto localization = Diglett::Localization::get_instance();
         if (!patrons.any())
         {
             auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
             patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), localization->get("QosmeticsCore:Credit:Fetching"));
+            auto placeholderText = CreateText(patronTexts->get_transform(), localization->get("QosmeticsCore:Credit:Missing"));
         }
         else
         {

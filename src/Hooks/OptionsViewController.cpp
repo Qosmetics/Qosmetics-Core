@@ -35,9 +35,9 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
 {
     OptionsViewController_DidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
 
-    Qosmetics::Core::Creators::Download();
     if (firstActivation)
     {
+        Qosmetics::Core::Creators::Download();
 
         bool questUIExists = QuestUI::GetModsCount() > 0;
         Button* baseButton = self->dyn__settingsButton();
