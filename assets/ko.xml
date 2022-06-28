@@ -10,6 +10,7 @@
     <string name="QosmeticsCore:Credit:PatreonMessageBody">These Patrons and Donators have donated to show their support,\n and have received a place here to thank them for this.\n This support is greatly appreciated and will help justify time spent on developing Qosmetics & other mods.\n A massive thanks goes out to all these people!\n\n If you'd also like to support development, the patreon can be found at:</string>
     <string name="QosmeticsCore:Credit:Fetching">Fetching patreon supporters...</string>
     <string name="QosmeticsCore:Credit:Missing">There were no patrons found, you can be the first to appear here!</string>
+    <string name="QosmeticsCore:Credit:Failed">There were no patrons found, There must have been a network error!</string>
     <string name="QosmeticsCore:Credit:Legendary">Legendary patrons</string>
     <string name="QosmeticsCore:Credit:Tier4">Tier 4</string>
     <string name="QosmeticsCore:Credit:Amazing">Amazing patrons</string>

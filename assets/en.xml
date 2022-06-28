@@ -15,6 +15,7 @@ A massive thanks goes out to all these people!
 If you'd also like to support development, the patreon can be found at:</string>
     <string name="QosmeticsCore:Credit:Fetching">Fetching patreon supporters...</string>
     <string name="QosmeticsCore:Credit:Missing">There were no patrons found, you can be the first to appear here!</string>
+    <string name="QosmeticsCore:Credit:Failed">There were no patrons found, There must have been a network error!</string>
     <string name="QosmeticsCore:Credit:Legendary">Legendary patrons</string>
     <string name="QosmeticsCore:Credit:Tier4">Tier 4</string>
     <string name="QosmeticsCore:Credit:Amazing">Amazing patrons</string>
