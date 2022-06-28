@@ -8,3 +8,4 @@ mod.template.json
 *.log
 mod.json
 *.qmod
+*.psd
