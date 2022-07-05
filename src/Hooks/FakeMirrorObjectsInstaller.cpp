@@ -11,11 +11,11 @@
 
 MAKE_AUTO_HOOK_ORIG_MATCH(FakeMirrorObjectsInstaller_InstallBindings, &GlobalNamespace::FakeMirrorObjectsInstaller::InstallBindings, void, GlobalNamespace::FakeMirrorObjectsInstaller* self)
 {
-    auto mirroredGameNoteControllerPrefab = self->dyn__mirroredGameNoteControllerPrefab();
-    auto mirroredBurstSliderHeadGameNoteControllerPrefab = self->dyn__mirroredBurstSliderHeadGameNoteControllerPrefab();
-    auto mirroredBurstSliderGameNoteControllerPrefab = self->dyn__mirroredBurstSliderGameNoteControllerPrefab();
-    auto mirroredBombNoteControllerPrefab = self->dyn__mirroredBombNoteControllerPrefab();
-    auto mirroredObstacleControllerPrefab = self->dyn__mirroredObstacleControllerPrefab();
+    auto mirroredGameNoteControllerPrefab = self->mirroredGameNoteControllerPrefab;
+    auto mirroredBurstSliderHeadGameNoteControllerPrefab = self->mirroredBurstSliderHeadGameNoteControllerPrefab;
+    auto mirroredBurstSliderGameNoteControllerPrefab = self->mirroredBurstSliderGameNoteControllerPrefab;
+    auto mirroredBombNoteControllerPrefab = self->mirroredBombNoteControllerPrefab;
+    auto mirroredObstacleControllerPrefab = self->mirroredObstacleControllerPrefab;
 
     MAKE_CLONE_AND_PARENT(mirroredGameNoteControllerPrefab);
     MAKE_CLONE_AND_PARENT(mirroredBurstSliderHeadGameNoteControllerPrefab);
@@ -33,9 +33,9 @@ MAKE_AUTO_HOOK_ORIG_MATCH(FakeMirrorObjectsInstaller_InstallBindings, &GlobalNam
 
     FakeMirrorObjectsInstaller_InstallBindings(self);
 
-    self->dyn__mirroredGameNoteControllerPrefab() = mirroredGameNoteControllerPrefab;
-    self->dyn__mirroredBurstSliderHeadGameNoteControllerPrefab() = mirroredBurstSliderHeadGameNoteControllerPrefab;
-    self->dyn__mirroredBurstSliderGameNoteControllerPrefab() = mirroredBurstSliderGameNoteControllerPrefab;
-    self->dyn__mirroredBombNoteControllerPrefab() = mirroredBombNoteControllerPrefab;
-    self->dyn__mirroredObstacleControllerPrefab() = mirroredObstacleControllerPrefab;
+    self->mirroredGameNoteControllerPrefab = mirroredGameNoteControllerPrefab;
+    self->mirroredBurstSliderHeadGameNoteControllerPrefab = mirroredBurstSliderHeadGameNoteControllerPrefab;
+    self->mirroredBurstSliderGameNoteControllerPrefab = mirroredBurstSliderGameNoteControllerPrefab;
+    self->mirroredBombNoteControllerPrefab = mirroredBombNoteControllerPrefab;
+    self->mirroredObstacleControllerPrefab = mirroredObstacleControllerPrefab;
 }

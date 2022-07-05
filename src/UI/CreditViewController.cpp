@@ -56,8 +56,8 @@ HorizontalLayoutGroup* make_patron_display(UnityEngine::Transform* parent, std::
 
     HMUI::ImageView* imageView =
         bannerBG->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
-    imageView->dyn__gradient() = true;
-    imageView->dyn__gradientDirection() = 1;
+    imageView->gradient = true;
+    imageView->gradientDirection = 1;
     imageView->set_color(headercolor);
     imageView->set_color0(Color(1.1f, 1.1f, 1.1f, 1.0f));
     imageView->set_color1(Color(0.9f, 0.9f, 0.9f, 1.0f));
@@ -78,8 +78,8 @@ HorizontalLayoutGroup* make_patron_display(UnityEngine::Transform* parent, std::
     bg->ApplyBackgroundWithAlpha("title-gradient", 0.5f);                           \
     HMUI::ImageView* imageView =                                                    \
         bg->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();           \
-    imageView->dyn__gradient() = false;                                             \
-    imageView->dyn__gradientDirection() = 1;                                        \
+    imageView->gradient = false;                                                    \
+    imageView->gradientDirection = 1;                                               \
     imageView->set_color({0, 0, 0, 0.5f})
 
 namespace Qosmetics::Core

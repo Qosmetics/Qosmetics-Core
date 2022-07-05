@@ -77,7 +77,7 @@ namespace Qosmetics::Core
 
         auto imageHost = CreateHost(get_transform(), {-42.5f, 0}, {9.0f, 9.0f});
         image = CreateImage(imageHost->get_transform(), nullptr, {0, 0}, {0, 0});
-        image->dyn__skew() = 0.18f;
+        image->skew = 0.18f;
 
         auto textHost = CreateHost(get_transform(), {-5.0f, 0}, {62.5f, 12.0f});
         textHost->set_childAlignment(UnityEngine::TextAnchor::MiddleLeft);
@@ -85,11 +85,11 @@ namespace Qosmetics::Core
         sub = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
 
         // auto selectBtn = CreateClickableImage(CreateHost(get_transform(), {32.5f, 0}, {8.0f, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_SelectIcon_png_start, _binary_SelectIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
-        // selectBtn->dyn__skew() = 0.18f;
+        // selectBtn->skew = 0.18f;
         // selectBtn->set_highlightColor({0.2f, 0.8f, 0.2f, 1.0f});
         auto deleteBtn = CreateClickableImage(CreateHost(get_transform(), {42.5f, 0}, {6.0f, 6.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_DeleteIcon_png_start, _binary_DeleteIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
         deleteBtn->set_highlightColor({0.8f, 0.2f, 0.2f, 1.0f});
-        deleteBtn->dyn__skew() = 0.18f;
+        deleteBtn->skew = 0.18f;
 
         hover = AddHoverHint(get_gameObject(), "---");
     }

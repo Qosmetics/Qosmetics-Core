@@ -22,15 +22,15 @@ namespace Qosmetics::Core
     {
         auto baseModal = CreateModal(parent, Vector2(50, 30), nullptr, true);
         auto go = baseModal->get_gameObject();
-        auto presentPanelAnimations = baseModal->dyn__presentPanelAnimations();
-        auto dismissPanelAnimation = baseModal->dyn__dismissPanelAnimation();
-        auto container = baseModal->dyn__container();
+        auto presentPanelAnimations = baseModal->presentPanelAnimations;
+        auto dismissPanelAnimation = baseModal->dismissPanelAnimation;
+        auto container = baseModal->container;
 
         Object::DestroyImmediate(baseModal);
         auto modal = go->AddComponent<DeletionConfirmationModal*>();
-        modal->dyn__presentPanelAnimations() = presentPanelAnimations;
-        modal->dyn__dismissPanelAnimation() = dismissPanelAnimation;
-        modal->dyn__container() = container;
+        modal->presentPanelAnimations = presentPanelAnimations;
+        modal->dismissPanelAnimation = dismissPanelAnimation;
+        modal->container = container;
 
         std::function<void()> onBlockerClicked = std::bind(&DeletionConfirmationModal::Dismiss, modal);
         modal->add_blockerClickedEvent(MakeDelegate(System::Action*, onBlockerClicked));

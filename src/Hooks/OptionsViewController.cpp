@@ -40,7 +40,7 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
         Qosmetics::Core::Creators::Download();
 
         bool questUIExists = QuestUI::GetModsCount() > 0;
-        Button* baseButton = self->dyn__settingsButton();
+        Button* baseButton = self->settingsButton;
         Button* button = Object::Instantiate(baseButton);
         button->set_name("Qosmetics Settings");
 
@@ -52,9 +52,9 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
             HorizontalLayoutGroup* layout = CreateHorizontalLayoutGroup(self->get_transform());
 
             Transform* layoutTransform = layout->get_transform();
-            self->dyn__editAvatarButton()->get_transform()->SetParent(layoutTransform);
-            self->dyn__playerOptionsButton()->get_transform()->SetParent(layoutTransform);
-            self->dyn__settingsButton()->get_transform()->SetParent(layoutTransform);
+            self->editAvatarButton->get_transform()->SetParent(layoutTransform);
+            self->playerOptionsButton->get_transform()->SetParent(layoutTransform);
+            self->settingsButton->get_transform()->SetParent(layoutTransform);
 
             layoutTransform->SetAsFirstSibling();
             layout->set_spacing(-64.0f);

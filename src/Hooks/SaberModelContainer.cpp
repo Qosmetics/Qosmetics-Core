@@ -20,12 +20,12 @@
 MAKE_AUTO_HOOK_ORIG_MATCH(SaberModelContainer_Start, &GlobalNamespace::SaberModelContainer::Start, void, GlobalNamespace::SaberModelContainer* self)
 {
     // implement original code more or less
-    auto saberModelControllerPrefab = self->dyn__saberModelControllerPrefab();
+    auto saberModelControllerPrefab = self->saberModelControllerPrefab;
 
-    auto container = self->dyn__container();
-    auto saber = self->dyn__saber();
+    auto container = self->container;
+    auto saber = self->saber;
 
-    auto saberModelControllerGO = self->dyn__container()->InstantiatePrefab(reinterpret_cast<UnityEngine::Object*>(saberModelControllerPrefab));
+    auto saberModelControllerGO = self->container->InstantiatePrefab(reinterpret_cast<UnityEngine::Object*>(saberModelControllerPrefab));
     auto saberModelController = saberModelControllerGO->GetComponent<GlobalNamespace::SaberModelController*>();
     saberModelController->Init(self->get_transform(), saber);
 

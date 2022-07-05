@@ -32,13 +32,13 @@ namespace Qosmetics::Core::UIUtils
         background->ApplyBackgroundWithAlpha("title-gradient", 1.0f);
 
         auto* imageView = background->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
-        imageView->dyn__skew() = 0.18f;
-        imageView->dyn__gradient() = true;
-        imageView->dyn__gradientDirection() = 0;
+        imageView->skew = 0.18f;
+        imageView->gradient = true;
+        imageView->gradientDirection = 0;
         imageView->set_color(color);
         imageView->set_color0(Color(1.0f, 1.0f, 1.0f, 1.0f));
         imageView->set_color1(Color(1.0f, 1.0f, 1.0f, 0.0f));
-        imageView->dyn__curvedCanvasSettingsHelper()->Reset();
+        imageView->curvedCanvasSettingsHelper->Reset();
 
         return text;
     }

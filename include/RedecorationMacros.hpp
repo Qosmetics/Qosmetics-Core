@@ -17,11 +17,11 @@
     auto type_##identifier = il2cpp_utils::GetSystemType(il2cpp_utils::ExtractType(identifier->klass)); \
     auto clone_##identifier = parent_clone_##identifier->GetComponentsInChildren(type_##identifier)[0]; \
     clone_##identifier->get_gameObject()->set_name(identifier->get_name());                             \
-    reinterpret_cast<UnityEngine::Component*&>(self->dyn__##identifier()) = clone_##identifier;         \
-    self->dyn__##identifier()->get_gameObject()->SetActive(true)
+    reinterpret_cast<UnityEngine::Component*&>(self->identifier) = clone_##identifier;                  \
+    self->identifier->get_gameObject()->SetActive(true)
 
 #define DESTROY_CLONE_PARENT(identifier) \
     UnityEngine::Object::Destroy(parent_clone_##identifier);
 
 #define REDECORATE(identifier) \
-    Qosmetics::Core::Redecoration::Redecorate(reinterpret_cast<Il2CppObject*&>(self->dyn__##identifier()), #identifier, type_##identifier, self_type, container)
+    Qosmetics::Core::Redecoration::Redecorate(reinterpret_cast<Il2CppObject*&>(self->identifier), #identifier, type_##identifier, self_type, container)

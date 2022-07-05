@@ -11,15 +11,15 @@
 
 MAKE_AUTO_HOOK_ORIG_MATCH(NoteDebrisPoolInstaller_InstallBindings, &GlobalNamespace::NoteDebrisPoolInstaller::InstallBindings, void, GlobalNamespace::NoteDebrisPoolInstaller* self)
 {
-    auto normalNoteDebrisHDPrefab = self->dyn__normalNoteDebrisHDPrefab();
-    auto normalNoteDebrisLWPrefab = self->dyn__normalNoteDebrisLWPrefab();
-    auto burstSliderHeadNoteDebrisHDPrefab = self->dyn__burstSliderHeadNoteDebrisHDPrefab();
-    auto burstSliderHeadNoteDebrisLWPrefab = self->dyn__burstSliderHeadNoteDebrisLWPrefab();
-    auto burstSliderElementNoteHDPrefab = self->dyn__burstSliderElementNoteHDPrefab();
-    auto burstSliderElementNoteLWPrefab = self->dyn__burstSliderElementNoteLWPrefab();
+    auto normalNoteDebrisHDPrefab = self->normalNoteDebrisHDPrefab;
+    auto normalNoteDebrisLWPrefab = self->normalNoteDebrisLWPrefab;
+    auto burstSliderHeadNoteDebrisHDPrefab = self->burstSliderHeadNoteDebrisHDPrefab;
+    auto burstSliderHeadNoteDebrisLWPrefab = self->burstSliderHeadNoteDebrisLWPrefab;
+    auto burstSliderElementNoteHDPrefab = self->burstSliderElementNoteHDPrefab;
+    auto burstSliderElementNoteLWPrefab = self->burstSliderElementNoteLWPrefab;
 
-    bool hd = self->dyn__noteDebrisHDConditionVariable()->get_value();
-    auto container = self->dyn__container();
+    bool hd = self->noteDebrisHDConditionVariable->get_value();
+    auto container = self->container;
     static auto self_type = il2cpp_utils::GetSystemType(il2cpp_utils::ExtractType(self->klass));
     if (hd)
     {
@@ -30,9 +30,9 @@ MAKE_AUTO_HOOK_ORIG_MATCH(NoteDebrisPoolInstaller_InstallBindings, &GlobalNamesp
         REDECORATE(burstSliderHeadNoteDebrisHDPrefab);
         REDECORATE(burstSliderElementNoteHDPrefab);
         NoteDebrisPoolInstaller_InstallBindings(self);
-        self->dyn__normalNoteDebrisHDPrefab() = normalNoteDebrisHDPrefab;
-        self->dyn__burstSliderHeadNoteDebrisHDPrefab() = burstSliderHeadNoteDebrisHDPrefab;
-        self->dyn__burstSliderElementNoteHDPrefab() = burstSliderElementNoteHDPrefab;
+        self->normalNoteDebrisHDPrefab = normalNoteDebrisHDPrefab;
+        self->burstSliderHeadNoteDebrisHDPrefab = burstSliderHeadNoteDebrisHDPrefab;
+        self->burstSliderElementNoteHDPrefab = burstSliderElementNoteHDPrefab;
     }
     else
     {
@@ -43,8 +43,8 @@ MAKE_AUTO_HOOK_ORIG_MATCH(NoteDebrisPoolInstaller_InstallBindings, &GlobalNamesp
         REDECORATE(burstSliderHeadNoteDebrisLWPrefab);
         REDECORATE(burstSliderElementNoteLWPrefab);
         NoteDebrisPoolInstaller_InstallBindings(self);
-        self->dyn__normalNoteDebrisLWPrefab() = normalNoteDebrisLWPrefab;
-        self->dyn__burstSliderHeadNoteDebrisLWPrefab() = burstSliderHeadNoteDebrisLWPrefab;
-        self->dyn__burstSliderElementNoteLWPrefab() = burstSliderElementNoteLWPrefab;
+        self->normalNoteDebrisLWPrefab = normalNoteDebrisLWPrefab;
+        self->burstSliderHeadNoteDebrisLWPrefab = burstSliderHeadNoteDebrisLWPrefab;
+        self->burstSliderElementNoteLWPrefab = burstSliderElementNoteLWPrefab;
     }
 }

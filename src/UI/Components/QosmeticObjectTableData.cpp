@@ -31,7 +31,7 @@ namespace Qosmetics::Core
         if (onSelect)
         {
             auto& desc = *std::next(objectDescriptors.begin(), idx);
-            ListW<QosmeticObjectTableCell*> visibleCells(reinterpret_cast<List<QosmeticObjectTableCell*>*>(tableView->dyn__visibleCells()));
+            ListW<QosmeticObjectTableCell*> visibleCells(reinterpret_cast<List<QosmeticObjectTableCell*>*>(tableView->visibleCells));
 
             auto cell = std::find_if(visibleCells.begin(), visibleCells.end(), [desc](auto x)
                                      { return desc.get_filePath() == x->descriptor.get_filePath(); });

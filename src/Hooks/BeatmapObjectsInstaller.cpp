@@ -11,13 +11,13 @@
 
 MAKE_AUTO_HOOK_ORIG_MATCH(BeatmapObjectsInstaller_InstallBindings, &GlobalNamespace::BeatmapObjectsInstaller::InstallBindings, void, GlobalNamespace::BeatmapObjectsInstaller* self)
 {
-    auto normalBasicNotePrefab = self->dyn__normalBasicNotePrefab();
-    auto proModeNotePrefab = self->dyn__proModeNotePrefab();
-    auto burstSliderHeadNotePrefab = self->dyn__burstSliderHeadNotePrefab();
-    auto burstSliderNotePrefab = self->dyn__burstSliderNotePrefab();
-    auto burstSliderFillPrefab = self->dyn__burstSliderFillPrefab();
-    auto bombNotePrefab = self->dyn__bombNotePrefab();
-    auto obstaclePrefab = self->dyn__obstaclePrefab();
+    auto normalBasicNotePrefab = self->normalBasicNotePrefab;
+    auto proModeNotePrefab = self->proModeNotePrefab;
+    auto burstSliderHeadNotePrefab = self->burstSliderHeadNotePrefab;
+    auto burstSliderNotePrefab = self->burstSliderNotePrefab;
+    auto burstSliderFillPrefab = self->burstSliderFillPrefab;
+    auto bombNotePrefab = self->bombNotePrefab;
+    auto obstaclePrefab = self->obstaclePrefab;
 
     MAKE_CLONE_AND_PARENT(normalBasicNotePrefab);
     MAKE_CLONE_AND_PARENT(proModeNotePrefab);
@@ -39,11 +39,11 @@ MAKE_AUTO_HOOK_ORIG_MATCH(BeatmapObjectsInstaller_InstallBindings, &GlobalNamesp
 
     BeatmapObjectsInstaller_InstallBindings(self);
 
-    self->dyn__normalBasicNotePrefab() = normalBasicNotePrefab;
-    self->dyn__proModeNotePrefab() = proModeNotePrefab;
-    self->dyn__burstSliderHeadNotePrefab() = burstSliderHeadNotePrefab;
-    self->dyn__burstSliderNotePrefab() = burstSliderNotePrefab;
-    self->dyn__burstSliderFillPrefab() = burstSliderFillPrefab;
-    self->dyn__bombNotePrefab() = bombNotePrefab;
-    self->dyn__obstaclePrefab() = obstaclePrefab;
+    self->normalBasicNotePrefab = normalBasicNotePrefab;
+    self->proModeNotePrefab = proModeNotePrefab;
+    self->burstSliderHeadNotePrefab = burstSliderHeadNotePrefab;
+    self->burstSliderNotePrefab = burstSliderNotePrefab;
+    self->burstSliderFillPrefab = burstSliderFillPrefab;
+    self->bombNotePrefab = bombNotePrefab;
+    self->obstaclePrefab = obstaclePrefab;
 }
