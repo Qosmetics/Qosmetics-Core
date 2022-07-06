@@ -13,7 +13,7 @@
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^3.7.4",
+      "versionRange": "^3.9.0",
       "additionalData": {
         "extraFiles": [
           "src/inline-hook"
@@ -22,21 +22,21 @@
     },
     {
       "id": "codegen",
-      "versionRange": "^0.22.0",
+      "versionRange": "^0.24.1",
       "additionalData": {
         "includeQmod": false
       }
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.9",
+      "versionRange": "^0.15.13",
       "additionalData": {
         "includeQmod": false
       }
     },
     {
       "id": "questui",
-      "versionRange": "^0.13.5",
+      "versionRange": "^0.16.1",
       "additionalData": {
         "includeQmod": false
       }
@@ -55,12 +55,12 @@
     },
     {
       "id": "paper",
-      "versionRange": "^1.0.5",
+      "versionRange": "^1.2.4",
       "additionalData": {}
     },
     {
       "id": "diglett",
-      "versionRange": "^2.0.0",
+      "versionRange": "^2.0.2",
       "additionalData": {}
     }
   ],
