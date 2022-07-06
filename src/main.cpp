@@ -42,12 +42,6 @@ extern "C" void load()
     Diglett::RegisterAsset(ASSET_TO_STR(ja_xml), Diglett::Language::JAPANESE);
     Diglett::RegisterAsset(ASSET_TO_STR(ko_xml), Diglett::Language::KOREAN);
 
-    if (!Paper::Logger::IsInited())
-    {
-        mkpath("/sdcard/Android/data/com.beatgames.beatsaber/files/logs/paper");
-        Paper::Logger::Init("/sdcard/Android/data/com.beatgames.beatsaber/files/logs/paper");
-    }
-
     srand(time(NULL));
 
     INFO("Boats and hoes");
