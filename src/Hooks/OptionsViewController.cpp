@@ -69,7 +69,7 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
 
         button->get_onClick()->AddListener(il2cpp_utils::MakeDelegate<UnityEngine::Events::UnityAction*>(classof(UnityEngine::Events::UnityAction*), (Il2CppObject*)nullptr, PresentQosmeticsFlowCoordinator));
 
-        SetButtonSprites(button, VectorToSprite(std::vector<uint8_t>(MenuIcon_png::getData(), MenuIcon_png::getData() + MenuIcon_png::getLength())), VectorToSprite(std::vector<uint8_t>(MenuIconSelected_png::getData(), MenuIconSelected_png::getData() + MenuIconSelected_png::getLength())));
+        SetButtonSprites(button, ArrayToSprite(IncludedAssets::MenuIcon_png), ArrayToSprite(IncludedAssets::MenuIconSelected_png));
 
         UnityEngine::Object::Destroy(button->GetComponentInChildren<Polyglot::LocalizedTextMeshProUGUI*>());
 

@@ -76,7 +76,7 @@ namespace Qosmetics::Core
         if (defaultSprite)
             return defaultSprite;
 
-        defaultSprite = QuestUI::BeatSaberUI::VectorToSprite(std::vector<uint8_t>(_binary_PlaceHolderImage_png_start, _binary_PlaceHolderImage_png_end));
+        defaultSprite = QuestUI::BeatSaberUI::ArrayToSprite(IncludedAssets::PlaceHolderImage_png);
         return defaultSprite;
     }
 

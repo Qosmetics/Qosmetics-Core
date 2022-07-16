@@ -87,7 +87,7 @@ namespace Qosmetics::Core
         // auto selectBtn = CreateClickableImage(CreateHost(get_transform(), {32.5f, 0}, {8.0f, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_SelectIcon_png_start, _binary_SelectIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
         // selectBtn->skew = 0.18f;
         // selectBtn->set_highlightColor({0.2f, 0.8f, 0.2f, 1.0f});
-        auto deleteBtn = CreateClickableImage(CreateHost(get_transform(), {42.5f, 0}, {6.0f, 6.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_DeleteIcon_png_start, _binary_DeleteIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
+        auto deleteBtn = CreateClickableImage(CreateHost(get_transform(), {42.5f, 0}, {6.0f, 6.0f})->get_transform(), ArrayToSprite(IncludedAssets::DeleteIcon_png), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
         deleteBtn->set_highlightColor({0.8f, 0.2f, 0.2f, 1.0f});
         deleteBtn->skew = 0.18f;
 
