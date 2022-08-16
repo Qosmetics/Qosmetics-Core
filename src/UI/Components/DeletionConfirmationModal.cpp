@@ -9,12 +9,14 @@
 #include "TMPro/TextAlignmentOptions.hpp"
 #include "UnityEngine/RectOffset.hpp"
 
+#include "custom-types/shared/delegate.hpp"
+
 DEFINE_TYPE(Qosmetics::Core, DeletionConfirmationModal);
 
 using namespace QuestUI::BeatSaberUI;
 using namespace UnityEngine;
 
-#define MakeDelegate(DelegateType, varName) (il2cpp_utils::MakeDelegate<DelegateType>(classof(DelegateType), varName))
+#define MakeDelegate(DelegateType, varName) (custom_types::MakeDelegate<DelegateType>(varName))
 
 namespace Qosmetics::Core
 {

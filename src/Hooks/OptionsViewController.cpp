@@ -15,6 +15,8 @@
 #include "UnityEngine/Events/UnityAction.hpp"
 #include "UnityEngine/Resources.hpp"
 
+#include "custom-types/shared/delegate.hpp"
+
 using namespace QuestUI;
 using namespace QuestUI::BeatSaberUI;
 using namespace UnityEngine;
@@ -67,7 +69,9 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
         else
             button->get_transform()->SetAsFirstSibling();
 
-        button->get_onClick()->AddListener(il2cpp_utils::MakeDelegate<UnityEngine::Events::UnityAction*>(classof(UnityEngine::Events::UnityAction*), (Il2CppObject*)nullptr, PresentQosmeticsFlowCoordinator));
+        auto delegate = custom_types::MakeDelegate<UnityEngine::Events::UnityAction*>(std::function<void()>([]()
+                                                                                                            { PresentQosmeticsFlowCoordinator(); }));
+        button->get_onClick()->AddListener(delegate);
 
         SetButtonSprites(button, ArrayToSprite(IncludedAssets::MenuIcon_png), ArrayToSprite(IncludedAssets::MenuIconSelected_png));
 

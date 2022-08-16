@@ -5,6 +5,8 @@
 
 #include "System/Action_2.hpp"
 
+#include "custom-types/shared/delegate.hpp"
+
 DEFINE_TYPE(Qosmetics::Core, QosmeticObjectTableData);
 
 namespace Qosmetics::Core
@@ -22,7 +24,7 @@ namespace Qosmetics::Core
     {
         using DelegateType = System::Action_2<HMUI::TableView*, int>;
         std::function<void(HMUI::TableView*, int)> fun = std::bind(&QosmeticObjectTableData::DidSelectCellWithIdx, this, std::placeholders::_1, std::placeholders::_2);
-        auto delegate = il2cpp_utils::MakeDelegate<DelegateType*>(classof(DelegateType*), fun);
+        auto delegate = custom_types::MakeDelegate<DelegateType*>(fun);
         tableView->add_didSelectCellWithIdxEvent(delegate);
     }
 
