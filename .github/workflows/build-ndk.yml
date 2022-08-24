@@ -3,7 +3,7 @@ name: NDK build
 on:
   workflow_dispatch:
   push:
-    branches: [master, qpm-rust]
+    branches: master
     paths-ignore:
       - '**.yml'
       - '!.github/workflows/build-ndk.yml'
@@ -73,9 +73,6 @@ jobs:
     - name: QPM Restore
       run: |
         ./QPM/qpm-rust restore
-        
-    - name: Run QPM legacy fix
-      run: ./QPM/qpm-rust cache legacy-fix
 
     - name: List Post Restore
       run: |
@@ -89,7 +86,7 @@ jobs:
     - name: Build
       run: |
         cd ${GITHUB_WORKSPACE}
-        ./QPM/qpm-rust qmod build --include_libs lib${module_id}.so libcustom-types.so libbeatsaber-hook_2_3_2.so libbs-utils.so
+        ./QPM/qpm-rust qmod build
         pwsh -Command ./build.ps1
 
     - name: Create Qmod
@@ -104,69 +101,16 @@ jobs:
         files=( $pattern )
         echo ::set-output name=NAME::"${files[0]}"
     
-#    - name: Upload non-debug artifact
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: ${{ steps.libname.outputs.NAME }}
-#        path: ./build/${{ steps.libname.outputs.NAME }}
-#        if-no-files-found: error
-#
-#    - name: Upload debug artifact
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: debug_${{ steps.libname.outputs.NAME }}
-#        path: ./build/debug_${{ steps.libname.outputs.NAME }}
-#        if-no-files-found: error
-#
-#    - name: Upload qmod artifact
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: ${{env.qmodName}}.qmod
-#        path: ./${{ env.qmodName }}.qmod
-#        if-no-files-found: error
-
-    - name: Check if webhook secret set
-      id: webhook-set
-      run: echo ::set-output name=EXISTS::"${{secrets.DISCORD_WEBHOOK_URL != ''}}"
-
-    - name: Publish release.so to webhook
-      if: ${{ steps.webhook-set.outputs.EXISTS }}
-      uses: tsickert/discord-webhook@v3.2.0
+    - name: Upload non-debug artifact
+      uses: actions/upload-artifact@v2
       with:
-        webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        content: "${{ env.CI_SHA_SHORT }} - `${{ github.event.head_commit.message }}`\nrelease.so"
-        username: "${{ github.repository }}"
-        avatar-url: "http://github.com/${{ env.CI_REPOSITORY_OWNER }}.png"
-        filename: ./build/${{ steps.libname.outputs.NAME }}
+        name: ${{ steps.libname.outputs.NAME }}
+        path: ./build/${{ steps.libname.outputs.NAME }}
+        if-no-files-found: error
 
-    - name: Publish debug.so to webhook
-      if: ${{ steps.webhook-set.outputs.EXISTS }}
-      uses: tsickert/discord-webhook@v3.2.0
+    - name: Upload debug artifact
+      uses: actions/upload-artifact@v2
       with:
-        webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        content: "debug.so"
-        username: "${{ github.repository }}"
-        avatar-url: "http://github.com/${{ env.CI_REPOSITORY_OWNER }}.png"
-        filename: ./build/debug_${{ steps.libname.outputs.NAME }}
-
-    - name: Publish qmod to webhook
-      uses: tsickert/discord-webhook@v3.2.0
-      with:
-        # Url is github secret, so it doesn't get leaked
-        webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        # last commit message will be the given text
-        content: "qmod"
-        # user is repo name
-        username: "${{ github.repository }}"
-        # avatar url is repo owner avatar
-        avatar-url: "http://github.com/${{ env.CI_REPOSITORY_OWNER }}.png"
-        # file to upload is the qmod
-        filename: ./${{ env.qmodName }}.qmod
-       # Disabling qmod upload becasue people are getting qmods from GH actions when they should not
-#    - name: Upload qmod artifact
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: ${{ env.qmodName }}.qmod
-#        path: ./${{ env.qmodName }}.qmod
-#        # if not found error obviously
-#        if-no-files-found: error
+        name: debug_${{ steps.libname.outputs.NAME }}
+        path: ./build/debug_${{ steps.libname.outputs.NAME }}
+        if-no-files-found: error
