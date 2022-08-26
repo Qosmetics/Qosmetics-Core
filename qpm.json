@@ -7,7 +7,11 @@
     "version": "2.0.0",
     "url": "https://github.com/Qosmetics/Qosmetics-Core",
     "additionalData": {
-      "overrideSoName": "libqosmetics-core.so"
+      "soLink": "https://github.com/Qosmetics/Qosmetics-Core/releases/download/v2.0.0/libqosmetics-core.so",
+      "debugSoLink": "https://github.com/Qosmetics/Qosmetics-Core/releases/download/v2.0.0/debug_libqosmetics-core.so",
+      "overrideSoName": "libqosmetics-core.so",
+      "modLink": "https://github.com/Qosmetics/Qosmetics-Core/releases/download/v2.0.0/QosmeticsCore.qmod",
+      "branchName": "version-v2.0.0"
     }
   },
   "dependencies": [
