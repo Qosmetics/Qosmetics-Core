@@ -1,25 +1,36 @@
 {
+  "env": {
+    "ndkPath": "S:/NDK/android-ndk-r23b"
+  },
   "configurations": [
     {
       "defines": [
-        "ID=\"Qosmetics\"",
-        "VERSION=\"1.3.0\"",
+        "MOD_ID=\"QosmeticsCore\"",
+        "VERSION=\"0.1.0\"",
         "__GNUC__",
         "__aarch64__"
       ],
       "includePath": [
-        "${workspaceFolder}",
-        "${workspaceFolder}/extern/includes",
-        "${workspaceFolder}/extern/includes/codegen/include",
         "${workspaceFolder}/extern/includes/libil2cpp/il2cpp/libil2cpp",
-        "${workspaceFolder}/shared",
+        "${workspaceFolder}/extern/includes/questui/shared/cppcodec",
+        "${workspaceFolder}/extern/includes/codegen/include",
+        "${workspaceFolder}/extern/includes/fmt/fmt/include",
+        "${workspaceFolder}/extern/includes",
         "${workspaceFolder}/include",
-        "${default}"
+        "${workspaceFolder}/shared",
+        "${workspaceFolder}",
+        "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/aarch64-linux-android",
+        "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include",
+        "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/*",
+        "${ndkPath}/sources/cxx-stl/llvm-libc++abi/include",
+        "${ndkPath}/sources/cxx-stl/llvm-libc++/include",
+        "${ndkPath}/"
       ],
+      "compilerPath": "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android24-clang.cmd",
       "name": "Quest",
       "cStandard": "c11",
       "cppStandard": "c++20",
-      "intelliSenseMode": "gcc-x64"
+      "intelliSenseMode": "linux-clang-arm64"
     }
   ],
   "version": 4

@@ -1,44 +1,50 @@
 #include "Data/Descriptor.hpp"
-#include "Utils/FileUtils.hpp"
-#include <map>
 
-static std::map<std::string, Qosmetics::ItemType> StringToType = {
-    { "qsaber", Qosmetics::ItemType::saber },
-    { "qbloq", Qosmetics::ItemType::note },
-    { "qwall", Qosmetics::ItemType::wall },
-    { "qpointer", Qosmetics::ItemType::pointer },
-    { "qplatform", Qosmetics::ItemType::platform }
-};
-
-
-namespace Qosmetics
+namespace Qosmetics::Core
 {
-    ItemType Descriptor::GetTypeFromName(std::string path)
+    Descriptor::Descriptor(){};
+
+    Descriptor::Descriptor(const Descriptor& other) : name(other.name), author(other.author), description(other.description), filePath(other.filePath), coverImage(other.coverImage){};
+
+    Descriptor::Descriptor(const rapidjson::Value& val, std::string_view filePath) : filePath(filePath)
     {
-        std::string extension = FileUtils::GetExtension(path);
-        std::map<std::string, ItemType>::iterator it = StringToType.find(extension);
-        if (it != StringToType.end())
+        name = val["objectName"].GetString();
+        author = val["author"].GetString();
+        description = val["description"].GetString();
+        auto coverImageItr = val.FindMember("coverImage");
+        if (coverImageItr != val.MemberEnd())
         {
-            return it->second;
+            coverImage = coverImageItr->value.GetString();
         }
-        return invalid;
     }
 
-    std::string Descriptor::GetFileName(bool removeExtension)
+    Descriptor::Descriptor(const rapidjson::Value& val) : filePath("")
     {
-        return FileUtils::GetFileName(filePath, removeExtension);
+        name = val["objectName"].GetString();
+        author = val["author"].GetString();
+        description = val["description"].GetString();
+        auto coverImageItr = val.FindMember("coverImage");
+        if (coverImageItr != val.MemberEnd())
+        {
+            coverImage = coverImageItr->value.GetString();
+        }
     }
 
-    rapidjson::Value Descriptor::ToVal(rapidjson::Document::AllocatorType& allocator)
+    rapidjson::Value Descriptor::ToJson(rapidjson::Document::AllocatorType& allocator) const
     {
         rapidjson::Value val;
         val.SetObject();
-
-        val.AddMember("name", rapidjson::Value(name.c_str(), name.size(), allocator), allocator);
         val.AddMember("author", rapidjson::Value(author.c_str(), author.size(), allocator), allocator);
+        val.AddMember("objectName", rapidjson::Value(name.c_str(), name.size(), allocator), allocator);
         val.AddMember("description", rapidjson::Value(description.c_str(), description.size(), allocator), allocator);
-        val.AddMember("type", (int)type, allocator);
-        val.AddMember("filePath", rapidjson::Value(filePath.c_str(), filePath.size(), allocator), allocator);
+        val.AddMember("coverImage", rapidjson::Value(coverImage.c_str(), coverImage.size(), allocator), allocator);
         return val;
     }
+
+    std::string_view Descriptor::get_author() const { return author; }
+    std::string_view Descriptor::get_name() const { return name; }
+    std::string_view Descriptor::get_description() const { return description; }
+    std::string_view Descriptor::get_filePath() const { return filePath; }
+    std::string_view Descriptor::get_coverImage() const { return coverImage; }
+
 }

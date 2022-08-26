@@ -1,29 +1,30 @@
 #include "Utils/DateUtils.hpp"
-#include <ctime>
 
-namespace DateUtils
+namespace Qosmetics::Core::DateUtils
 {
-    tm* get_time()
+    struct tm GetTime()
     {
-        time_t ttime = time(0);
-
-        tm* gmt_time = localtime(&ttime);
-
-        return gmt_time;
+        time_t rawtime = time(nullptr);
+        return *localtime(&rawtime);
     }
 
-    bool get_isMonth(int month)
+    bool isMonth(int month)
     {
-        return (get_time()->tm_mon + 1) == month;
+        return (month - 1) == GetTime().tm_mon;
     }
 
-    bool get_isDay(int day)
+    bool isDayOfMonth(int day)
     {
-        return get_time()->tm_mday == day;
+        return day == GetTime().tm_mday;
     }
 
-    bool get_isMonthAndDay(int month, int day)
+    bool isDayOfWeek(int day)
     {
-        return get_isMonth(month) && get_isDay(day);
+        return (day - 1) == GetTime().tm_wday;
+    }
+
+    bool isDayOfYear(int day)
+    {
+        return (day - 1) == GetTime().tm_yday;
     }
 }
