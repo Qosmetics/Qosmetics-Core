@@ -37,7 +37,7 @@ MAKE_AUTO_HOOK_MATCH(OptionsViewController_DidActivate, &GlobalNamespace::Option
 {
     OptionsViewController_DidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
 
-    if (firstActivation)
+    if (firstActivation && false)
     {
         Qosmetics::Core::Creators::Download();
 

@@ -9,3 +9,5 @@ mod.template.json
 mod.json
 *.qmod
 *.psd
+*.*cpp
+*.*hpp
