@@ -27,14 +27,14 @@ extern "C" void setup(ModInfo& info)
 
 extern "C" void load()
 {
+    il2cpp_functions::Init();
     if (!Qosmetics::Core::Config::LoadConfig())
         Qosmetics::Core::Config::SaveConfig();
-    il2cpp_functions::Init();
 
     auto& logger = Qosmetics::Core::Logging::getLogger();
     Hooks::InstallHooks(logger);
     custom_types::Register::AutoRegister();
-
+    QuestUI::Init();
     // QuestUI::Register::RegisterGameplaySetupMenu<Qosmetics::Core::GameplaySetupView*>(modInfo, "Qosmetics");
 
     auto zenjector = ::Lapiz::Zenject::Zenjector::Get();

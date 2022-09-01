@@ -17,5 +17,6 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticsViewController, HMUI::ViewContro
                       DECLARE_INJECT_METHOD(void, Inject, ListWrapper<Qosmetics::Core::QosmeticsBaseFlowCoordinator*> baseFlowCoordinators);
                       DECLARE_INSTANCE_FIELD(HMUI::FlowCoordinator*, qosmeticsFlowCoordinator);
                       DECLARE_INSTANCE_FIELD(ArrayW<Qosmetics::Core::QosmeticsBaseFlowCoordinator*>, flowCoordinators);
+                      DECLARE_DEFAULT_CTOR();
 
 )

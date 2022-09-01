@@ -25,7 +25,7 @@ namespace Qosmetics::Core
         if (firstActivation)
         {
             auto horizontal = CreateHorizontalLayoutGroup(get_transform());
-            if (flowCoordinators.size() == 0)
+            if (!flowCoordinators || flowCoordinators.size() == 0)
             {
                 auto text = CreateText(horizontal->get_transform(), Diglett::Localization::get_instance()->get("QosmeticsCore:Misc:ModulesMissing"));
                 text->set_alignment(TMPro::TextAlignmentOptions::Center);
