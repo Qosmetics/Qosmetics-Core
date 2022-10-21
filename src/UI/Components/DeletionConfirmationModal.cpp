@@ -40,7 +40,6 @@ namespace Qosmetics::Core
 
     void DeletionConfirmationModal::Setup()
     {
-        auto localization = Diglett::Localization::get_instance();
         auto vertical = CreateVerticalLayoutGroup(get_transform());
         vertical->set_padding(RectOffset::New_ctor(2, 2, 2, 2));
         auto headerText = CreateText(vertical->get_transform(), "Are you sure you want to delete this?");
