@@ -26,6 +26,7 @@ DECLARE_CLASS_CODEGEN_INTERFACES(Qosmetics::Core, QosmeticsFlowCoordinator, HMUI
 
                                  DECLARE_INJECT_METHOD(void, Inject, Qosmetics::Core::CreditViewController* creditViewController, Qosmetics::Core::ProfileSwitcherViewController* profileSwitcherViewController, Qosmetics::Core::QosmeticsViewController* qosmeticsViewController, GlobalNamespace::MainFlowCoordinator* mainFlowCoordinator);
                                  DECLARE_INSTANCE_METHOD(void, PresentSelf);
+                                 DECLARE_INSTANCE_METHOD(StringW, GetTitle);
                                  DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
                                  DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::FlowCoordinator::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
                                  DECLARE_OVERRIDE_METHOD_MATCH(void, BackButtonWasPressed, &HMUI::FlowCoordinator::BackButtonWasPressed, HMUI::ViewController* topViewController);

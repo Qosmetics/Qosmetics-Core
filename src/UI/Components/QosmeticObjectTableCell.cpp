@@ -1,6 +1,4 @@
 #include "UI/Components/QosmeticObjectTableCell.hpp"
-#include "diglett/shared/Localization.hpp"
-#include "diglett/shared/Util.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 #include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
 

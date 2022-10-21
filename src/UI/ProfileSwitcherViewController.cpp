@@ -4,8 +4,6 @@
 #include "Utils/FileUtils.hpp"
 #include "Utils/RainbowUtils.hpp"
 #include "Utils/UIUtils.hpp"
-#include "diglett/shared/Localization.hpp"
-#include "diglett/shared/Util.hpp"
 #include "logging.hpp"
 
 #include "questui/shared/BeatSaberUI.hpp"
@@ -27,23 +25,18 @@ namespace Qosmetics::Core
     {
         if (firstActivation)
         {
-            auto localization = Diglett::Localization::get_instance();
             time_t rawtime = time(nullptr);
             if (DateUtils::isMonth(6))
-            {
-                UIUtils::AddHeader(get_transform(), RainbowUtils::gayify(static_cast<std::string>(localization->get("QosmeticsCore:Settings:Profile"))), qosmetics_purple);
-            }
+                UIUtils::AddHeader(get_transform(), RainbowUtils::gayify("Profile Switcher"), qosmetics_purple);
             else
-            {
-                UIUtils::AddHeader(get_transform(), localization->get("QosmeticsCore:Settings:Profile"), qosmetics_purple);
-            }
+                UIUtils::AddHeader(get_transform(), "Profile Switcher", qosmetics_purple);
 
             auto vertical = CreateVerticalLayoutGroup(get_transform());
 
-            CreateText(vertical->get_transform(), localization->get("QosmeticsCore:Settings:ProfileMessage"));
+            CreateText(vertical->get_transform(), "Switch user config to quickly change which config you're using!");
 
             auto addUserHorizontal = CreateHorizontalLayoutGroup(vertical);
-            textField = CreateStringSetting(addUserHorizontal->get_transform(), localization->get("QosmeticsCore:Settings:ProfileName"), "",
+            textField = CreateStringSetting(addUserHorizontal->get_transform(), "Type a name...", "",
                                             [&](auto v)
                                             {
                                                 if (static_cast<std::u16string_view>(v).size() > 15)
@@ -53,7 +46,7 @@ namespace Qosmetics::Core
                                             });
             auto layout = textField->GetComponent<UnityEngine::UI::LayoutElement*>();
             layout->set_preferredWidth(60.0f);
-            auto confirm = CreateUIButton(addUserHorizontal->get_transform(), localization->get("QosmeticsCore:Settings:AddProfile"), std::bind(&ProfileSwitcherViewController::ConfirmAddUser, this));
+            auto confirm = CreateUIButton(addUserHorizontal->get_transform(), "Add", std::bind(&ProfileSwitcherViewController::ConfirmAddUser, this));
             userList = CreateScrollableList(vertical->get_transform(), {60.0f, 58.5f}, std::bind(&ProfileSwitcherViewController::SelectUser, this, std::placeholders::_1));
             userList->set_listStyle(CustomListTableData::ListStyle::Simple);
             userList->cellSize = 8.5f;

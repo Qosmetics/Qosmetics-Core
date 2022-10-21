@@ -16,8 +16,6 @@
 #include "UnityEngine/Events/UnityAction.hpp"
 
 #include "custom-types/shared/delegate.hpp"
-#include "diglett/shared/Localization.hpp"
-#include "diglett/shared/Util.hpp"
 #include "questui/shared/BeatSaberUI.hpp"
 #include "questui/shared/QuestUI.hpp"
 
@@ -53,6 +51,8 @@ namespace Qosmetics::Core
         UnityEngine::Transform* wrapper = optionsViewController->get_transform()->Find("Wrapper");
         button->get_transform()->SetParent(wrapper, false);
 
+        // TODO: update check to run with BSML stuff instead
+        // also all round just actually use bsml for UI
         if (questUIExists)
         {
             HorizontalLayoutGroup* layout = CreateHorizontalLayoutGroup(optionsViewController->get_transform());
@@ -82,7 +82,7 @@ namespace Qosmetics::Core
 
         UnityEngine::Object::Destroy(button->GetComponentInChildren<Polyglot::LocalizedTextMeshProUGUI*>());
 
-        button->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText(Diglett::Localization::get_instance()->get("QosmeticsCore:Settings:QosmeticsSettings"));
+        button->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("Qosmetics Settings");
     }
 
     void QosmeticsFlowCoordinator::PresentSelf()
@@ -102,12 +102,17 @@ namespace Qosmetics::Core
 
             time_t rawtime = time(nullptr);
             tm localTime = *localtime(&rawtime);
-            SetTitle(DateUtils::isMonth(6) ? RainbowUtils::gayify("Qosmetics") : "Qosmetics", HMUI::ViewController::AnimationType::In);
+            SetTitle(GetTitle(), HMUI::ViewController::AnimationType::In);
         }
 
         creditViewController->get_gameObject()->SetActive(true);
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         UIUtils::SetTitleColor(titleView, qosmetics_purple);
+    }
+
+    StringW QosmeticsFlowCoordinator::GetTitle()
+    {
+        return DateUtils::isMonth(6) ? RainbowUtils::gayify("Qosmetics") : "Qosmetics";
     }
 
     void QosmeticsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)

@@ -10,8 +10,6 @@
 #include "HMUI/ImageView.hpp"
 
 #include "ConfigRegister_Internal.hpp"
-#include "diglett/shared/Conversions.hpp"
-#include "diglett/shared/Register.hpp"
 
 #include <fmt/format.h>
 
@@ -39,13 +37,6 @@ extern "C" void load()
 
     auto zenjector = ::Lapiz::Zenject::Zenjector::Get();
     zenjector->Install<Qosmetics::Core::MenuInstaller*>(::Lapiz::Zenject::Location::Menu);
-
-    Diglett::RegisterAsset(static_cast<std::string_view>(IncludedAssets::de_xml), Diglett::Language::GERMAN);
-    Diglett::RegisterAsset(static_cast<std::string_view>(IncludedAssets::en_xml), Diglett::Language::ENGLISH);
-    Diglett::RegisterAsset(static_cast<std::string_view>(IncludedAssets::es_xml), Diglett::Language::SPANISH);
-    Diglett::RegisterAsset(static_cast<std::string_view>(IncludedAssets::fr_xml), Diglett::Language::FRENCH);
-    Diglett::RegisterAsset(static_cast<std::string_view>(IncludedAssets::ja_xml), Diglett::Language::JAPANESE);
-    Diglett::RegisterAsset(static_cast<std::string_view>(IncludedAssets::ko_xml), Diglett::Language::KOREAN);
 
     srand(time(NULL));
 
