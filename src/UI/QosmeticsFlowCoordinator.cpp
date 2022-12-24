@@ -9,32 +9,40 @@
 #include "logging.hpp"
 #include "static-defines.hpp"
 
+#include "HMUI/ButtonSpriteSwap.hpp"
 #include "HMUI/TitleViewController.hpp"
 #include "HMUI/ViewController_AnimationDirection.hpp"
 #include "HMUI/ViewController_AnimationType.hpp"
 #include "Polyglot/LocalizedTextMeshProUGUI.hpp"
 #include "UnityEngine/Events/UnityAction.hpp"
+#include "UnityEngine/TextureWrapMode.hpp"
+#include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
+#include "UnityEngine/UI/HorizontalLayoutGroup.hpp"
 
-#include "custom-types/shared/delegate.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
-#include "questui/shared/QuestUI.hpp"
+#include "bsml/shared/BSML.hpp"
+#include "bsml/shared/BSML/Settings/BSMLSettings.hpp"
+#include "bsml/shared/helpers/utilities.hpp"
 
 #include "assets.hpp"
 DEFINE_TYPE(Qosmetics::Core, QosmeticsFlowCoordinator);
 
-using namespace QuestUI::BeatSaberUI;
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
 
 namespace Qosmetics::Core
 {
+    void QosmeticsFlowCoordinator::ctor()
+    {
+        INVOKE_BASE_CTOR(classof(HMUI::FlowCoordinator*));
+    }
+
     void QosmeticsFlowCoordinator::Inject(Qosmetics::Core::CreditViewController* creditViewController, Qosmetics::Core::ProfileSwitcherViewController* profileSwitcherViewController, Qosmetics::Core::QosmeticsViewController* qosmeticsViewController, GlobalNamespace::MainFlowCoordinator* mainFlowCoordinator)
     {
         this->creditViewController = creditViewController;
         this->profileSwitcherViewController = profileSwitcherViewController;
         this->qosmeticsViewController = qosmeticsViewController;
         this->mainFlowCoordinator = mainFlowCoordinator;
-        qosmeticsViewController->qosmeticsFlowCoordinator = this;
+        qosmeticsViewController->set_qosmeticsFlowCoordinator(this);
     }
 
     void QosmeticsFlowCoordinator::Initialize()
@@ -42,47 +50,46 @@ namespace Qosmetics::Core
         Qosmetics::Core::Creators::Download();
 
         auto optionsViewController = mainFlowCoordinator->optionsViewController;
-
-        bool questUIExists = QuestUI::GetModsCount() > 0;
-        Button* baseButton = optionsViewController->settingsButton;
-        Button* button = Object::Instantiate(baseButton);
-        button->set_name("Qosmetics Settings");
-
+        bool bsmlSettingsExists = BSML::BSMLSettings::get_instance()->get_settingsMenus().size() > 0;
+        vanillaMenus = List<UnityEngine::Transform*>::New_ctor();
         UnityEngine::Transform* wrapper = optionsViewController->get_transform()->Find("Wrapper");
-        button->get_transform()->SetParent(wrapper, false);
 
-        // TODO: update check to run with BSML stuff instead
-        // also all round just actually use bsml for UI
-        if (questUIExists)
+        // load sprites for btn
+        activeSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MenuIconSelected_png);
+        inactiveSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MenuIcon_png);
+
+        activeSprite->get_texture()->set_wrapMode(UnityEngine::TextureWrapMode::Clamp);
+        inactiveSprite->get_texture()->set_wrapMode(UnityEngine::TextureWrapMode::Clamp);
+
+        // make button
+        BSML::parse_and_construct("<image-button id='settingsButton' text='Qosmetics Settings' on-click='PresentSelf'/>", wrapper, this);
+
+        if (bsmlSettingsExists)
         {
-            HorizontalLayoutGroup* layout = CreateHorizontalLayoutGroup(optionsViewController->get_transform());
+            vanillaMenus->Add(optionsViewController->editAvatarButton->get_transform());
+            vanillaMenus->Add(optionsViewController->playerOptionsButton->get_transform());
+            vanillaMenus->Add(optionsViewController->settingsButton->get_transform());
+            BSML::parse_and_construct(IncludedAssets::QosmeticsSettingsButton_bsml, optionsViewController->get_transform(), this);
 
-            Transform* layoutTransform = layout->get_transform();
-            optionsViewController->editAvatarButton->get_transform()->SetParent(layoutTransform);
-            optionsViewController->playerOptionsButton->get_transform()->SetParent(layoutTransform);
-            optionsViewController->settingsButton->get_transform()->SetParent(layoutTransform);
-
-            layoutTransform->SetAsFirstSibling();
-            layout->set_spacing(-64.0f);
-            layout->get_gameObject()->GetComponent<UnityEngine::RectTransform*>()->set_anchoredPosition(UnityEngine::Vector2(0.0f, -7.5f));
-
+            // this has to be done manually, without bsml
             HorizontalLayoutGroup* oldLayout = wrapper->get_gameObject()->GetComponent<HorizontalLayoutGroup*>();
             oldLayout->get_gameObject()->GetComponent<RectTransform*>()->set_anchoredPosition(UnityEngine::Vector2(0.0f, 0.0f));
-            button->get_transform()->SetAsLastSibling();
+            oldLayout->set_spacing(2);
+            settingsButton->get_transform()->SetAsLastSibling();
         }
         else
-            button->get_transform()->SetAsFirstSibling();
+            settingsButton->get_transform()->SetAsFirstSibling();
+    }
 
-        auto delegate = custom_types::MakeDelegate<UnityEngine::Events::UnityAction*>(
-            std::function<void()>([this]()
-                                  { PresentSelf(); }));
-        button->get_onClick()->AddListener(delegate);
+    void QosmeticsFlowCoordinator::PostParse()
+    {
+        if (!(settingsButton && settingsButton->m_CachedPtr.m_value))
+            return;
 
-        SetButtonSprites(button, ArrayToSprite(IncludedAssets::MenuIcon_png), ArrayToSprite(IncludedAssets::MenuIconSelected_png));
-
-        UnityEngine::Object::Destroy(button->GetComponentInChildren<Polyglot::LocalizedTextMeshProUGUI*>());
-
-        button->GetComponentInChildren<TMPro::TextMeshProUGUI*>()->SetText("Qosmetics Settings");
+        auto spriteSwap = settingsButton->GetComponent<HMUI::ButtonSpriteSwap*>();
+        // setting the sprites
+        spriteSwap->highlightStateSprite = spriteSwap->pressedStateSprite = activeSprite;
+        spriteSwap->disabledStateSprite = spriteSwap->normalStateSprite = inactiveSprite;
     }
 
     void QosmeticsFlowCoordinator::PresentSelf()
@@ -91,7 +98,18 @@ namespace Qosmetics::Core
             return;
         mainFlowCoordinator->YoungestChildFlowCoordinatorOrSelf()->PresentFlowCoordinator(this, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
     }
+    /*
+    void QosmeticsFlowCoordinator::PresentFlowCoordinatorNextFrame(HMUI::FlowCoordinator* fc)
+    {
+    }
 
+    custom_types::Helpers::Coroutine QosmeticsFlowCoordinator::PresentFlowCoordinatorNextFrameRoutine(HMUI::FlowCoordinator* fc)
+    {
+        co_yield nullptr;
+        PresentFlowCoordinator(fc, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
+        co_return;
+    }
+    */
     void QosmeticsFlowCoordinator::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (firstActivation)
@@ -118,7 +136,7 @@ namespace Qosmetics::Core
     void QosmeticsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)
     {
         creditViewController->get_gameObject()->SetActive(false);
-        this->parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
+        parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         UIUtils::SetTitleColor(titleView, beatsaber_light_blue, true);
     }

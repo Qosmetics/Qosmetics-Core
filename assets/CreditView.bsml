@@ -1,0 +1,34 @@
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'>
+    <!-- Header -->
+    <stack background="title-gradient" pref-width='90' pref-height='10' vertical-fit="PreferredSize"
+        horizontal-fit="PreferredSize"
+        background-color0="#4C2699FF" background-color1="#4C269900" ignore-layout="true"
+        anchor-pos-y="45">
+        <macro.if value='!gay'>
+            <text text='Patrons &amp; Donators' align="Center" font-size="8" />
+        </macro.if>
+        <macro.if value='gay'>
+            <text text='Patrons &amp; Donators' align="Center" font-size="8" />
+        </macro.if>
+    </stack>
+    <!-- Main UI -->
+    <scrollable-settings-container size-delta-x="0" size-delta-y="0" horizontal-fit="PreferredSize"
+        id="container" spacing='5'>
+        <horizontal pref-height="52" vertical-fit="PreferredSize">
+            <vertical>
+                <text text='Qosmetics Patreon Supporters &amp; Donators' font-size="6"
+                    color='#ff4040' bold="true" align="Center" pref-height='7' />
+                <text text='~thankyou' align="Center" font-size="3" pref-height='40' />
+                <clickable-text text='Patreon.com/Qosmetics' on-click='OpenURL'
+                    hover-hint="Opens in Browser" align="Center" default-color='#ff4040'
+                    highlight-color='#ff8080' pref-height='5' />
+            </vertical>
+        </horizontal>
+        <horizontal>
+            <vertical id='patronTexts' vertical-fit="Unconstrained" spacing='5'>
+                <text id='placeholderText' text='Fetching Patreon supporters...' align='Center' />
+            </vertical>
+        </horizontal>
+    </scrollable-settings-container>
+</bg>

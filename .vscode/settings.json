@@ -1,5 +1,7 @@
 {
     "files.associations": {
+        "*.bsml": "xml",
+        "*.qmod": "zip",
         "iosfwd": "cpp",
         "__config": "cpp",
         "__nullptr": "cpp",
@@ -118,7 +120,8 @@
         "__memory": "cpp",
         "format": "cpp",
         "source_location": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "__std_stream": "cpp"
     },
     "editor.formatOnSave": true
 }

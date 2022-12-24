@@ -1,13 +1,12 @@
 #include "UI/QosmeticsViewController.hpp"
+#include "assets.hpp"
 #include "logging.hpp"
 
 #include "HMUI/ViewController_AnimationDirection.hpp"
 #include "UI/QosmeticsBaseFlowCoordinator.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
+#include "bsml/shared/BSML.hpp"
 
 DEFINE_TYPE(Qosmetics::Core, QosmeticsViewController);
-
-using namespace QuestUI::BeatSaberUI;
 
 namespace Qosmetics::Core
 {
@@ -15,38 +14,28 @@ namespace Qosmetics::Core
     {
         INFO("Inject");
         // this should get all the QosmeticsBaseFlowCoordinators :)
-        flowCoordinators = baseFlowCoordinators->ToArray();
+        flowCoordinators = baseFlowCoordinators;
+    }
+
+    void QosmeticsViewController::set_qosmeticsFlowCoordinator(HMUI::FlowCoordinator* qosmeticsFlowCoordinator)
+    {
+        this->qosmeticsFlowCoordinator = qosmeticsFlowCoordinator;
+        if (get_anyCoordinators())
+        {
+            for (auto& fc : flowCoordinators)
+                fc->qosmeticsFlowCoordinator = qosmeticsFlowCoordinator;
+        }
+    }
+
+    bool QosmeticsViewController::get_anyCoordinators()
+    {
+        return flowCoordinators && flowCoordinators.size() > 0;
     }
 
     void QosmeticsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
-        if (firstActivation)
-        {
-            auto horizontal = CreateHorizontalLayoutGroup(get_transform());
-            if (!flowCoordinators || flowCoordinators.size() == 0)
-            {
-                auto text = CreateText(horizontal->get_transform(), "No Qosmetics modules were installed,\nmake sure to install any of the modules for them to show up here!");
-                text->set_alignment(TMPro::TextAlignmentOptions::Center);
-            }
-            else
-            {
-                for (auto* reg : flowCoordinators)
-                {
-                    auto btn = CreateUIButton(horizontal->get_transform(), reg->name, "SettingsButton", {0, 0}, {0, 0}, std::bind(&QosmeticsViewController::PresentFlowCoordinator, this, reg));
-                    SetButtonSprites(btn, reg->inActiveSprite, reg->activeSprite);
-                }
-            }
-        }
-    }
-
-    void QosmeticsViewController::PresentFlowCoordinator(Qosmetics::Core::QosmeticsBaseFlowCoordinator* flowCoordinator)
-    {
-        if (!qosmeticsFlowCoordinator || !qosmeticsFlowCoordinator->m_CachedPtr.m_value)
+        if (!firstActivation)
             return;
-        if (!flowCoordinator || !flowCoordinator->m_CachedPtr.m_value)
-            return;
-
-        DEBUG("Presenting {} on parent {}", fmt::ptr(flowCoordinator), fmt::ptr(qosmeticsFlowCoordinator));
-        qosmeticsFlowCoordinator->PresentFlowCoordinator(flowCoordinator, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
+        BSML::parse_and_construct(IncludedAssets::QosmeticsView_bsml, get_transform(), this);
     }
 }

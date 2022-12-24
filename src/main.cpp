@@ -4,7 +4,6 @@
 #include "hooks.hpp"
 #include "logging.hpp"
 #include "modloader/shared/modloader.hpp"
-#include "questui/shared/QuestUI.hpp"
 
 #include "HMUI/CurvedTextMeshPro.hpp"
 #include "HMUI/ImageView.hpp"
@@ -14,6 +13,7 @@
 #include <fmt/format.h>
 
 #include "Installers/MenuInstaller.hpp"
+#include "bsml/shared/BSMLDataCache.hpp"
 #include "lapiz/shared/zenject/Zenjector.hpp"
 
 ModInfo modInfo = {MOD_ID, VERSION};
@@ -32,8 +32,6 @@ extern "C" void load()
     auto& logger = Qosmetics::Core::Logging::getLogger();
     Hooks::InstallHooks(logger);
     custom_types::Register::AutoRegister();
-    QuestUI::Init();
-    // QuestUI::Register::RegisterGameplaySetupMenu<Qosmetics::Core::GameplaySetupView*>(modInfo, "Qosmetics");
 
     auto zenjector = ::Lapiz::Zenject::Zenjector::Get();
     zenjector->Install<Qosmetics::Core::MenuInstaller*>(::Lapiz::Zenject::Location::Menu);
@@ -41,4 +39,14 @@ extern "C" void load()
     srand(time(NULL));
 
     INFO("Boats and hoes");
+}
+
+BSML_DATACACHE(deleteIcon)
+{
+    return IncludedAssets::DeleteIcon_png;
+}
+
+BSML_DATACACHE(placeHolderIcon)
+{
+    return IncludedAssets::PlaceHolderImage_png;
 }

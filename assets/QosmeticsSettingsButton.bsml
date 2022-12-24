@@ -1,0 +1,5 @@
+<bg>
+    <horizontal anchor-pos-y='-7.5' pref-width='100' spacing-x='5' horizontal-fit='PreferredSize'>
+        <macro.reparent transforms='vanillaMenus' />
+    </horizontal>
+</bg>

@@ -12,11 +12,13 @@
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticsViewController, HMUI::ViewController,
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
-                      DECLARE_INSTANCE_METHOD(void, PresentFlowCoordinator, Qosmetics::Core::QosmeticsBaseFlowCoordinator* flowCoordinator);
 
                       DECLARE_INJECT_METHOD(void, Inject, ListWrapper<Qosmetics::Core::QosmeticsBaseFlowCoordinator*> baseFlowCoordinators);
                       DECLARE_INSTANCE_FIELD(HMUI::FlowCoordinator*, qosmeticsFlowCoordinator);
-                      DECLARE_INSTANCE_FIELD(ArrayW<Qosmetics::Core::QosmeticsBaseFlowCoordinator*>, flowCoordinators);
+                      DECLARE_INSTANCE_METHOD(bool, get_anyCoordinators);
+                      DECLARE_INSTANCE_METHOD(void, set_qosmeticsFlowCoordinator, HMUI::FlowCoordinator* qosmeticsFlowCoordinator);
+
+                      DECLARE_INSTANCE_FIELD_DEFAULT(ListWrapper<Qosmetics::Core::QosmeticsBaseFlowCoordinator*>, flowCoordinators, nullptr);
                       DECLARE_DEFAULT_CTOR();
 
 )

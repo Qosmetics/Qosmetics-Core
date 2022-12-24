@@ -4,13 +4,12 @@
 #include "Utils/RainbowUtils.hpp"
 #include "Utils/UIUtils.hpp"
 #include "logging.hpp"
-#include "questui/shared/ArrayUtil.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
-#include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
-#include "questui/shared/CustomTypes/Components/ExternalComponents.hpp"
 #include "static-defines.hpp"
 
 #include "GlobalNamespace/SharedCoroutineStarter.hpp"
+
+#include "assets.hpp"
+#include "bsml/shared/BSML.hpp"
 
 #include "HMUI/Touchable.hpp"
 
@@ -27,104 +26,39 @@
 #include "UnityEngine/UI/ContentSizeFitter.hpp"
 
 DEFINE_TYPE(Qosmetics::Core, CreditViewController);
+DEFINE_TYPE(Qosmetics::Core, Patron);
+DEFINE_TYPE(Qosmetics::Core, Tier);
 
-using namespace QuestUI;
-using namespace QuestUI::BeatSaberUI;
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
 
-HorizontalLayoutGroup* make_patron_display(UnityEngine::Transform* parent, std::vector<std::string>& names, StringW title, UnityEngine::Color headercolor)
+std::string repeat(char c, int count)
 {
-    auto banner = CreateHorizontalLayoutGroup(parent->get_transform());
-    auto bannerText = CreateText(banner->get_transform(), title);
-    auto bannerBG = banner->get_gameObject()->AddComponent<QuestUI::Backgroundable*>();
-    bannerBG->ApplyBackgroundWithAlpha("title-gradient", 1.0f);
-    bannerText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
-
-    auto contentSizeFitter = banner->get_gameObject()->GetComponent<ContentSizeFitter*>();
-    if (!contentSizeFitter)
-        contentSizeFitter = banner->get_gameObject()->AddComponent<ContentSizeFitter*>();
-    contentSizeFitter->set_horizontalFit(ContentSizeFitter::FitMode::Unconstrained);
-
-    auto layoutElement = bannerText->get_gameObject()->GetComponent<LayoutElement*>();
-    if (!layoutElement)
-        layoutElement = banner->get_gameObject()->AddComponent<LayoutElement*>();
-    layoutElement->set_preferredWidth(50.0f);
-    layoutElement->set_preferredHeight(5.0f);
-
-    HMUI::ImageView* imageView =
-        bannerBG->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
-    imageView->gradient = true;
-    imageView->gradientDirection = 1;
-    imageView->set_color(headercolor);
-    imageView->set_color0(Color(1.1f, 1.1f, 1.1f, 1.0f));
-    imageView->set_color1(Color(0.9f, 0.9f, 0.9f, 1.0f));
-
-    for (auto& n : names)
-    {
-        auto t = CreateText(parent, n);
-        t->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
-    }
-
-    return banner;
+    std::string res;
+    res.reserve(count);
+    for (int i = 0; i < count; i++)
+        res += c;
+    return res;
 }
-
-#define SETUP_WRAPPER()                                                             \
-    auto horizontal = CreateHorizontalLayoutGroup(container->get_transform());      \
-    auto vertical = CreateVerticalLayoutGroup(horizontal->get_transform());         \
-    auto bg = vertical->get_gameObject()->AddComponent<QuestUI::Backgroundable*>(); \
-    bg->ApplyBackgroundWithAlpha("title-gradient", 0.5f);                           \
-    HMUI::ImageView* imageView =                                                    \
-        bg->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();           \
-    imageView->gradient = false;                                                    \
-    imageView->gradientDirection = 1;                                               \
-    imageView->set_color({0, 0, 0, 0.5f})
 
 namespace Qosmetics::Core
 {
+    StringW CreditViewController::get_thankyou()
+    {
+        return "These Patrons and Donators have donated to show their support,\nand have received a place here to thank them for this.\nThis support is greatly appreciated and will help justify time spent on developing Qosmetics & other mods.\nA massive thanks goes out to all these people!\n\nIf you'd also like to support development, the patreon can be found at:";
+    }
+
+    bool CreditViewController::get_gay()
+    {
+        return DateUtils::isMonth(6);
+    }
+
     void CreditViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
-        if (firstActivation)
-        {
-            get_gameObject()->AddComponent<HMUI::Touchable*>();
-            container = CreateScrollableSettingsContainer(get_transform());
-            ExternalComponents* components = container->GetComponent<ExternalComponents*>();
-            RectTransform* rect = components->Get<RectTransform*>();
-            rect->set_sizeDelta({0.0f, 0.0f});
-
-            auto vertical = container->GetComponentInChildren<VerticalLayoutGroup*>();
-            vertical->set_spacing(5.0f);
-
-            if (DateUtils::isMonth(6))
-            {
-                UIUtils::AddHeader(get_transform(), RainbowUtils::gayify("Patrons & Donators"), qosmetics_purple);
-            }
-            else
-            {
-                UIUtils::AddHeader(get_transform(), "Patrons & Donators", qosmetics_purple);
-            }
-
-            auto explHorizontal = CreateHorizontalLayoutGroup(container->get_transform());
-            auto explVertical = CreateVerticalLayoutGroup(explHorizontal->get_transform());
-
-            auto mainText = CreateText(explVertical->get_transform(), u"<color=#ff4040><size=6><b>Qosmetics Patreon Supporters & Donators</b></size></color>\n<size=3>These Patrons and Donators have donated to show their support,\nand have received a place here to thank them for this.\nThis support is greatly appreciated and will help justify time spent on developing Qosmetics & other mods.\nA massive thanks goes out to all these people!\n\nIf you'd also like to support development, the patreon can be found at:</size>");
-            mainText->get_gameObject()->AddComponent<LayoutElement*>()->set_preferredHeight(40.f);
-            mainText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
-
-            auto patreonText = CreateClickableText(explVertical->get_transform(), "Patreon.com/Qosmetics", true, []()
-                                                   { Application::OpenURL(patreon_url); });
-            patreonText->set_alignment(TMPro::TextAlignmentOptions::_get_Center());
-            patreonText->set_defaultColor(Color(1.0f, 0.25f, 0.25f, 1.0f));
-            patreonText->set_highlightColor(Color(1.0f, 0.5f, 0.5f, 1.0f));
-
-            AddHoverHint(patreonText->get_gameObject(), "Open To Browser");
-
-            auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
-            patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), "Fetching patreon supporters...");
-
-            StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters()));
-        }
+        if (!firstActivation)
+            return;
+        BSML::parse_and_construct(IncludedAssets::CreditView_bsml, get_transform(), this);
+        StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters()));
     }
 
     custom_types::Helpers::Coroutine CreditViewController::GetPatreonSupporters()
@@ -142,33 +76,30 @@ namespace Qosmetics::Core
             ERROR("Was http error: {}", isHttpError);
             ERROR("Was network error: {}", isNetworkError);
 
-            auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
-            patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), "There were no patrons found, There must have been a network error!");
-
+            placeholderText->set_text("There were no patrons found, There must have been a network error!");
             co_return;
         }
 
         auto downloadHandler = www->get_downloadHandler();
         auto patrons = Qosmetics::Core::Patrons::Parse(static_cast<std::string>(downloadHandler->get_text()));
 
-        auto patronTextsT = patronTexts->get_transform()->get_parent();
-        Object::DestroyImmediate(patronTextsT->get_gameObject());
-
         if (!patrons.any())
         {
-            auto patronParent = CreateHorizontalLayoutGroup(container->get_transform());
-            patronTexts = CreateVerticalLayoutGroup(patronParent->get_transform());
-            auto placeholderText = CreateText(patronTexts->get_transform(), "There were no patrons found, you can be the first to appear here!");
+            placeholderText->set_text("There were no patrons found, you can be the first to appear here!");
         }
         else
         {
-            if (patrons.legendary.size() > 0)
+            auto scrollViewContentContainer = patronTexts->get_parent()->get_parent();
+            Object::DestroyImmediate(patronTexts->get_parent()->get_gameObject());
+            if (!patrons.legendary.empty())
             {
-                SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>Legendary patrons</color> <color=#222222><size=2>(Tier 4)</size></color>";
-                auto banner = make_patron_display(vertical->get_transform(), patrons.legendary, patreontext, Color(0.9f, 0.75f, 0.25f, 1.0f));
-                auto bannerimageView = banner->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
+                auto tier = Tier::New_ctor("<color=#000000>Legendary patrons</color> <color=#222222><size=2>(Tier 4)</size></color>", Color(0.9f, 0.75f, 0.25f, 1.0f));
+                for (auto patron : patrons.legendary)
+                    tier->patrons->Add(Patron::New_ctor(patron));
+
+                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+
+                auto bannerimageView = tier->banner->background;
                 auto origMat = UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>().FirstOrDefault(
                     [](UnityEngine::Material* x)
                     {
@@ -177,29 +108,63 @@ namespace Qosmetics::Core
                 auto dupe = Object::Instantiate(origMat);
                 dupe->SetColor(Shader::PropertyToID("_ShineColor"), Color(0.9f, 0.75f, 0.25f, 1.0f));
                 bannerimageView->set_material(dupe);
+
+                tier->Finalize();
             }
 
-            if (patrons.amazing.size() > 0)
+            if (!patrons.amazing.empty())
             {
-                SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>Amazing patrons</color> <color=#222222><size=2>(Tier 3)</size></color>";
-                make_patron_display(vertical->get_transform(), patrons.amazing, patreontext, Color(0.4f, 0.45f, 0.8f, 1.0f));
+                auto tier = Tier::New_ctor("<color=#000000>Amazing patrons</color> <color=#222222><size=2>(Tier 3)</size></color>", Color(0.4f, 0.45f, 0.8f, 1.0f));
+                for (auto patron : patrons.amazing)
+                    tier->patrons->Add(Patron::New_ctor(patron));
+
+                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+                tier->Finalize();
             }
 
-            if (patrons.enthusiastic.size() > 0)
+            if (!patrons.enthusiastic.empty())
             {
-                SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>Enthusiastic patrons</color> <color=#222222><size=2>(Tier 2)</size></color>";
-                make_patron_display(vertical->get_transform(), patrons.enthusiastic, patreontext, Color(0.5f, 0.55f, 0.9f, 1.0f));
+                auto tier = Tier::New_ctor("<color=#000000>Enthusiastic patrons</color> <color=#222222><size=2>(Tier 2)</size></color>", Color(0.5f, 0.55f, 0.9f, 1.0f));
+                for (auto patron : patrons.enthusiastic)
+                    tier->patrons->Add(Patron::New_ctor(patron));
+
+                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+                tier->Finalize();
             }
 
-            if (patrons.paypal.size() > 0)
+            if (!patrons.paypal.empty())
             {
-                SETUP_WRAPPER();
-                StringW patreontext = u"<color=#000000>Paypal donators</color>";
-                make_patron_display(vertical->get_transform(), patrons.paypal, patreontext, Color(0.0f, 0.6f, 0.85f, 1.0f));
+                auto tier = Tier::New_ctor("<color=#000000>Paypal donators</color>", Color(0.0f, 0.6f, 0.85f, 1.0f));
+                for (auto patron : patrons.paypal)
+                    tier->patrons->Add(Patron::New_ctor(patron));
+
+                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+                tier->Finalize();
             }
         }
         co_return;
     }
+
+    void Patron::ctor(StringW patronName)
+    {
+        this->patronName = patronName;
+    }
+
+    void Tier::ctor(StringW tierName, UnityEngine::Color bannerColor)
+    {
+        this->tierName = tierName;
+        this->bannerColor = bannerColor;
+        patrons = List<Patron*>::New_ctor();
+    }
+
+    void Tier::PostParse()
+    {
+        HMUI::ImageView* imageView = banner->background;
+        imageView->gradient = true;
+        imageView->gradientDirection = 1;
+        imageView->set_color(bannerColor);
+        imageView->set_color0(Color(1.1f, 1.1f, 1.1f, 1.0f));
+        imageView->set_color1(Color(0.9f, 0.9f, 0.9f, 1.0f));
+    }
+
 }

@@ -43,10 +43,18 @@ struct IncludedAsset {
 
 namespace IncludedAssets {
 
+	DECLARE_FILE(CreditView_bsml)
 	DECLARE_FILE(DeleteIcon_png)
+	DECLARE_FILE(DeletionConfirmationModal_bsml)
+	DECLARE_FILE(GameplaySetupView_bsml)
 	DECLARE_FILE(MenuIcon_png)
 	DECLARE_FILE(MenuIconSelected_png)
+	DECLARE_FILE(PatronCreditBox_bsml)
 	DECLARE_FILE(PlaceHolderImage_png)
+	DECLARE_FILE(ProfileSwitcherView_bsml)
+	DECLARE_FILE(QosmeticsItemCell_bsml)
+	DECLARE_FILE(QosmeticsSettingsButton_bsml)
+	DECLARE_FILE(QosmeticsView_bsml)
 	DECLARE_FILE(SelectIcon_png)
 	DECLARE_FILE(de_xml)
 	DECLARE_FILE(en_xml)

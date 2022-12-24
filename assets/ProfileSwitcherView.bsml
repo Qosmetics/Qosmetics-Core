@@ -1,0 +1,50 @@
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'>
+    <!-- Header -->
+    <stack background="title-gradient" pref-width='90' pref-height='10' vertical-fit="PreferredSize"
+        horizontal-fit="PreferredSize"
+        background-color0="#4C2699FF" background-color1="#4C269900" ignore-layout="true"
+        anchor-pos-y="45">
+        <macro.if value='!gay'>
+            <text text='Profile Switcher' align="Center" font-size="8" />
+        </macro.if>
+        <macro.if value='gay'>
+            <text text='Profile Switcher' align="Center" font-size="8" />
+        </macro.if>
+    </stack>
+
+    <!-- Main UI -->
+    <vertical pref-width="80" horizontal-fit="PreferredSize" spacing='5'>
+        <text text="Switch user config to quickly change which config you're using!" align="Center"
+            font-size='3' />
+        <horizontal spacing='5'>
+            <string-setting id='textField' text='New User' pref-width="55" />
+            <action-button text='Add User' on-click="ConfirmAddUser" pref-width="20" />
+        </horizontal>
+        <stack pref-width='55' horizontal-fit="PreferredSize">
+            <list id='userList' list-style="Simple" cell-size="8.5" pref-width='55' data='profiles'
+                select-cell="SelectUser" show-scrollbar="true" stick-scrolling="true" />
+        </stack>
+    </vertical>
+
+    <!-- Delete modal button -->
+    <stack pref-width='10' pref-height="10" horizontal-fit="PreferredSize"
+        vertical-fit="PreferredSize" ignore-layout="true" anchor-pos-y="-35" anchor-pos-x="27.5">
+        <button-with-icon icon="QosmeticsCore_deleteIcon" on-click="ShowDeleteModal" pref-width='10'
+            pref-height="10" />
+    </stack>
+
+    <!-- Delete modal -->
+    <modal id='deleteModal' move-to-center='true' click-off-closes="true" size-delta-x="60"
+        size-delta-y="40">
+        <vertical bg="round-rect-panel" pad='2' pref-height="40" vertical-fit="PreferredSize"
+            pref-width="60" horizontal-fit="PreferredSize">
+            <text text="Are you sure you want to delete this profile?" align="Center" />
+            <text id='deleteProfileName' text='Placeholder' align="Center" />
+            <horizontal pref-height="10" vertical-fit="PreferredSize" spacing="5">
+                <button text='Confirm' color='#ff0000' on-click="ConfirmDelete" pref-width='20' />
+                <button text='Cancel' color='#00ff00' on-click='deleteModal#Hide' pref-width='20' />
+            </horizontal>
+        </vertical>
+    </modal>
+</bg>

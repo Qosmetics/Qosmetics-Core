@@ -47,6 +47,7 @@ namespace Qosmetics::Core::BundleUtils
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
 
         out = req->get_assetBundle();
+        co_return;
     }
 
     custom_types::Helpers::Coroutine LoadAssetFromBundleAsync(UnityEngine::AssetBundle* bundle, std::string_view name, System::Type* type, UnityEngine::Object*& out)

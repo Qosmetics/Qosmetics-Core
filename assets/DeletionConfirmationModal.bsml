@@ -1,0 +1,19 @@
+<modal
+    id='modal'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'
+    size-delta-x="50"
+    size-delta-y="30"
+    click-off-closes="true"
+    move-to-center="true"
+    on-blocker-clicked='Dismiss'
+>
+    <vertical bg='round-rect-panel' pad='2'>
+        <text text='Are you sure you want to delete this?' align='Center' italics="true" />
+        <text id='objectName' text='---' align='Center' italics="true" />
+        <horizontal pref-width="46" spacing='4'>
+            <button pref-width='20' text='Confirm' on-click="Confirm" face-color='#ff0404' />
+            <button pref-width='20' text='Cancel' on-click="Dismiss" face-color='#04ff04' />
+        </horizontal>
+    </vertical>
+</modal>

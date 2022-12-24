@@ -1,9 +1,9 @@
 #include "UI/Components/QosmeticObjectTableData.hpp"
 #include "UI/Components/QosmeticObjectTableCell.hpp"
 #include "assets.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
 
 #include "System/Action_2.hpp"
+#include "bsml/shared/Helpers/utilities.hpp"
 
 #include "custom-types/shared/delegate.hpp"
 
@@ -75,10 +75,10 @@ namespace Qosmetics::Core
 
     UnityEngine::Sprite* QosmeticObjectTableData::DefaultSprite()
     {
-        if (defaultSprite)
+        if (defaultSprite && defaultSprite->m_CachedPtr.m_value)
             return defaultSprite;
 
-        defaultSprite = QuestUI::BeatSaberUI::ArrayToSprite(IncludedAssets::PlaceHolderImage_png);
+        defaultSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::PlaceHolderImage_png);
         return defaultSprite;
     }
 
@@ -86,6 +86,7 @@ namespace Qosmetics::Core
     {
         return previewToSpriteDict->ContainsKey(key) ? previewToSpriteDict->get_Item(key) : nullptr;
     }
+
     void QosmeticObjectTableData::AddCachedSprite(StringW key, UnityEngine::Sprite* sprite)
     {
         if (!previewToSpriteDict->ContainsKey(key))

@@ -31,11 +31,6 @@
       "additionalData": {}
     },
     {
-      "id": "questui",
-      "versionRange": "^0.17.5",
-      "additionalData": {}
-    },
-    {
       "id": "modloader",
       "versionRange": "^1.2.3",
       "additionalData": {}
@@ -50,11 +45,20 @@
     {
       "id": "paper",
       "versionRange": "^1.2.9",
-      "additionalData": {}
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "lapiz",
       "versionRange": "^0.1.4",
+      "additionalData": {
+        "private": true
+      }
+    },
+    {
+      "id": "bsml",
+      "versionRange": "^0.2.3",
       "additionalData": {}
     }
   ],
