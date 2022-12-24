@@ -21,7 +21,7 @@
 
 #include "bsml/shared/BSML.hpp"
 #include "bsml/shared/BSML/Settings/BSMLSettings.hpp"
-#include "bsml/shared/helpers/utilities.hpp"
+#include "bsml/shared/Helpers/utilities.hpp"
 
 #include "assets.hpp"
 DEFINE_TYPE(Qosmetics::Core, QosmeticsFlowCoordinator);
