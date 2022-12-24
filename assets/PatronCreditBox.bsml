@@ -1,0 +1,10 @@
+<horizontal background='round-rect-panel' bg-alpha='0.8' vertical-fit='PreferredSize' horizontal-fit='PreferredSize' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'>
+    <vertical>
+        <horizontal id='banner' pref-width='50' pref-height="5" background='title-gradient' vertical-fit="PreferredSize" horizontal-fit="PreferredSize">
+            <text text='~tierName' align="Center" />
+        </horizontal>
+        <macro.for-each hosts='patrons'>
+            <text text='~patronName' align="Center" />
+        </macro.for-each>
+    </vertical>
+</horizontal>

@@ -11,8 +11,10 @@
 #include "UnityEngine/EventSystems/PointerEventData.hpp"
 #include "custom-types/shared/coroutine.hpp"
 #include "custom-types/shared/macros.hpp"
-#include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
 #include <functional>
+
+#include "bsml/shared/BSML/Components/Backgroundable.hpp"
+#include "bsml/shared/BSML/Components/ClickableImage.hpp"
 
 #ifndef DECLARE_OVERRIDE_METHOD_MATCH
 #define DECLARE_OVERRIDE_METHOD_MATCH(retval, method, mptr, ...) \
@@ -25,22 +27,22 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticObjectTableCell, HMUI::TableCell,
                       DECLARE_INSTANCE_FIELD(TMPro::TextMeshProUGUI*, sub);
                       DECLARE_INSTANCE_FIELD(HMUI::HoverHint*, hover);
                       DECLARE_INSTANCE_FIELD(HMUI::ImageView*, image);
-                      DECLARE_INSTANCE_FIELD(HMUI::ImageView*, backgroundImage);
+                      DECLARE_INSTANCE_FIELD(BSML::Backgroundable*, backgroundImage);
+                      DECLARE_INSTANCE_FIELD(BSML::ClickableImage*, deleteBtn);
 
                       DECLARE_INSTANCE_FIELD(DeletionConfirmationModal*, deletionConfirmationModal);
                       DECLARE_INSTANCE_FIELD(QosmeticObjectTableData*, tableData);
 
+                      DECLARE_INSTANCE_METHOD(void, PostParse);
+                      DECLARE_INSTANCE_METHOD(void, Select);
+                      DECLARE_INSTANCE_METHOD(void, Delete);
+                      DECLARE_INSTANCE_METHOD(void, AttemptDelete);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, HighlightDidChange, &HMUI::SelectableCell::HighlightDidChange, HMUI::SelectableCell::TransitionType transitionType);
 
                       public
                       :
 
                       static Qosmetics::Core::QosmeticObjectTableCell * CreateNewCell();
-                      void Setup();
-
-                      void Select();
-                      void Delete();
-                      void AttemptDelete();
 
                       void SetDescriptor(Descriptor descriptor);
                       void set_name(std::string_view name);

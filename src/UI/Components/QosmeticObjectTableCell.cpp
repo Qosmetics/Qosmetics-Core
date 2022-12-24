@@ -1,8 +1,4 @@
 #include "UI/Components/QosmeticObjectTableCell.hpp"
-#include "diglett/shared/Localization.hpp"
-#include "diglett/shared/Util.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
-#include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
 
 #include "HMUI/Touchable.hpp"
 #include "UnityEngine/GameObject.hpp"
@@ -10,10 +6,6 @@
 #include "UnityEngine/Networking/DownloadHandlerTexture.hpp"
 #include "UnityEngine/Networking/UnityWebRequest.hpp"
 #include "UnityEngine/Networking/UnityWebRequestTexture.hpp"
-#include "UnityEngine/Sprite.hpp"
-#include "UnityEngine/SpriteMeshType.hpp"
-#include "UnityEngine/Texture2D.hpp"
-#include "UnityEngine/UI/LayoutElement.hpp"
 
 #include "Data/Creators.hpp"
 
@@ -21,36 +13,18 @@
 #include "Utils/ZipUtils.hpp"
 
 #include "assets.hpp"
+#include "bsml/shared/BSML.hpp"
+#include "bsml/shared/Helpers/getters.hpp"
+#include "bsml/shared/Helpers/utilities.hpp"
 #include "logging.hpp"
 
 DEFINE_TYPE(Qosmetics::Core, QosmeticObjectTableCell);
 
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
-using namespace QuestUI::BeatSaberUI;
 
-#define SetHorizontalFitMode(obj, mode)                                               \
-    auto obj##SizeFitter = obj->get_gameObject()->GetComponent<ContentSizeFitter*>(); \
-    if (!obj##SizeFitter)                                                             \
-        obj##SizeFitter = obj->get_gameObject()->AddComponent<ContentSizeFitter*>();  \
-    obj##SizeFitter->set_horizontalFit(mode)
 UnityEngine::Color highlightedColor = UnityEngine::Color(0.0f, 0.0f, 0.5f, 0.8f);
 UnityEngine::Color idleColor = UnityEngine::Color(0.0f, 0.0f, 0.0f, 0.8f);
-VerticalLayoutGroup* CreateHost(Transform* parent, Vector2 anchoredPos,
-                                Vector2 size)
-{
-    VerticalLayoutGroup* group = CreateVerticalLayoutGroup(parent);
-    group->get_rectTransform()->set_anchoredPosition(anchoredPos);
-
-    LayoutElement* elem = group->GetComponent<LayoutElement*>();
-    elem->set_preferredHeight(size.y);
-    elem->set_preferredWidth(size.x);
-
-    ContentSizeFitter* fitter = group->GetComponent<ContentSizeFitter*>();
-    fitter->set_verticalFit(ContentSizeFitter::FitMode::PreferredSize);
-    fitter->set_horizontalFit(ContentSizeFitter::FitMode::PreferredSize);
-    return group;
-}
 
 namespace Qosmetics::Core
 {
@@ -60,43 +34,29 @@ namespace Qosmetics::Core
         auto cellGO = UnityEngine::GameObject::New_ctor();
         auto playerCell = cellGO->AddComponent<QosmeticObjectTableCell*>();
         cellGO->set_name(playerTableCellStr);
-        playerCell->Setup();
+
+        BSML::parse_and_construct(IncludedAssets::QosmeticsItemCell_bsml, cellGO->get_transform(), playerCell);
         return playerCell;
     }
 
-    void QosmeticObjectTableCell::Setup()
+    void QosmeticObjectTableCell::PostParse()
     {
         get_gameObject()->AddComponent<HMUI::Touchable*>();
-        auto bgHost = CreateHost(get_transform(), {0.0f, 0}, {100.0f, 12.0f});
-        auto bg = bgHost->get_gameObject()->AddComponent<QuestUI::Backgroundable*>();
-        bg->ApplyBackgroundWithAlpha("title-gradient", 0.8f);
-        backgroundImage = bg->get_gameObject()->GetComponentInChildren<HMUI::ImageView*>();
-        backgroundImage->set_color(idleColor);
-        backgroundImage->set_color0({1.0f, 1.0f, 1.0f, 1.0f});
-        backgroundImage->set_color1({1.0f, 1.0f, 1.0f, 1.0f});
-
-        auto imageHost = CreateHost(get_transform(), {-42.5f, 0}, {9.0f, 9.0f});
-        image = CreateImage(imageHost->get_transform(), nullptr, {0, 0}, {0, 0});
+        hover = get_gameObject()->GetComponent<HMUI::HoverHint*>();
+        if (!hover)
+            hover = get_gameObject()->AddComponent<HMUI::HoverHint*>();
+        hover->set_text("---");
+        hover->hoverHintController = BSML::Helpers::GetHoverHintController();
         image->skew = 0.18f;
 
-        auto textHost = CreateHost(get_transform(), {-5.0f, 0}, {62.5f, 12.0f});
-        textHost->set_childAlignment(UnityEngine::TextAnchor::MiddleLeft);
-        name = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
-        sub = CreateText(textHost->get_transform(), "---", {0, 0}, {0, 0});
-
-        // auto selectBtn = CreateClickableImage(CreateHost(get_transform(), {32.5f, 0}, {8.0f, 8.0f})->get_transform(), VectorToSprite(std::vector<uint8_t>(_binary_SelectIcon_png_start, _binary_SelectIcon_png_end)), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::Select, this));
-        // selectBtn->skew = 0.18f;
-        // selectBtn->set_highlightColor({0.2f, 0.8f, 0.2f, 1.0f});
-        auto deleteBtn = CreateClickableImage(CreateHost(get_transform(), {42.5f, 0}, {6.0f, 6.0f})->get_transform(), ArrayToSprite(IncludedAssets::DeleteIcon_png), Vector2(0, 0), Vector2(0, 0), std::bind(&QosmeticObjectTableCell::AttemptDelete, this));
-        deleteBtn->set_highlightColor({0.8f, 0.2f, 0.2f, 1.0f});
-        deleteBtn->skew = 0.18f;
-
-        hover = AddHoverHint(get_gameObject(), "---");
+        backgroundImage->background->set_color(idleColor);
+        backgroundImage->background->set_color0({1.0f, 1.0f, 1.0f, 1.0f});
+        backgroundImage->background->set_color1({1.0f, 1.0f, 1.0f, 1.0f});
     }
 
     void QosmeticObjectTableCell::HighlightDidChange(HMUI::SelectableCell::TransitionType transitionType)
     {
-        backgroundImage->set_color(get_highlighted() ? highlightedColor : idleColor);
+        backgroundImage->background->set_color(get_highlighted() ? highlightedColor : idleColor);
     }
 
     void QosmeticObjectTableCell::Select()
@@ -114,7 +74,6 @@ namespace Qosmetics::Core
     {
         if (onDelete)
             onDelete(this);
-        deletionConfirmationModal->Hide(true, nullptr);
     }
 
     void QosmeticObjectTableCell::SetDescriptor(Descriptor descriptor)
@@ -131,31 +90,31 @@ namespace Qosmetics::Core
             set_sprite(tableData->DefaultSprite());
     }
 
-    void QosmeticObjectTableCell::set_name(std::string_view name)
+    void QosmeticObjectTableCell::set_name(std::string_view nameText)
     {
-        if (RainbowUtils::shouldRainbow(name))
-            this->name->set_text(u"<i>" + to_utf16(RainbowUtils::rainbowify(name)) + u"</i>");
+        if (RainbowUtils::shouldRainbow(nameText))
+            this->name->set_text(RainbowUtils::rainbowify(nameText));
         else
-            this->name->set_text(u"<i>" + to_utf16(name) + u"</i>");
+            this->name->set_text(nameText);
     }
 
-    void QosmeticObjectTableCell::set_sub(std::string_view sub)
+    void QosmeticObjectTableCell::set_sub(std::string_view subText)
     {
-        auto color = Creators::GetCreatorColor(std::string(sub));
+        auto color = Creators::GetCreatorColor(std::string(subText));
         if (RainbowUtils::shouldRainbow(color))
         {
-            this->sub->set_text(u"<i>" + to_utf16(RainbowUtils::rainbowify(sub)) + u"</i>");
+            sub->set_text(RainbowUtils::rainbowify(subText));
         }
         else
         {
-            this->sub->set_text(u"<i>" + to_utf16(sub) + u"</i>");
+            sub->set_text(subText);
         }
-        this->sub->set_color(color);
+        sub->set_color(color);
     }
 
-    void QosmeticObjectTableCell::set_hover(std::string_view hover)
+    void QosmeticObjectTableCell::set_hover(std::string_view hoverText)
     {
-        this->hover->set_text(u"<i>" + to_utf16(hover) + u"</i>");
+        hover->set_text(u"<i>" + to_utf16(hoverText) + u"</i>");
     }
 
     void QosmeticObjectTableCell::set_sprite(UnityEngine::Sprite* sprite)
@@ -169,7 +128,7 @@ namespace Qosmetics::Core
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
         auto downloadHandlerTexture = reinterpret_cast<UnityEngine::Networking::DownloadHandlerTexture*>(www->get_downloadHandler());
         auto texture = downloadHandlerTexture->get_texture();
-        auto sprite = Sprite::Create(texture, Rect(0.0f, 0.0f, (float)texture->get_width(), (float)texture->get_height()), Vector2(0.5f, 0.5f), 1024.0f, 1u, SpriteMeshType::FullRect, Vector4(0.0f, 0.0f, 0.0f, 0.0f), false);
+        auto sprite = BSML::Utilities::LoadSpriteFromTexture(texture);
         tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
         set_sprite(sprite);
         co_return;
@@ -179,7 +138,7 @@ namespace Qosmetics::Core
     {
         // check if image already cached
         auto sprite = tableData->GetCachedSprite(descriptor.get_filePath());
-        if (sprite)
+        if (sprite && sprite->m_CachedPtr.m_value)
         {
             set_sprite(sprite);
             return;
@@ -194,10 +153,10 @@ namespace Qosmetics::Core
         }
 
         // else just load the image from the zip
-        std::vector<uint8_t> bytes;
+        ArrayW<uint8_t> bytes;
         if (ZipUtils::GetBytesFromZipFile(descriptor.get_filePath(), descriptor.get_coverImage(), bytes))
         {
-            auto sprite = VectorToSprite(bytes);
+            auto sprite = BSML::Utilities::LoadSpriteRaw(bytes);
             tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
             set_sprite(sprite);
         }
