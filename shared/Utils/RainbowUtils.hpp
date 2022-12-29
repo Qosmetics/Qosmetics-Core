@@ -9,4 +9,7 @@ namespace Qosmetics::Core::RainbowUtils
     std::string rainbowify(std::string_view in);
     std::string gayify(std::string_view in);
     std::string toLower(std::string in);
+
+    const std::string_view rainbowGradient();
+    const std::string_view randomGradient();
 }

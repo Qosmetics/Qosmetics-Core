@@ -13,6 +13,7 @@
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, ProfileSwitcherViewController, HMUI::ViewController,
                       DECLARE_INSTANCE_FIELD(List<BSML::CustomCellInfo*>*, _profiles);
                       DECLARE_INSTANCE_METHOD(ListWrapper<BSML::CustomCellInfo*>, get_profiles);
+                      DECLARE_INSTANCE_METHOD(StringW, get_gaydient);
                       DECLARE_INSTANCE_METHOD(bool, get_gay);
 
                       DECLARE_INSTANCE_METHOD(BSML::CustomCellInfo*, GetSelectedCell);

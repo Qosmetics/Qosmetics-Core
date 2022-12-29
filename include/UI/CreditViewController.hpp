@@ -18,6 +18,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, CreditViewController, HMUI::ViewControlle
                       DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, container);
                       DECLARE_INSTANCE_FIELD(TMPro::TextMeshProUGUI*, placeholderText);
 
+                      DECLARE_INSTANCE_METHOD(StringW, get_gaydient);
                       DECLARE_INSTANCE_METHOD(StringW, get_thankyou);
                       DECLARE_INSTANCE_METHOD(bool, get_gay);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);

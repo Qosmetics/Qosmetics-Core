@@ -53,6 +53,11 @@ namespace Qosmetics::Core
         return DateUtils::isMonth(6);
     }
 
+    StringW CreditViewController::get_gaydient()
+    {
+        return RainbowUtils::randomGradient();
+    }
+
     void CreditViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (!firstActivation)

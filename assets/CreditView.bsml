@@ -9,7 +9,14 @@
             <text text='Patrons &amp; Donators' align="Center" font-size="8" />
         </macro.if>
         <macro.if value='gay'>
-            <text text='Patrons &amp; Donators' align="Center" font-size="8" />
+            <gradient-text
+                gradient='~gaydient'
+                gradient-scroll-speed='0.2'
+                gradient-fixed-step='true'
+                gradient-step-size='2'
+                text='Patrons &amp; Donators'
+                align="Center"
+                font-size="8" />
         </macro.if>
     </stack>
     <!-- Main UI -->
