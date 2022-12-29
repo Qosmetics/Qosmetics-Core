@@ -113,7 +113,7 @@ namespace Qosmetics::Core
 
             time_t rawtime = time(nullptr);
             tm localTime = *localtime(&rawtime);
-            SetTitle(GetTitle(), HMUI::ViewController::AnimationType::In);
+            SetTitle("Qosmetics", HMUI::ViewController::AnimationType::In);
 
             if (DateUtils::isMonth(6))
             {
@@ -151,11 +151,6 @@ namespace Qosmetics::Core
                     c = {255, 255, 255, 255};
             text->UpdateVertexData(TMPro::TMP_VertexDataUpdateFlags::Colors32);
         }
-    }
-
-    StringW QosmeticsFlowCoordinator::GetTitle()
-    {
-        return DateUtils::isMonth(6) ? RainbowUtils::gayify("Qosmetics") : "Qosmetics";
     }
 
     void QosmeticsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)
