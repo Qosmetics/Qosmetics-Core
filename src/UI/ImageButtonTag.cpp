@@ -19,24 +19,6 @@
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
 
-std::string rept(char c, int count)
-{
-    std::string result;
-    result.resize(count);
-    memset(result.data(), c, count);
-    return result;
-}
-
-void log_hierarchy(Transform* current, int depth = 0)
-{
-    DEBUG("{}{}", rept(' ', depth++), current->get_name());
-    int childCount = current->get_childCount();
-    for (int i = 0; i < childCount; i++)
-    {
-        log_hierarchy(current->GetChild(i), depth);
-    }
-}
-
 namespace Qosmetics::Core
 {
     static BSML::BSMLNodeParser<ImageButtonTag> imageButtonTagParser({"image-button"});
@@ -65,7 +47,6 @@ namespace Qosmetics::Core
         externalComponents->Add(button);
         externalComponents->Add(transform);
 
-        log_hierarchy(button->get_transform());
         auto textObject = button->get_transform()->Find("Text")->get_gameObject();
         auto localizedText = textObject->GetComponent<Polyglot::LocalizedTextMeshProUGUI*>();
         if (localizedText)

@@ -23,6 +23,9 @@
 #include "bsml/shared/BSML/Settings/BSMLSettings.hpp"
 #include "bsml/shared/Helpers/utilities.hpp"
 
+#include "TMPro/TMP_TextInfo.hpp"
+#include "TMPro/TMP_VertexDataUpdateFlags.hpp"
+
 #include "assets.hpp"
 DEFINE_TYPE(Qosmetics::Core, QosmeticsFlowCoordinator);
 
@@ -98,20 +101,10 @@ namespace Qosmetics::Core
             return;
         mainFlowCoordinator->YoungestChildFlowCoordinatorOrSelf()->PresentFlowCoordinator(this, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
     }
-    /*
-    void QosmeticsFlowCoordinator::PresentFlowCoordinatorNextFrame(HMUI::FlowCoordinator* fc)
-    {
-    }
 
-    custom_types::Helpers::Coroutine QosmeticsFlowCoordinator::PresentFlowCoordinatorNextFrameRoutine(HMUI::FlowCoordinator* fc)
-    {
-        co_yield nullptr;
-        PresentFlowCoordinator(fc, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
-        co_return;
-    }
-    */
     void QosmeticsFlowCoordinator::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
+        HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         if (firstActivation)
         {
             ProvideInitialViewControllers(qosmeticsViewController, profileSwitcherViewController, creditViewController, nullptr, nullptr);
@@ -120,17 +113,44 @@ namespace Qosmetics::Core
 
             time_t rawtime = time(nullptr);
             tm localTime = *localtime(&rawtime);
-            SetTitle(GetTitle(), HMUI::ViewController::AnimationType::In);
+            SetTitle("Qosmetics", HMUI::ViewController::AnimationType::In);
+
+            if (DateUtils::isMonth(6))
+            {
+                titleGradientUpdater = get_gameObject()->AddComponent<BSML::TextGradientUpdater*>();
+                titleGradientUpdater->set_gradient(BSML::Gradient::Parse(RainbowUtils::randomGradient()));
+                titleGradientUpdater->text = titleView->text;
+                titleGradientUpdater->scrollSpeed = 0.2;
+                titleGradientUpdater->fixedStep = true;
+                titleGradientUpdater->stepSize = 2;
+            }
         }
 
+        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr.m_value)
+            titleGradientUpdater->set_enabled(true);
+
         creditViewController->get_gameObject()->SetActive(true);
-        HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         UIUtils::SetTitleColor(titleView, qosmetics_purple);
     }
 
-    StringW QosmeticsFlowCoordinator::GetTitle()
+    void QosmeticsFlowCoordinator::DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
     {
-        return DateUtils::isMonth(6) ? RainbowUtils::gayify("Qosmetics") : "Qosmetics";
+        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr.m_value)
+            return;
+        titleGradientUpdater->set_enabled(false);
+        // reset title text to white
+        HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
+        auto text = titleView->text;
+        auto textInfo = text->get_textInfo();
+        auto characterCount = textInfo->characterCount;
+        if (characterCount > 0)
+        {
+            int materialCount = textInfo->materialCount;
+            for (int i = 0; i < materialCount; i++)
+                for (auto& c : textInfo->meshInfo[i].colors32)
+                    c = {255, 255, 255, 255};
+            text->UpdateVertexData(TMPro::TMP_VertexDataUpdateFlags::Colors32);
+        }
     }
 
     void QosmeticsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)

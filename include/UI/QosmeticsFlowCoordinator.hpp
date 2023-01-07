@@ -14,6 +14,8 @@
 #include "ProfileSwitcherViewController.hpp"
 #include "QosmeticsViewController.hpp"
 
+#include "bsml/shared/BSML/Components/TextGradientUpdater.hpp"
+
 #define DECLARE_OVERRIDE_METHOD_MATCH(retval, name, mptr, ...) \
     DECLARE_OVERRIDE_METHOD(retval, name, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
 
@@ -27,13 +29,14 @@ DECLARE_CLASS_CODEGEN_INTERFACES(Qosmetics::Core, QosmeticsFlowCoordinator, HMUI
                                  DECLARE_INSTANCE_FIELD(GlobalNamespace::MainFlowCoordinator*, mainFlowCoordinator);
                                  DECLARE_INSTANCE_FIELD(UnityEngine::UI::Button*, settingsButton);
                                  DECLARE_INSTANCE_FIELD(List<UnityEngine::Transform*>*, vanillaMenus);
+                                 DECLARE_INSTANCE_FIELD(BSML::TextGradientUpdater*, titleGradientUpdater);
 
                                  DECLARE_INJECT_METHOD(void, Inject, Qosmetics::Core::CreditViewController* creditViewController, Qosmetics::Core::ProfileSwitcherViewController* profileSwitcherViewController, Qosmetics::Core::QosmeticsViewController* qosmeticsViewController, GlobalNamespace::MainFlowCoordinator* mainFlowCoordinator);
                                  DECLARE_INSTANCE_METHOD(void, PostParse);
                                  DECLARE_INSTANCE_METHOD(void, PresentSelf);
-                                 DECLARE_INSTANCE_METHOD(StringW, GetTitle);
                                  DECLARE_OVERRIDE_METHOD_MATCH(void, Initialize, &::Zenject::IInitializable::Initialize);
                                  DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::FlowCoordinator::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
+                                 DECLARE_OVERRIDE_METHOD_MATCH(void, DidDeactivate, &HMUI::FlowCoordinator::DidDeactivate, bool removedFromHierarchy, bool screenSystemDisabling);
                                  DECLARE_OVERRIDE_METHOD_MATCH(void, BackButtonWasPressed, &HMUI::FlowCoordinator::BackButtonWasPressed, HMUI::ViewController* topViewController);
                                  DECLARE_CTOR(ctor);
 

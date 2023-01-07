@@ -17,7 +17,8 @@ namespace Qosmetics::Core::BundleUtils
 
         auto req = UnityEngine::AssetBundle::LoadFromFileAsync(filePath);
         req->set_allowSceneActivation(true);
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
+        while (!req->get_isDone())
+            co_yield nullptr;
 
         out = req->get_assetBundle();
         co_return;
@@ -44,7 +45,8 @@ namespace Qosmetics::Core::BundleUtils
 
         auto req = assetBundle_LoadFromMemoryAsync(bytes, 0);
         req->set_allowSceneActivation(true);
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
+        while (!req->get_isDone())
+            co_yield nullptr;
 
         out = req->get_assetBundle();
         co_return;
@@ -54,7 +56,8 @@ namespace Qosmetics::Core::BundleUtils
     {
         auto req = bundle->LoadAssetAsync(name, type);
         req->set_allowSceneActivation(true);
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
+        while (!req->get_isDone())
+            co_yield nullptr;
 
         out = req->get_asset();
 

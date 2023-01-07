@@ -28,9 +28,15 @@ namespace Qosmetics::Core
     }
 
     ListWrapper<BSML::CustomCellInfo*> ProfileSwitcherViewController::get_profiles() { return _profiles; }
+
     bool ProfileSwitcherViewController::get_gay()
     {
         return DateUtils::isMonth(6);
+    }
+
+    StringW ProfileSwitcherViewController::get_gaydient()
+    {
+        return RainbowUtils::randomGradient();
     }
 
     void ProfileSwitcherViewController::PostParse()

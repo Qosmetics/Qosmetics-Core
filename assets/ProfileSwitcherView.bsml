@@ -9,7 +9,14 @@
             <text text='Profile Switcher' align="Center" font-size="8" />
         </macro.if>
         <macro.if value='gay'>
-            <text text='Profile Switcher' align="Center" font-size="8" />
+            <gradient-text
+                gradient='~gaydient'
+                gradient-scroll-speed='0.2'
+                gradient-fixed-step='true'
+                gradient-step-size='2'
+                text='Profile Switcher'
+                align="Center"
+                font-size="8" />
         </macro.if>
     </stack>
 
