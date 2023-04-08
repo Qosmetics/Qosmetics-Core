@@ -11,5 +11,19 @@
     "dependencies": [],
     "modFiles": [],
     "libraryFiles": [],
-    "fileCopies": []
+    "fileCopies": [],
+    "copyExtensions": [
+        {
+            "extension": "whacker",
+            "destination": "/sdcard/ModData/com.beatgames.beatsaber/Mods/Qosmetics/Whackers/"
+        },
+        {
+            "extension": "box",
+            "destination": "/sdcard/ModData/com.beatgames.beatsaber/Mods/Qosmetics/Boxes/"
+        },
+        {
+            "extension": "cyoob",
+            "destination": "/sdcard/ModData/com.beatgames.beatsaber/Mods/Qosmetics/Cyoobs/"
+        }
+    ]
 }
