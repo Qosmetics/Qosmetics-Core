@@ -7,7 +7,11 @@
     "version": "2.2.0",
     "url": "https://github.com/Qosmetics/Qosmetics-Core",
     "additionalData": {
-      "overrideSoName": "libqosmetics-core.so"
+      "soLink": "https://github.com/Qosmetics/Qosmetics-Core/releases/download/v2.2.0/libqosmetics-core.so",
+      "debugSoLink": "https://github.com/Qosmetics/Qosmetics-Core/releases/download/v2.2.0/debug_libqosmetics-core.so",
+      "overrideSoName": "libqosmetics-core.so",
+      "modLink": "https://github.com/Qosmetics/Qosmetics-Core/releases/download/v2.2.0/QosmeticsCore.qmod",
+      "branchName": "version-v2.2.0"
     }
   },
   "dependencies": [
@@ -69,6 +73,15 @@
   ],
   "workspace": {
     "scripts": {
+      "copy": [
+        "pwsh ./scripts/copy.ps1"
+      ],
+      "build": [
+        "pwsh ./scripts/build.ps1"
+      ],
+      "log": [
+        "pwsh ./scripts/log.ps1"
+      ],
       "qmod": [
         "pwsh ./scripts/build.ps1 -clean",
         "qpm-rust qmod build",
@@ -76,15 +89,6 @@
       ],
       "clean": [
         "pwsh ./scripts/build.ps1 -clean"
-      ],
-      "log": [
-        "pwsh ./scripts/log.ps1"
-      ],
-      "build": [
-        "pwsh ./scripts/build.ps1"
-      ],
-      "copy": [
-        "pwsh ./scripts/copy.ps1"
       ]
     }
   }
