@@ -5,11 +5,25 @@
     "author": "RedBrumbler",
     "version": "${version}",
     "packageId": "com.beatgames.beatsaber",
-    "packageVersion": "1.27.0_3631150051",
+    "packageVersion": "1.28.0_4124311467",
     "coverImage": "cover.png",
     "description": "Qosmetics Core module that handles menu placement and generic utils for other modules",
     "dependencies": [],
     "modFiles": [],
     "libraryFiles": [],
-    "fileCopies": []
+    "fileCopies": [],
+    "copyExtensions": [
+        {
+            "extension": "whacker",
+            "destination": "/sdcard/ModData/com.beatgames.beatsaber/Mods/Qosmetics/Whackers/"
+        },
+        {
+            "extension": "box",
+            "destination": "/sdcard/ModData/com.beatgames.beatsaber/Mods/Qosmetics/Boxes/"
+        },
+        {
+            "extension": "cyoob",
+            "destination": "/sdcard/ModData/com.beatgames.beatsaber/Mods/Qosmetics/Cyoobs/"
+        }
+    ]
 }
