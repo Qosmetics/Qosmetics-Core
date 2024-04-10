@@ -11,7 +11,6 @@
 
 #include "System/Collections/Generic/HashSet_1.hpp"
 
-#include "HMUI/TableView_ScrollPositionType.hpp"
 #include "UnityEngine/UI/LayoutElement.hpp"
 
 #include "bsml/shared/BSML.hpp"
@@ -23,11 +22,11 @@ namespace Qosmetics::Core
 {
     void ProfileSwitcherViewController::ctor()
     {
-        _profiles = List<BSML::CustomCellInfo*>::New_ctor();
+        _profiles = ListW<BSML::CustomCellInfo*>::New();
         RefreshUsers(false);
     }
 
-    ListWrapper<BSML::CustomCellInfo*> ProfileSwitcherViewController::get_profiles() { return _profiles; }
+    ListW<BSML::CustomCellInfo*> ProfileSwitcherViewController::get_profiles() { return _profiles; }
 
     bool ProfileSwitcherViewController::get_gay()
     {
@@ -48,12 +47,12 @@ namespace Qosmetics::Core
     {
         if (!firstActivation)
             return;
-        BSML::parse_and_construct(IncludedAssets::ProfileSwitcherView_bsml, get_transform(), this);
+        BSML::parse_and_construct(Assets::Views::ProfileSwitcherView_bsml, get_transform(), this);
     }
 
     void ProfileSwitcherViewController::ConfirmAddUser()
     {
-        if (textField && textField->m_CachedPtr.m_value && textField->get_text())
+        if (textField && textField->m_CachedPtr && textField->get_text())
         {
             AddUser(static_cast<std::string>(textField->get_text()));
             textField->set_text("");
@@ -123,7 +122,7 @@ namespace Qosmetics::Core
     BSML::CustomCellInfo* ProfileSwitcherViewController::GetSelectedCell()
     {
         auto profilesList = get_profiles();
-        auto enumerator = userList->tableView->selectedCellIdxs->GetEnumerator();
+        auto enumerator = userList->tableView->_selectedCellIdxs->GetEnumerator();
         if (!enumerator.MoveNext())
             return nullptr;
         int idx = enumerator.get_Current();

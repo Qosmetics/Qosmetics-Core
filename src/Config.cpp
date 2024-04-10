@@ -4,7 +4,7 @@
 #include "logging.hpp"
 #include "static-defines.hpp"
 
-extern ModInfo modInfo;
+extern modloader::ModInfo modInfo;
 
 Configuration& get_config()
 {
@@ -56,7 +56,7 @@ namespace Qosmetics::Core::Config
         doc.Parse(content);
         if (doc.GetParseError() != 0)
         {
-            ERROR("Doc failed to parse config file, error code: {}", doc.GetParseError());
+            ERROR("Doc failed to parse config file, error code: {}", (int)doc.GetParseError());
             return false;
         }
 

@@ -3,9 +3,9 @@
 #include "static-defines.hpp"
 #include <unordered_map>
 
-#include "GlobalNamespace/SharedCoroutineStarter.hpp"
 #include "UnityEngine/Networking/DownloadHandler.hpp"
 #include "UnityEngine/Networking/UnityWebRequest.hpp"
+#include "bsml/shared/BSML/SharedCoroutineStarter.hpp"
 
 #include "logging.hpp"
 
@@ -43,14 +43,12 @@ namespace Qosmetics::Core::Creators
         UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequest::Get(creator_color_url);
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
 
-        bool isHttpError = www->get_isHttpError();
-        bool isNetworkError = www->get_isNetworkError();
+        auto error = www->GetError();
 
-        if (isHttpError || isNetworkError)
+        if (error != UnityEngine::Networking::UnityWebRequest::UnityWebRequestError::OK)
         {
             ERROR("Failed to fetch creators file from resources repository");
-            ERROR("Was http error: {}", isHttpError);
-            ERROR("Was network error: {}", isNetworkError);
+            ERROR("Error from webreq: {}", www->error);
 
             co_return;
         }
@@ -67,6 +65,6 @@ namespace Qosmetics::Core::Creators
 
     void Download()
     {
-        GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(custom_types::Helpers::CoroutineHelper::New(DownloadCreatorColors()));
+        BSML::SharedCoroutineStarter::StartCoroutine(custom_types::Helpers::CoroutineHelper::New(DownloadCreatorColors()));
     }
 }

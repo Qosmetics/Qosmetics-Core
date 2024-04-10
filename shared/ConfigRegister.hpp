@@ -1,9 +1,11 @@
 #pragma once
+
+#include "./_config.h"
 #include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
 
 namespace Qosmetics::Core::Config
 {
-    struct Registration
+    struct QOSMETICS_CORE_EXPORT Registration
     {
         Registration(std::string_view memberName) : memberName(memberName){};
         std::string memberName;
@@ -16,10 +18,10 @@ namespace Qosmetics::Core::Config
         virtual void OnProfileSwitched() const = 0;
     };
 
-    void Register(const Registration* registration);
+    QOSMETICS_CORE_EXPORT void Register(const Registration* registration);
 
     /// @brief Make Qosmetics save it's config for the current user
-    void SaveConfig();
+    QOSMETICS_CORE_EXPORT void SaveConfig();
 }
 
 #ifndef QOSMETICS_CONFIG
@@ -43,13 +45,13 @@ namespace Qosmetics::Core::Config
 ///     }
 /// };
 /// QOSMETICS_CONFIG(SaberPlayerConfigRegistration, "saberConfig");
-#define QOSMETICS_CONFIG_REGISTER(typename_, memberName_)         \
-    struct config_registration_##typename : public typename_      \
-    {                                                             \
-        config_registration_##typename() : typename_(memberName_) \
-        {                                                         \
-            Qosmetics::Core::Config::Register(this);              \
-        };                                                        \
-    };                                                            \
+#define QOSMETICS_CONFIG_REGISTER(typename_, memberName_)                          \
+    struct QOSMETICS_CORE_EXPORT config_registration_##typename : public typename_ \
+    {                                                                              \
+        config_registration_##typename() : typename_(memberName_)                  \
+        {                                                                          \
+            Qosmetics::Core::Config::Register(this);                               \
+        };                                                                         \
+    };                                                                             \
     static config_registration_##typename config_registration_##typename##_Instance = config_registration_##typename()
 #endif

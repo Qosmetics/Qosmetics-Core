@@ -15,7 +15,7 @@ namespace Qosmetics::Core
     DeletionConfirmationModal* DeletionConfirmationModal::Create(UnityEngine::Transform* parent)
     {
         auto modal = parent->get_gameObject()->AddComponent<DeletionConfirmationModal*>();
-        BSML::parse_and_construct(IncludedAssets::DeletionConfirmationModal_bsml, parent, modal);
+        BSML::parse_and_construct(Assets::DeletionConfirmationModal_bsml, parent, modal);
         return modal;
     }
 

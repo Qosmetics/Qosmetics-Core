@@ -1,12 +1,13 @@
 #pragma once
-#include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
 
+#include "../_config.h"
+#include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
 #include <string>
 
 namespace Qosmetics::Core
 {
-    struct DescriptorComparator;
-    class Descriptor
+    struct QOSMETICS_CORE_EXPORT DescriptorComparator;
+    class QOSMETICS_CORE_EXPORT Descriptor
     {
     public:
         Descriptor();
@@ -32,7 +33,7 @@ namespace Qosmetics::Core
         friend DescriptorComparator;
     };
 
-    struct DescriptorComparator
+    struct QOSMETICS_CORE_EXPORT DescriptorComparator
     {
         constexpr bool operator()(const Descriptor& lhs, const Descriptor& rhs) const
         {

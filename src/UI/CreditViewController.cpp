@@ -6,8 +6,6 @@
 #include "logging.hpp"
 #include "static-defines.hpp"
 
-#include "GlobalNamespace/SharedCoroutineStarter.hpp"
-
 #include "assets.hpp"
 #include "bsml/shared/BSML.hpp"
 
@@ -62,7 +60,7 @@ namespace Qosmetics::Core
     {
         if (!firstActivation)
             return;
-        BSML::parse_and_construct(IncludedAssets::CreditView_bsml, get_transform(), this);
+        BSML::parse_and_construct(Assets::Views::CreditView_bsml, get_transform(), this);
         StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters()));
     }
 
@@ -72,14 +70,12 @@ namespace Qosmetics::Core
         auto req = www->SendWebRequest();
         co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
 
-        bool isHttpError = www->get_isHttpError();
-        bool isNetworkError = www->get_isNetworkError();
+        auto error = www->GetError();
 
-        if (isHttpError || isNetworkError)
+        if (error != UnityEngine::Networking::UnityWebRequest::UnityWebRequestError::OK)
         {
             ERROR("Failed to fetch patrons file from resources repository");
-            ERROR("Was http error: {}", isHttpError);
-            ERROR("Was network error: {}", isNetworkError);
+            ERROR("Error from webreq: {}", www->error);
 
             placeholderText->set_text("There were no patrons found, There must have been a network error!");
             co_return;
@@ -102,10 +98,10 @@ namespace Qosmetics::Core
                 for (auto patron : patrons.legendary)
                     tier->patrons->Add(Patron::New_ctor(patron));
 
-                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
 
                 auto bannerimageView = tier->banner->background;
-                auto origMat = UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>().FirstOrDefault(
+                auto origMat = UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>()->FirstOrDefault(
                     [](UnityEngine::Material* x)
                     {
                         return x->get_name() == "AnimatedButton";
@@ -123,7 +119,7 @@ namespace Qosmetics::Core
                 for (auto patron : patrons.amazing)
                     tier->patrons->Add(Patron::New_ctor(patron));
 
-                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
                 tier->Finalize();
             }
 
@@ -133,7 +129,7 @@ namespace Qosmetics::Core
                 for (auto patron : patrons.enthusiastic)
                     tier->patrons->Add(Patron::New_ctor(patron));
 
-                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
                 tier->Finalize();
             }
 
@@ -143,7 +139,7 @@ namespace Qosmetics::Core
                 for (auto patron : patrons.paypal)
                     tier->patrons->Add(Patron::New_ctor(patron));
 
-                BSML::parse_and_construct(IncludedAssets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
                 tier->Finalize();
             }
         }
@@ -159,14 +155,14 @@ namespace Qosmetics::Core
     {
         this->tierName = tierName;
         this->bannerColor = bannerColor;
-        patrons = List<Patron*>::New_ctor();
+        patrons = ListW<Patron*>::New();
     }
 
     void Tier::PostParse()
     {
         HMUI::ImageView* imageView = banner->background;
         imageView->gradient = true;
-        imageView->gradientDirection = 1;
+        imageView->_gradientDirection = HMUI::ImageView::GradientDirection::Vertical;
         imageView->set_color(bannerColor);
         imageView->set_color0(Color(1.1f, 1.1f, 1.1f, 1.0f));
         imageView->set_color1(Color(0.9f, 0.9f, 0.9f, 1.0f));

@@ -16,11 +16,6 @@
 #include "bsml/shared/BSML/Components/Backgroundable.hpp"
 #include "bsml/shared/BSML/Components/ClickableImage.hpp"
 
-#ifndef DECLARE_OVERRIDE_METHOD_MATCH
-#define DECLARE_OVERRIDE_METHOD_MATCH(retval, method, mptr, ...) \
-    DECLARE_OVERRIDE_METHOD(retval, method, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
-#endif
-
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticObjectTableCell, HMUI::TableCell,
 
                       DECLARE_INSTANCE_FIELD(TMPro::TextMeshProUGUI*, name);
