@@ -28,7 +28,7 @@ on:
       - master
 
 env:
-  module_id: qosmeticscore
+  module_id: qosmetics-core
   qmod_name: QosmeticsCore
 
 jobs:
