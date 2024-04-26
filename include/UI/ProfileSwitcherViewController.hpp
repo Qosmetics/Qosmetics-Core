@@ -11,8 +11,9 @@
 #include <vector>
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, ProfileSwitcherViewController, HMUI::ViewController,
-                      DECLARE_INSTANCE_FIELD(List<BSML::CustomCellInfo*>*, _profiles);
-                      DECLARE_INSTANCE_METHOD(ListWrapper<BSML::CustomCellInfo*>, get_profiles);
+                      DECLARE_INSTANCE_FIELD(ListW<BSML::CustomCellInfo*>, _profiles);
+                      DECLARE_INSTANCE_METHOD(ListW<BSML::CustomCellInfo*>, get_profiles);
+
                       DECLARE_INSTANCE_METHOD(StringW, get_gaydient);
                       DECLARE_INSTANCE_METHOD(bool, get_gay);
 
@@ -26,7 +27,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, ProfileSwitcherViewController, HMUI::View
                       DECLARE_INSTANCE_FIELD(BSML::ModalView*, deleteModal);
                       DECLARE_INSTANCE_FIELD(TMPro::TextMeshProUGUI*, deleteProfileName);
 
-                      DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::il2cpp_type_check::MetadataGetter<&HMUI::ViewController::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
+                      DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
                       DECLARE_INSTANCE_METHOD(void, SelectUser, HMUI::TableView* _, int idx);
 
                       DECLARE_CTOR(ctor);

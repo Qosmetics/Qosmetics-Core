@@ -10,9 +10,6 @@
 #include "custom-types/shared/coroutine.hpp"
 #include "custom-types/shared/macros.hpp"
 
-#define DECLARE_OVERRIDE_METHOD_MATCH(retval, name, mptr, ...) \
-    DECLARE_OVERRIDE_METHOD(retval, name, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
-
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, CreditViewController, HMUI::ViewController,
                       DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, patronTexts);
                       DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, container);
@@ -27,16 +24,16 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, CreditViewController, HMUI::ViewControlle
 
 )
 
-DECLARE_CLASS_CODEGEN(Qosmetics::Core, Patron, Il2CppObject,
+DECLARE_CLASS_CODEGEN(Qosmetics::Core, Patron, System::Object,
                       DECLARE_INSTANCE_FIELD(StringW, patronName);
                       DECLARE_CTOR(ctor, StringW patronName);
 
 )
 
-DECLARE_CLASS_CODEGEN(Qosmetics::Core, Tier, Il2CppObject,
+DECLARE_CLASS_CODEGEN(Qosmetics::Core, Tier, System::Object,
                       DECLARE_INSTANCE_FIELD(StringW, tierName);
                       DECLARE_INSTANCE_FIELD(UnityEngine::Color, bannerColor);
-                      DECLARE_INSTANCE_FIELD(List<Patron*>*, patrons);
+                      DECLARE_INSTANCE_FIELD(ListW<Patron*>, patrons);
                       DECLARE_INSTANCE_FIELD(BSML::Backgroundable*, banner);
 
                       DECLARE_INSTANCE_METHOD(void, PostParse);

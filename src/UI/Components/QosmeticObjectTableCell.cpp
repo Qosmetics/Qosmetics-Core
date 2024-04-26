@@ -35,7 +35,7 @@ namespace Qosmetics::Core
         auto playerCell = cellGO->AddComponent<QosmeticObjectTableCell*>();
         cellGO->set_name(playerTableCellStr);
 
-        BSML::parse_and_construct(IncludedAssets::QosmeticsItemCell_bsml, cellGO->get_transform(), playerCell);
+        BSML::parse_and_construct(Assets::QosmeticsItemCell_bsml, cellGO->get_transform(), playerCell);
         return playerCell;
     }
 
@@ -46,8 +46,8 @@ namespace Qosmetics::Core
         if (!hover)
             hover = get_gameObject()->AddComponent<HMUI::HoverHint*>();
         hover->set_text("---");
-        hover->hoverHintController = BSML::Helpers::GetHoverHintController();
-        image->skew = 0.18f;
+        hover->_hoverHintController = BSML::Helpers::GetHoverHintController();
+        image->_skew = 0.18f;
 
         backgroundImage->background->set_color(idleColor);
         backgroundImage->background->set_color0({1.0f, 1.0f, 1.0f, 1.0f});
@@ -114,7 +114,7 @@ namespace Qosmetics::Core
 
     void QosmeticObjectTableCell::set_hover(std::string_view hoverText)
     {
-        hover->set_text(u"<i>" + to_utf16(hoverText) + u"</i>");
+        hover->set_text(fmt::format("<i>{}</i>", hoverText));
     }
 
     void QosmeticObjectTableCell::set_sprite(UnityEngine::Sprite* sprite)
@@ -138,7 +138,7 @@ namespace Qosmetics::Core
     {
         // check if image already cached
         auto sprite = tableData->GetCachedSprite(descriptor.get_filePath());
-        if (sprite && sprite->m_CachedPtr.m_value)
+        if (sprite && sprite->m_CachedPtr)
         {
             set_sprite(sprite);
             return;

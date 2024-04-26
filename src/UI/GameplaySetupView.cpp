@@ -9,9 +9,16 @@ DEFINE_TYPE(Qosmetics::Core, GameplaySetupView);
 
 using namespace UnityEngine;
 
+static UnityEngine::Vector3 operator*(UnityEngine::Vector3 vec, float v)
+{
+    return {
+        vec.x * v,
+        vec.y * v,
+        vec.z * v};
+}
 namespace Qosmetics::Core
 {
-    void GameplaySetupView::Inject(QosmeticsFlowCoordinator* qosmeticsFlowCoordinator, ListWrapper<QosmeticsBaseFlowCoordinator*> baseFlowCoordinators)
+    void GameplaySetupView::Inject(QosmeticsFlowCoordinator* qosmeticsFlowCoordinator, ListW<QosmeticsBaseFlowCoordinator*> baseFlowCoordinators)
     {
         this->qosmeticsFlowCoordinator = qosmeticsFlowCoordinator;
         this->flowCoordinators = baseFlowCoordinators;
@@ -36,12 +43,12 @@ namespace Qosmetics::Core
 
     void GameplaySetupView::PostParse()
     {
-        if (grid && grid->m_CachedPtr.m_value)
+        if (grid && grid->m_CachedPtr)
             grid->set_localScale(grid->get_localScale() * 0.66f);
     }
 }
 
 BSML_DATACACHE(gameplaySetupTab)
 {
-    return IncludedAssets::GameplaySetupView_bsml;
+    return Assets::Views::GameplaySetupView_bsml;
 }

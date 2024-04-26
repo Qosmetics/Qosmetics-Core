@@ -5,28 +5,7 @@
 
 #include "paper/shared/logger.hpp"
 
-namespace Qosmetics::Core
-{
-    class Logging
-    {
-    public:
-        static Logger& getLogger();
-        [[deprecated]] static LoggerContextObject& getContextLogger(const char* fun, const char* file, int line);
-    };
-}
-
-template <>
-struct fmt::formatter<::StringW> : formatter<string_view>
-{
-    // parse is inherited from formatter<string_view>.
-    template <typename FormatContext>
-    auto format(StringW s, FormatContext& ctx)
-    {
-        return formatter<string_view>::format(s ? static_cast<std::string>(s) : std::string("NULL"), ctx);
-    }
-};
-
-#define INFO(...) Paper::Logger::fmtLog<Paper::LogLevel::INF>(__VA_ARGS__)
-#define ERROR(...) Paper::Logger::fmtLog<Paper::LogLevel::ERR>(__VA_ARGS__)
-#define CRITICAL(...) Paper::Logger::fmtLog<Paper::LogLevel::ERR>(__VA_ARGS__)
-#define DEBUG(...) Paper::Logger::fmtLog<Paper::LogLevel::DBG>(__VA_ARGS__)
+#define INFO(str, ...) Paper::Logger::fmtLogTag<Paper::LogLevel::INF>(str, "QosmeticsCore" __VA_OPT__(, __VA_ARGS__))
+#define ERROR(str, ...) Paper::Logger::fmtLogTag<Paper::LogLevel::ERR>(str, "QosmeticsCore" __VA_OPT__(, __VA_ARGS__))
+#define CRITICAL(str, ...) Paper::Logger::fmtLogTag<Paper::LogLevel::ERR>(str, "QosmeticsCore" __VA_OPT__(, __VA_ARGS__))
+#define DEBUG(str, ...) Paper::Logger::fmtLogTag<Paper::LogLevel::DBG>(str, "QosmeticsCore" __VA_OPT__(, __VA_ARGS__))

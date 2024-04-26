@@ -9,14 +9,12 @@
 #include "logging.hpp"
 #include "static-defines.hpp"
 
+#include "BGLib/Polyglot/LocalizedTextMeshProUGUI.hpp"
+#include "GlobalNamespace/OptionsViewController.hpp"
 #include "HMUI/ButtonSpriteSwap.hpp"
 #include "HMUI/TitleViewController.hpp"
-#include "HMUI/ViewController_AnimationDirection.hpp"
-#include "HMUI/ViewController_AnimationType.hpp"
-#include "Polyglot/LocalizedTextMeshProUGUI.hpp"
 #include "UnityEngine/Events/UnityAction.hpp"
 #include "UnityEngine/TextureWrapMode.hpp"
-#include "UnityEngine/UI/Button_ButtonClickedEvent.hpp"
 #include "UnityEngine/UI/HorizontalLayoutGroup.hpp"
 
 #include "bsml/shared/BSML.hpp"
@@ -36,11 +34,12 @@ namespace Qosmetics::Core
 {
     void QosmeticsFlowCoordinator::ctor()
     {
-        INVOKE_BASE_CTOR(classof(HMUI::FlowCoordinator*));
+        HMUI::FlowCoordinator::_ctor();
     }
 
     void QosmeticsFlowCoordinator::Inject(Qosmetics::Core::CreditViewController* creditViewController, Qosmetics::Core::ProfileSwitcherViewController* profileSwitcherViewController, Qosmetics::Core::QosmeticsViewController* qosmeticsViewController, GlobalNamespace::MainFlowCoordinator* mainFlowCoordinator)
     {
+        DEBUG("Injecting");
         this->creditViewController = creditViewController;
         this->profileSwitcherViewController = profileSwitcherViewController;
         this->qosmeticsViewController = qosmeticsViewController;
@@ -50,16 +49,17 @@ namespace Qosmetics::Core
 
     void QosmeticsFlowCoordinator::Initialize()
     {
+        DEBUG("Initialize");
         Qosmetics::Core::Creators::Download();
 
-        auto optionsViewController = mainFlowCoordinator->optionsViewController;
+        auto optionsViewController = mainFlowCoordinator->_optionsViewController;
         bool bsmlSettingsExists = BSML::BSMLSettings::get_instance()->get_settingsMenus().size() > 0;
-        vanillaMenus = List<UnityEngine::Transform*>::New_ctor();
+        vanillaMenus = ListW<UnityEngine::Transform*>::New();
         UnityEngine::Transform* wrapper = optionsViewController->get_transform()->Find("Wrapper");
 
         // load sprites for btn
-        activeSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MenuIconSelected_png);
-        inactiveSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::MenuIcon_png);
+        activeSprite = BSML::Utilities::LoadSpriteRaw(Assets::Icons::MenuIconSelected_png);
+        inactiveSprite = BSML::Utilities::LoadSpriteRaw(Assets::Icons::MenuIcon_png);
 
         activeSprite->get_texture()->set_wrapMode(UnityEngine::TextureWrapMode::Clamp);
         inactiveSprite->get_texture()->set_wrapMode(UnityEngine::TextureWrapMode::Clamp);
@@ -69,10 +69,10 @@ namespace Qosmetics::Core
 
         if (bsmlSettingsExists)
         {
-            vanillaMenus->Add(optionsViewController->editAvatarButton->get_transform());
-            vanillaMenus->Add(optionsViewController->playerOptionsButton->get_transform());
-            vanillaMenus->Add(optionsViewController->settingsButton->get_transform());
-            BSML::parse_and_construct(IncludedAssets::QosmeticsSettingsButton_bsml, optionsViewController->get_transform(), this);
+            vanillaMenus->Add(optionsViewController->_editAvatarButton->transform);
+            vanillaMenus->Add(optionsViewController->_playerOptionsButton->transform);
+            vanillaMenus->Add(optionsViewController->_settingsButton->transform);
+            BSML::parse_and_construct(Assets::QosmeticsSettingsButton_bsml, optionsViewController->transform, this);
 
             // this has to be done manually, without bsml
             HorizontalLayoutGroup* oldLayout = wrapper->get_gameObject()->GetComponent<HorizontalLayoutGroup*>();
@@ -81,23 +81,28 @@ namespace Qosmetics::Core
             settingsButton->get_transform()->SetAsLastSibling();
         }
         else
+        {
+
             settingsButton->get_transform()->SetAsFirstSibling();
+        }
     }
 
     void QosmeticsFlowCoordinator::PostParse()
     {
-        if (!(settingsButton && settingsButton->m_CachedPtr.m_value))
+        if (!(settingsButton && settingsButton->m_CachedPtr))
             return;
 
         auto spriteSwap = settingsButton->GetComponent<HMUI::ButtonSpriteSwap*>();
         // setting the sprites
-        spriteSwap->highlightStateSprite = spriteSwap->pressedStateSprite = activeSprite;
-        spriteSwap->disabledStateSprite = spriteSwap->normalStateSprite = inactiveSprite;
+        spriteSwap->_highlightStateSprite = activeSprite;
+        spriteSwap->_pressedStateSprite = activeSprite;
+        spriteSwap->_disabledStateSprite = inactiveSprite;
+        spriteSwap->_normalStateSprite = inactiveSprite;
     }
 
     void QosmeticsFlowCoordinator::PresentSelf()
     {
-        if (!mainFlowCoordinator || !mainFlowCoordinator->m_CachedPtr.m_value)
+        if (!mainFlowCoordinator || !mainFlowCoordinator->m_CachedPtr)
             return;
         mainFlowCoordinator->YoungestChildFlowCoordinatorOrSelf()->PresentFlowCoordinator(this, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
     }
@@ -119,14 +124,14 @@ namespace Qosmetics::Core
             {
                 titleGradientUpdater = get_gameObject()->AddComponent<BSML::TextGradientUpdater*>();
                 titleGradientUpdater->set_gradient(BSML::Gradient::Parse(RainbowUtils::randomGradient()));
-                titleGradientUpdater->text = titleView->text;
+                titleGradientUpdater->text = titleView->_text;
                 titleGradientUpdater->scrollSpeed = 0.2;
                 titleGradientUpdater->fixedStep = true;
                 titleGradientUpdater->stepSize = 2;
             }
         }
 
-        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr.m_value)
+        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr)
             titleGradientUpdater->set_enabled(true);
 
         creditViewController->get_gameObject()->SetActive(true);
@@ -135,12 +140,12 @@ namespace Qosmetics::Core
 
     void QosmeticsFlowCoordinator::DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
     {
-        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr.m_value)
+        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr)
             return;
         titleGradientUpdater->set_enabled(false);
         // reset title text to white
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
-        auto text = titleView->text;
+        auto text = titleView->_text;
         auto textInfo = text->get_textInfo();
         auto characterCount = textInfo->characterCount;
         if (characterCount > 0)
@@ -148,7 +153,7 @@ namespace Qosmetics::Core
             int materialCount = textInfo->materialCount;
             for (int i = 0; i < materialCount; i++)
                 for (auto& c : textInfo->meshInfo[i].colors32)
-                    c = {255, 255, 255, 255};
+                    c = {0, 255, 255, 255, 255};
             text->UpdateVertexData(TMPro::TMP_VertexDataUpdateFlags::Colors32);
         }
     }
@@ -156,7 +161,7 @@ namespace Qosmetics::Core
     void QosmeticsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)
     {
         creditViewController->get_gameObject()->SetActive(false);
-        parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
+        _parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         UIUtils::SetTitleColor(titleView, beatsaber_light_blue, true);
     }

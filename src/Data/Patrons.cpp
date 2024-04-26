@@ -36,7 +36,7 @@ namespace Qosmetics::Core
         }
         else
         {
-            ERROR("Doc parse Error {}, data:\n{}", doc.GetParseError(), json);
+            ERROR("Doc parse Error {}, data:\n{}", (int)doc.GetParseError(), json);
         }
 
         return result;

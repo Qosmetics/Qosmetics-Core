@@ -17,6 +17,6 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticsBaseFlowCoordinator, HMUI::FlowC
                       DECLARE_INSTANCE_METHOD(void, Present);
                       DECLARE_INSTANCE_METHOD(StringW, get_menuName);
 
-                      DECLARE_OVERRIDE_METHOD(void, DidActivate_Base, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::HMUI::FlowCoordinator::DidActivate>::get(), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
+                      DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate_Base, &::HMUI::FlowCoordinator::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
 )

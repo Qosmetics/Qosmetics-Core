@@ -1,13 +1,15 @@
 #pragma once
+
 #include "../Data/BasicConfig.hpp"
 #include "../Data/Descriptor.hpp"
 #include "../Utils/ZipUtils.hpp"
+#include "../_config.h"
 
 namespace Qosmetics::Core
 {
     /// @tparam T config for the object, requires a default & const rapidjson::Value& ctor
     template <class T = BasicConfig>
-    class Manifest
+    class QOSMETICS_CORE_EXPORT Manifest
     {
     public:
         Manifest() : filePath(){};

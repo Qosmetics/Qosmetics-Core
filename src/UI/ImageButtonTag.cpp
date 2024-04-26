@@ -3,7 +3,7 @@
 
 #include "bsml/shared/BSML/Components/ExternalComponents.hpp"
 
-#include "Polyglot/LocalizedTextMeshProUGUI.hpp"
+#include "BGLib/Polyglot/LocalizedTextMeshProUGUI.hpp"
 #include "TMPro/TextMeshProUGUI.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/RectTransform.hpp"
@@ -27,8 +27,8 @@ namespace Qosmetics::Core
         static SafePtrUnity<Button> buttonPrefab;
         if (!buttonPrefab)
         {
-            buttonPrefab = Resources::FindObjectsOfTypeAll<Button*>().LastOrDefault([&](auto x)
-                                                                                    { return x->get_name() == "SettingsButton"; });
+            buttonPrefab = Resources::FindObjectsOfTypeAll<Button*>()->LastOrDefault([&](auto x)
+                                                                                     { return x->get_name() == "SettingsButton"; });
         }
         return buttonPrefab.ptr();
     }
@@ -40,7 +40,7 @@ namespace Qosmetics::Core
         button->set_name("BSMLButton");
         button->set_interactable(true);
 
-        auto transform = reinterpret_cast<RectTransform*>(button->get_transform());
+        auto transform = button->transform.cast<RectTransform>();
         auto gameObject = button->get_gameObject();
         gameObject->SetActive(true);
         auto externalComponents = gameObject->AddComponent<BSML::ExternalComponents*>();
@@ -48,7 +48,7 @@ namespace Qosmetics::Core
         externalComponents->Add(transform);
 
         auto textObject = button->get_transform()->Find("Text")->get_gameObject();
-        auto localizedText = textObject->GetComponent<Polyglot::LocalizedTextMeshProUGUI*>();
+        auto localizedText = textObject->GetComponent<BGLib::Polyglot::LocalizedTextMeshProUGUI*>();
         if (localizedText)
             Object::Destroy(localizedText);
 

@@ -1,9 +1,10 @@
-//#include "UI/GameplaySetupView.hpp"
+// #include "UI/GameplaySetupView.hpp"
+#include "_config.h"
 #include "assets.hpp"
 #include "custom-types/shared/register.hpp"
 #include "hooks.hpp"
 #include "logging.hpp"
-#include "modloader/shared/modloader.hpp"
+#include "scotland2/shared/modloader.h"
 
 #include "HMUI/CurvedTextMeshPro.hpp"
 #include "HMUI/ImageView.hpp"
@@ -14,39 +15,42 @@
 
 #include "Installers/MenuInstaller.hpp"
 #include "bsml/shared/BSMLDataCache.hpp"
+#include "lapiz/shared/AttributeRegistration.hpp"
 #include "lapiz/shared/zenject/Zenjector.hpp"
 
-ModInfo modInfo = {MOD_ID, VERSION};
+modloader::ModInfo modInfo = {MOD_ID, VERSION, 0};
 
-extern "C" void setup(ModInfo& info)
+QOSMETICS_CORE_EXPORT_FUNC void setup(CModInfo* info)
 {
-    info = modInfo;
+    info->id = MOD_ID;
+    info->version = VERSION;
+    info->version_long = 0;
 }
 
-extern "C" void load()
+QOSMETICS_CORE_EXPORT_FUNC void late_load()
 {
+    INFO("Loading Qosmetics");
+
     il2cpp_functions::Init();
     if (!Qosmetics::Core::Config::LoadConfig())
         Qosmetics::Core::Config::SaveConfig();
 
-    auto& logger = Qosmetics::Core::Logging::getLogger();
-    Hooks::InstallHooks(logger);
+    Hooks::InstallHooks();
     custom_types::Register::AutoRegister();
+    Lapiz::Attributes::AutoRegister();
 
     auto zenjector = ::Lapiz::Zenject::Zenjector::Get();
     zenjector->Install<Qosmetics::Core::MenuInstaller*>(::Lapiz::Zenject::Location::Menu);
 
     srand(time(NULL));
-
-    INFO("Boats and hoes");
 }
 
 BSML_DATACACHE(deleteIcon)
 {
-    return IncludedAssets::DeleteIcon_png;
+    return Assets::Icons::DeleteIcon_png;
 }
 
 BSML_DATACACHE(placeHolderIcon)
 {
-    return IncludedAssets::PlaceHolderImage_png;
+    return Assets::Icons::PlaceHolderImage_png;
 }

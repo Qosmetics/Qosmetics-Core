@@ -22,7 +22,7 @@ namespace Qosmetics::Core
 
     void QosmeticObjectTableData::Start()
     {
-        using DelegateType = System::Action_2<HMUI::TableView*, int>;
+        using DelegateType = System::Action_2<UnityW<HMUI::TableView>, int>;
         std::function<void(HMUI::TableView*, int)> fun = std::bind(&QosmeticObjectTableData::DidSelectCellWithIdx, this, std::placeholders::_1, std::placeholders::_2);
         auto delegate = custom_types::MakeDelegate<DelegateType*>(fun);
         tableView->add_didSelectCellWithIdxEvent(delegate);
@@ -33,7 +33,7 @@ namespace Qosmetics::Core
         if (onSelect)
         {
             auto& desc = *std::next(objectDescriptors.begin(), idx);
-            ListWrapper<QosmeticObjectTableCell*> visibleCells(reinterpret_cast<List<QosmeticObjectTableCell*>*>(tableView->visibleCells));
+            ListW<QosmeticObjectTableCell*> visibleCells(reinterpret_cast<List<QosmeticObjectTableCell*>*>(tableView->visibleCells));
 
             auto cell = std::find_if(visibleCells.begin(), visibleCells.end(), [desc](auto x)
                                      { return desc.get_filePath() == x->descriptor.get_filePath(); });
@@ -54,7 +54,7 @@ namespace Qosmetics::Core
 
     HMUI::TableCell* QosmeticObjectTableData::CellForIdx(HMUI::TableView* tableView, int idx)
     {
-        auto tableCell = reinterpret_cast<QosmeticObjectTableCell*>(tableView->DequeueReusableCellForIdentifier(reuseIdentifier));
+        auto tableCell = tableView->DequeueReusableCellForIdentifier(reuseIdentifier).try_cast<QosmeticObjectTableCell>().value_or(nullptr);
 
         if (!tableCell)
         {
@@ -75,10 +75,10 @@ namespace Qosmetics::Core
 
     UnityEngine::Sprite* QosmeticObjectTableData::DefaultSprite()
     {
-        if (defaultSprite && defaultSprite->m_CachedPtr.m_value)
+        if (defaultSprite && defaultSprite->m_CachedPtr)
             return defaultSprite;
 
-        defaultSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::PlaceHolderImage_png);
+        defaultSprite = BSML::Utilities::LoadSpriteRaw(Assets::Icons::PlaceHolderImage_png);
         return defaultSprite;
     }
 

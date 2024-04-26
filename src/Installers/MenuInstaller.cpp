@@ -17,6 +17,7 @@ DEFINE_TYPE(Qosmetics::Core, MenuInstaller);
 
 void Qosmetics::Core::MenuInstaller::InstallBindings()
 {
+    INFO("InstallBindings");
     auto container = get_Container();
 
     Lapiz::Zenject::ZenjectExtensions::FromNewComponentOnNewGameObject(container->BindInterfacesAndSelfTo<Qosmetics::Core::QosmeticsFlowCoordinator*>())->AsSingle()->NonLazy();

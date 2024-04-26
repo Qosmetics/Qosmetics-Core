@@ -1,9 +1,11 @@
 #pragma once
+
+#include "../_config.h"
 #include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
 
 namespace Qosmetics::Core
 {
-    class BasicConfig
+    class QOSMETICS_CORE_EXPORT BasicConfig
     {
     public:
         BasicConfig(){};

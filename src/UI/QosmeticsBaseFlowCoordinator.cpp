@@ -6,7 +6,6 @@
 #include "UnityEngine/Texture2D.hpp"
 #include "UnityEngine/TextureWrapMode.hpp"
 
-#include "HMUI/ViewController_AnimationDirection.hpp"
 #include "bsml/shared/Helpers/delegates.hpp"
 #include "bsml/shared/Helpers/getters.hpp"
 
@@ -22,11 +21,11 @@ namespace Qosmetics::Core
 
     void QosmeticsBaseFlowCoordinator::Present()
     {
-        if (qosmeticsFlowCoordinator && qosmeticsFlowCoordinator->m_CachedPtr.m_value)
+        if (qosmeticsFlowCoordinator && qosmeticsFlowCoordinator->m_CachedPtr)
         {
             auto currentFlowCoordinator = BSML::Helpers::GetMainFlowCoordinator()->YoungestChildFlowCoordinatorOrSelf();
             // if we aren't in the qos FC rn, present it and then present the proper one
-            if (currentFlowCoordinator != qosmeticsFlowCoordinator)
+            if (currentFlowCoordinator.unsafePtr() != qosmeticsFlowCoordinator)
             {
                 DEBUG("We were not on the qosmetics flow coordinator, presenting a new flow coordinator after the qosmetics one!");
                 auto onFinished = BSML::MakeSystemAction(
@@ -59,11 +58,11 @@ namespace Qosmetics::Core
         auto spriteSwap = button->GetComponent<HMUI::ButtonSpriteSwap*>();
 
         // setting the sprites
-        spriteSwap->highlightStateSprite = activeSprite;
-        spriteSwap->pressedStateSprite = activeSprite;
+        spriteSwap->_highlightStateSprite = activeSprite;
+        spriteSwap->_pressedStateSprite = activeSprite;
 
-        spriteSwap->disabledStateSprite = inActiveSprite;
-        spriteSwap->normalStateSprite = inActiveSprite;
+        spriteSwap->_disabledStateSprite = inActiveSprite;
+        spriteSwap->_normalStateSprite = inActiveSprite;
     }
 
     void QosmeticsBaseFlowCoordinator::DidActivate_Base(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)

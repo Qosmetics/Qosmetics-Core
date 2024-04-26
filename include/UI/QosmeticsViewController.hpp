@@ -7,18 +7,15 @@
 
 #include "HMUI/ViewController.hpp"
 
-#define DECLARE_OVERRIDE_METHOD_MATCH(retval, name, mptr, ...) \
-    DECLARE_OVERRIDE_METHOD(retval, name, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
-
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, QosmeticsViewController, HMUI::ViewController,
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
-                      DECLARE_INJECT_METHOD(void, Inject, ListWrapper<Qosmetics::Core::QosmeticsBaseFlowCoordinator*> baseFlowCoordinators);
+                      DECLARE_INJECT_METHOD(void, Inject, ListW<Qosmetics::Core::QosmeticsBaseFlowCoordinator*> baseFlowCoordinators);
                       DECLARE_INSTANCE_FIELD(HMUI::FlowCoordinator*, qosmeticsFlowCoordinator);
                       DECLARE_INSTANCE_METHOD(bool, get_anyCoordinators);
                       DECLARE_INSTANCE_METHOD(void, set_qosmeticsFlowCoordinator, HMUI::FlowCoordinator* qosmeticsFlowCoordinator);
 
-                      DECLARE_INSTANCE_FIELD_DEFAULT(ListWrapper<Qosmetics::Core::QosmeticsBaseFlowCoordinator*>, flowCoordinators, nullptr);
+                      DECLARE_INSTANCE_FIELD_DEFAULT(ListW<Qosmetics::Core::QosmeticsBaseFlowCoordinator*>, flowCoordinators, nullptr);
                       DECLARE_DEFAULT_CTOR();
 
 )
