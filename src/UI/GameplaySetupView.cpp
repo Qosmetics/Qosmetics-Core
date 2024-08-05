@@ -9,46 +9,37 @@ DEFINE_TYPE(Qosmetics::Core, GameplaySetupView);
 
 using namespace UnityEngine;
 
-static UnityEngine::Vector3 operator*(UnityEngine::Vector3 vec, float v)
-{
+static UnityEngine::Vector3 operator*(UnityEngine::Vector3 vec, float v) {
     return {
         vec.x * v,
         vec.y * v,
-        vec.z * v};
+        vec.z * v
+    };
 }
-namespace Qosmetics::Core
-{
-    void GameplaySetupView::Inject(QosmeticsFlowCoordinator* qosmeticsFlowCoordinator, ListW<QosmeticsBaseFlowCoordinator*> baseFlowCoordinators)
-    {
+
+namespace Qosmetics::Core {
+    void GameplaySetupView::Inject(QosmeticsFlowCoordinator* qosmeticsFlowCoordinator, ListW<QosmeticsBaseFlowCoordinator*> baseFlowCoordinators) {
         this->qosmeticsFlowCoordinator = qosmeticsFlowCoordinator;
         this->flowCoordinators = baseFlowCoordinators;
     }
 
-    bool GameplaySetupView::get_anyCoordinators()
-    {
-        return flowCoordinators && flowCoordinators.size() > 0;
-    }
+    bool GameplaySetupView::get_anyCoordinators() { return flowCoordinators && flowCoordinators.size() > 0; }
 
-    void GameplaySetupView::Initialize()
-    {
+    void GameplaySetupView::Initialize() {
         DEBUG("Initialize");
         BSML::Register::RegisterGameplaySetupTab("Qosmetics", MOD_ID "_gameplaySetupTab", this);
     }
 
-    void GameplaySetupView::Dispose()
-    {
+    void GameplaySetupView::Dispose() {
         DEBUG("Dispose");
         BSML::Register::UnRegisterGameplaySetupTab("Qosmetics");
     }
 
-    void GameplaySetupView::PostParse()
-    {
-        if (grid && grid->m_CachedPtr)
-            grid->set_localScale(grid->get_localScale() * 0.66f);
+    void GameplaySetupView::PostParse() {
+        if (grid && grid->m_CachedPtr.m_value) grid->localScale = grid->localScale * 0.66f;
     }
 }
 
-BSML_DATACACHE(gameplaySetupTab)
-{
+BSML_DATACACHE(gameplaySetupTab) {
     return Assets::Views::GameplaySetupView_bsml;
 }

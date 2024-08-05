@@ -1,5 +1,4 @@
 #include "UI/CreditViewController.hpp"
-#include "Data/Patrons.hpp"
 #include "Utils/DateUtils.hpp"
 #include "Utils/RainbowUtils.hpp"
 #include "Utils/UIUtils.hpp"
@@ -8,15 +7,13 @@
 
 #include "assets.hpp"
 #include "bsml/shared/BSML.hpp"
+#include "web-utils/shared/WebUtils.hpp"
 
 #include "HMUI/Touchable.hpp"
 
 #include "UnityEngine/Application.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Material.hpp"
-#include "UnityEngine/Networking/DownloadHandler.hpp"
-#include "UnityEngine/Networking/UnityWebRequest.hpp"
-#include "UnityEngine/Networking/UnityWebRequestAsyncOperation.hpp"
 #include "UnityEngine/RectTransform.hpp"
 #include "UnityEngine/Resources.hpp"
 #include "UnityEngine/Shader.hpp"
@@ -61,89 +58,76 @@ namespace Qosmetics::Core
         if (!firstActivation)
             return;
         BSML::parse_and_construct(Assets::Views::CreditView_bsml, get_transform(), this);
-        StartCoroutine(custom_types::Helpers::CoroutineHelper::New(GetPatreonSupporters()));
+        BSML::MainThreadScheduler::AwaitFuture<PatronResponse>(WebUtils::GetAsync<PatronResponse>({patron_url}), std::bind(&CreditViewController::HandlePatronResponse, this, std::placeholders::_1));
     }
 
-    custom_types::Helpers::Coroutine CreditViewController::GetPatreonSupporters()
+    void CreditViewController::HandlePatronResponse(PatronResponse response)
     {
-        UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequest::Get(patron_url);
-        auto req = www->SendWebRequest();
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(req);
-
-        auto error = www->GetError();
-
-        if (error != UnityEngine::Networking::UnityWebRequest::UnityWebRequestError::OK)
+        if (!response.IsSuccessful() || !response.DataParsedSuccessful())
         {
-            ERROR("Failed to fetch patrons file from resources repository");
-            ERROR("Error from webreq: {}", www->error);
-
-            placeholderText->set_text("There were no patrons found, There must have been a network error!");
-            co_return;
+            placeholderText->text = "There were no patrons found, There must have been a network error!";
+            return;
         }
 
-        auto downloadHandler = www->get_downloadHandler();
-        auto patrons = Qosmetics::Core::Patrons::Parse(static_cast<std::string>(downloadHandler->get_text()));
+        UsePatrons(response.responseData.value());
+        return;
+    }
 
+    void CreditViewController::UsePatrons(Patrons const& patrons)
+    {
         if (!patrons.any())
         {
             placeholderText->set_text("There were no patrons found, you can be the first to appear here!");
+            return;
         }
-        else
+
+        auto scrollViewContentContainer = patronTexts->get_parent()->get_parent();
+        Object::DestroyImmediate(patronTexts->get_parent()->get_gameObject());
+        if (!patrons.legendary.empty())
         {
-            auto scrollViewContentContainer = patronTexts->get_parent()->get_parent();
-            Object::DestroyImmediate(patronTexts->get_parent()->get_gameObject());
-            if (!patrons.legendary.empty())
-            {
-                auto tier = Tier::New_ctor("<color=#000000>Legendary patrons</color> <color=#222222><size=2>(Tier 4)</size></color>", Color(0.9f, 0.75f, 0.25f, 1.0f));
-                for (auto patron : patrons.legendary)
-                    tier->patrons->Add(Patron::New_ctor(patron));
+            auto tier = Tier::New_ctor("<color=#000000>Legendary patrons</color> <color=#222222><size=2>(Tier 4)</size></color>", Color(0.9f, 0.75f, 0.25f, 1.0f));
+            for (auto patron : patrons.legendary)
+                tier->patrons->Add(Patron::New_ctor(patron));
 
-                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+            BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
 
-                auto bannerimageView = tier->banner->background;
-                auto origMat = UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>()->FirstOrDefault(
-                    [](UnityEngine::Material* x)
-                    {
-                        return x->get_name() == "AnimatedButton";
-                    });
-                auto dupe = Object::Instantiate(origMat);
-                dupe->SetColor(Shader::PropertyToID("_ShineColor"), Color(0.9f, 0.75f, 0.25f, 1.0f));
-                bannerimageView->set_material(dupe);
-
-                tier->Finalize();
-            }
-
-            if (!patrons.amazing.empty())
-            {
-                auto tier = Tier::New_ctor("<color=#000000>Amazing patrons</color> <color=#222222><size=2>(Tier 3)</size></color>", Color(0.4f, 0.45f, 0.8f, 1.0f));
-                for (auto patron : patrons.amazing)
-                    tier->patrons->Add(Patron::New_ctor(patron));
-
-                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
-                tier->Finalize();
-            }
-
-            if (!patrons.enthusiastic.empty())
-            {
-                auto tier = Tier::New_ctor("<color=#000000>Enthusiastic patrons</color> <color=#222222><size=2>(Tier 2)</size></color>", Color(0.5f, 0.55f, 0.9f, 1.0f));
-                for (auto patron : patrons.enthusiastic)
-                    tier->patrons->Add(Patron::New_ctor(patron));
-
-                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
-                tier->Finalize();
-            }
-
-            if (!patrons.paypal.empty())
-            {
-                auto tier = Tier::New_ctor("<color=#000000>Paypal donators</color>", Color(0.0f, 0.6f, 0.85f, 1.0f));
-                for (auto patron : patrons.paypal)
-                    tier->patrons->Add(Patron::New_ctor(patron));
-
-                BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
-                tier->Finalize();
-            }
+            auto bannerimageView = tier->banner->background;
+            auto origMat = UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::Material*>()->FirstOrDefault(
+                [](UnityEngine::Material* x)
+                {
+                    return x->get_name() == "AnimatedButton";
+                });
+            auto dupe = Object::Instantiate(origMat);
+            dupe->SetColor(Shader::PropertyToID("_ShineColor"), Color(0.9f, 0.75f, 0.25f, 1.0f));
+            bannerimageView->set_material(dupe);
         }
-        co_return;
+
+        if (!patrons.amazing.empty())
+        {
+            auto tier = Tier::New_ctor("<color=#000000>Amazing patrons</color> <color=#222222><size=2>(Tier 3)</size></color>", Color(0.4f, 0.45f, 0.8f, 1.0f));
+            for (auto patron : patrons.amazing)
+                tier->patrons->Add(Patron::New_ctor(patron));
+
+            BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+        }
+
+        if (!patrons.enthusiastic.empty())
+        {
+            auto tier = Tier::New_ctor("<color=#000000>Enthusiastic patrons</color> <color=#222222><size=2>(Tier 2)</size></color>", Color(0.5f, 0.55f, 0.9f, 1.0f));
+            for (auto patron : patrons.enthusiastic)
+                tier->patrons->Add(Patron::New_ctor(patron));
+
+            BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+        }
+
+        if (!patrons.paypal.empty())
+        {
+            auto tier = Tier::New_ctor("<color=#000000>Paypal donators</color>", Color(0.0f, 0.6f, 0.85f, 1.0f));
+            for (auto patron : patrons.paypal)
+                tier->patrons->Add(Patron::New_ctor(patron));
+
+            BSML::parse_and_construct(Assets::PatronCreditBox_bsml, scrollViewContentContainer, tier);
+        }
     }
 
     void Patron::ctor(StringW patronName)
@@ -167,5 +151,4 @@ namespace Qosmetics::Core
         imageView->set_color0(Color(1.1f, 1.1f, 1.1f, 1.0f));
         imageView->set_color1(Color(0.9f, 0.9f, 0.9f, 1.0f));
     }
-
 }

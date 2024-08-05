@@ -11,19 +11,17 @@
 using namespace UnityEngine;
 using namespace UnityEngine::UI;
 
-Color operator*(const Color& col, float v)
-{
+Color operator*(const Color& col, float v) {
     return {
         col.r * v,
         col.g * v,
         col.b * v,
-        col.a * v};
+        col.a * v
+    };
 }
 
-namespace Qosmetics::Core::UIUtils
-{
-    void SetTitleColor(HMUI::TitleViewController* titleView, const UnityEngine::Color& color, bool buttonanim)
-    {
+namespace Qosmetics::Core::UIUtils {
+    void SetTitleColor(HMUI::TitleViewController* titleView, const UnityEngine::Color& color, bool buttonanim) {
         Transform* title_T = titleView->get_transform();
         Transform* BG_T = title_T->Find("BG");
         Transform* BackButtonBG_T = title_T->Find("BackButton/BG");

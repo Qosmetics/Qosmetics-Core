@@ -6,10 +6,8 @@
 
 namespace Qosmetics::Core::BundleUtils
 {
-    custom_types::Helpers::Coroutine LoadBundleFromFileAsync(std::string_view filePath, UnityEngine::AssetBundle*& out)
-    {
-        if (!fileexists(filePath))
-        {
+    custom_types::Helpers::Coroutine LoadBundleFromFileAsync(std::string_view filePath, UnityEngine::AssetBundle*& out) {
+        if (!fileexists(filePath)) {
             ERROR("File {} did not exist", filePath);
             out = nullptr;
             co_return;
@@ -24,11 +22,9 @@ namespace Qosmetics::Core::BundleUtils
         co_return;
     }
 
-    custom_types::Helpers::Coroutine LoadBundleFromZipAsync(std::string_view filePath, std::string_view fileName, UnityEngine::AssetBundle*& out)
-    {
+    custom_types::Helpers::Coroutine LoadBundleFromZipAsync(std::string_view filePath, std::string_view fileName, UnityEngine::AssetBundle*& out) {
         std::vector<uint8_t> bytes;
-        if (!ZipUtils::GetBytesFromZipFile(filePath, fileName, bytes))
-        {
+        if (!ZipUtils::GetBytesFromZipFile(filePath, fileName, bytes)) {
             ERROR("Could not read bytes from zip {}", filePath);
             out = nullptr;
             co_return;
@@ -39,8 +35,7 @@ namespace Qosmetics::Core::BundleUtils
         co_return;
     }
 
-    custom_types::Helpers::Coroutine LoadBundleFromMemoryAsync(ArrayW<uint8_t> bytes, UnityEngine::AssetBundle*& out)
-    {
+    custom_types::Helpers::Coroutine LoadBundleFromMemoryAsync(ArrayW<uint8_t> bytes, UnityEngine::AssetBundle*& out) {
         using AssetBundle_LoadFromMemoryAsync = function_ptr_t<UnityEngine::AssetBundleCreateRequest*, ArrayW<uint8_t>, uint32_t>;
         static AssetBundle_LoadFromMemoryAsync assetBundle_LoadFromMemoryAsync = reinterpret_cast<AssetBundle_LoadFromMemoryAsync>(il2cpp_functions::resolve_icall("UnityEngine.AssetBundle::LoadFromMemoryAsync_Internal"));
 
@@ -53,8 +48,7 @@ namespace Qosmetics::Core::BundleUtils
         co_return;
     }
 
-    custom_types::Helpers::Coroutine LoadAssetFromBundleAsync(UnityEngine::AssetBundle* bundle, std::string_view name, System::Type* type, UnityEngine::Object*& out)
-    {
+    custom_types::Helpers::Coroutine LoadAssetFromBundleAsync(UnityEngine::AssetBundle* bundle, std::string_view name, System::Type* type, UnityEngine::Object*& out) {
         SafePtr<UnityEngine::AssetBundleRequest> req = bundle->LoadAssetAsync(name, type);
 
         req->set_allowSceneActivation(true);

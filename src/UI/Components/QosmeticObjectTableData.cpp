@@ -11,8 +11,7 @@ DEFINE_TYPE(Qosmetics::Core, QosmeticObjectTableData);
 
 namespace Qosmetics::Core
 {
-    void QosmeticObjectTableData::ctor()
-    {
+    void QosmeticObjectTableData::ctor() {
         INVOKE_CTOR();
         reuseIdentifier = StringW("QosmeticObjectCellList");
         cellSize = 12.0f;
@@ -20,51 +19,47 @@ namespace Qosmetics::Core
         previewToSpriteDict = StringToSpriteDict::New_ctor();
     }
 
-    void QosmeticObjectTableData::Start()
-    {
+    void QosmeticObjectTableData::Start() {
         using DelegateType = System::Action_2<UnityW<HMUI::TableView>, int>;
         std::function<void(HMUI::TableView*, int)> fun = std::bind(&QosmeticObjectTableData::DidSelectCellWithIdx, this, std::placeholders::_1, std::placeholders::_2);
         auto delegate = custom_types::MakeDelegate<DelegateType*>(fun);
         tableView->add_didSelectCellWithIdxEvent(delegate);
     }
 
-    void QosmeticObjectTableData::DidSelectCellWithIdx(HMUI::TableView* tableView, int idx)
-    {
-        if (onSelect)
-        {
+    void QosmeticObjectTableData::DidSelectCellWithIdx(HMUI::TableView* tableView, int idx) {
+        if (onSelect) {
             auto& desc = *std::next(objectDescriptors.begin(), idx);
             ListW<QosmeticObjectTableCell*> visibleCells(reinterpret_cast<List<QosmeticObjectTableCell*>*>(tableView->visibleCells));
 
-            auto cell = std::find_if(visibleCells.begin(), visibleCells.end(), [desc](auto x)
-                                     { return desc.get_filePath() == x->descriptor.get_filePath(); });
-            if (cell != visibleCells.end())
-                (*cell)->Select();
+            auto cell = std::find_if(
+                visibleCells.begin(),
+                visibleCells.end(),
+                [desc](auto x) {
+                    return desc.filePath == x->descriptor.filePath;
+                }
+            );
+
+            if (cell != visibleCells.end()) (*cell)->Select();
         }
     }
 
-    float QosmeticObjectTableData::CellSize()
-    {
-        return cellSize;
-    }
+    float QosmeticObjectTableData::CellSize() { return cellSize; }
 
-    int QosmeticObjectTableData::NumberOfCells()
-    {
-        return objectDescriptors.size();
-    }
+    int QosmeticObjectTableData::NumberOfCells() { return objectDescriptors.size(); }
 
     HMUI::TableCell* QosmeticObjectTableData::CellForIdx(HMUI::TableView* tableView, int idx)
     {
         auto tableCell = tableView->DequeueReusableCellForIdentifier(reuseIdentifier).try_cast<QosmeticObjectTableCell>().value_or(nullptr);
 
-        if (!tableCell)
-        {
+        if (!tableCell) {
             tableCell = QosmeticObjectTableCell::CreateNewCell();
         }
 
-        tableCell->tableData = this;
-        tableCell->deletionConfirmationModal = deletionConfirmationModal;
-        tableCell->set_reuseIdentifier(reuseIdentifier);
+        tableCell->_tableData = this;
+        tableCell->_deletionConfirmationModal = deletionConfirmationModal;
+        tableCell->reuseIdentifier = reuseIdentifier;
         tableCell->SetDescriptor(*std::next(objectDescriptors.begin(), idx));
+
         if (onSelect)
             tableCell->onSelect = onSelect;
         if (onDelete)
@@ -73,22 +68,19 @@ namespace Qosmetics::Core
         return tableCell;
     }
 
-    UnityEngine::Sprite* QosmeticObjectTableData::DefaultSprite()
-    {
-        if (defaultSprite && defaultSprite->m_CachedPtr)
+    UnityEngine::Sprite* QosmeticObjectTableData::DefaultSprite() {
+        if (defaultSprite && defaultSprite->m_CachedPtr.m_value)
             return defaultSprite;
 
         defaultSprite = BSML::Utilities::LoadSpriteRaw(Assets::Icons::PlaceHolderImage_png);
         return defaultSprite;
     }
 
-    UnityEngine::Sprite* QosmeticObjectTableData::GetCachedSprite(StringW key)
-    {
-        return previewToSpriteDict->ContainsKey(key) ? previewToSpriteDict->get_Item(key) : nullptr;
+    UnityEngine::Sprite* QosmeticObjectTableData::GetCachedSprite(StringW key) {
+        return previewToSpriteDict->ContainsKey(key) ? previewToSpriteDict->Item[key] : nullptr;
     }
 
-    void QosmeticObjectTableData::AddCachedSprite(StringW key, UnityEngine::Sprite* sprite)
-    {
+    void QosmeticObjectTableData::AddCachedSprite(StringW key, UnityEngine::Sprite* sprite) {
         if (!previewToSpriteDict->ContainsKey(key))
             previewToSpriteDict->Add(key, sprite);
     }

@@ -5,6 +5,7 @@
 #include "hooks.hpp"
 #include "logging.hpp"
 #include "scotland2/shared/modloader.h"
+#include "static-defines.hpp"
 
 #include "HMUI/CurvedTextMeshPro.hpp"
 #include "HMUI/ImageView.hpp"
@@ -17,6 +18,9 @@
 #include "bsml/shared/BSMLDataCache.hpp"
 #include "lapiz/shared/AttributeRegistration.hpp"
 #include "lapiz/shared/zenject/Zenjector.hpp"
+
+#include "Data/Creators.hpp"
+#include "Data/Patrons.hpp"
 
 modloader::ModInfo modInfo = {MOD_ID, VERSION, 0};
 
@@ -41,6 +45,8 @@ QOSMETICS_CORE_EXPORT_FUNC void late_load()
 
     auto zenjector = ::Lapiz::Zenject::Zenjector::Get();
     zenjector->Install<Qosmetics::Core::MenuInstaller*>(::Lapiz::Zenject::Location::Menu);
+
+    Qosmetics::Core::Creators::TryDownloadCreators();
 
     srand(time(NULL));
 }

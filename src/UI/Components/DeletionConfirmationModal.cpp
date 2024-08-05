@@ -12,27 +12,20 @@ using namespace UnityEngine;
 
 namespace Qosmetics::Core
 {
-    DeletionConfirmationModal* DeletionConfirmationModal::Create(UnityEngine::Transform* parent)
-    {
+    DeletionConfirmationModal* DeletionConfirmationModal::Create(UnityEngine::Transform* parent) {
         auto modal = parent->get_gameObject()->AddComponent<DeletionConfirmationModal*>();
         BSML::parse_and_construct(Assets::DeletionConfirmationModal_bsml, parent, modal);
         return modal;
     }
 
-    void DeletionConfirmationModal::Show(QosmeticObjectTableCell* cellToDelete)
-    {
+    void DeletionConfirmationModal::Show(QosmeticObjectTableCell* cellToDelete) {
         currentCell = cellToDelete;
-        objectName->set_text(currentCell->descriptor.get_name());
+        objectName->text = currentCell->descriptor.name;
         modal->Show();
     }
 
-    void DeletionConfirmationModal::Dismiss()
-    {
-        modal->Hide();
-    }
-
-    void DeletionConfirmationModal::Confirm()
-    {
+    void DeletionConfirmationModal::Dismiss() { modal->Hide(); }
+    void DeletionConfirmationModal::Confirm() {
         modal->Hide();
         currentCell->Delete();
         currentCell = nullptr;

@@ -50,7 +50,6 @@ namespace Qosmetics::Core
     void QosmeticsFlowCoordinator::Initialize()
     {
         DEBUG("Initialize");
-        Qosmetics::Core::Creators::Download();
 
         auto optionsViewController = mainFlowCoordinator->_optionsViewController;
         bool bsmlSettingsExists = BSML::BSMLSettings::get_instance()->get_settingsMenus().size() > 0;
@@ -89,7 +88,7 @@ namespace Qosmetics::Core
 
     void QosmeticsFlowCoordinator::PostParse()
     {
-        if (!(settingsButton && settingsButton->m_CachedPtr))
+        if (!(settingsButton && settingsButton->m_CachedPtr.m_value))
             return;
 
         auto spriteSwap = settingsButton->GetComponent<HMUI::ButtonSpriteSwap*>();
@@ -102,7 +101,7 @@ namespace Qosmetics::Core
 
     void QosmeticsFlowCoordinator::PresentSelf()
     {
-        if (!mainFlowCoordinator || !mainFlowCoordinator->m_CachedPtr)
+        if (!mainFlowCoordinator || !mainFlowCoordinator->m_CachedPtr.m_value)
             return;
         mainFlowCoordinator->YoungestChildFlowCoordinatorOrSelf()->PresentFlowCoordinator(this, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, false, false);
     }
@@ -131,7 +130,7 @@ namespace Qosmetics::Core
             }
         }
 
-        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr)
+        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr.m_value)
             titleGradientUpdater->set_enabled(true);
 
         creditViewController->get_gameObject()->SetActive(true);
@@ -140,7 +139,7 @@ namespace Qosmetics::Core
 
     void QosmeticsFlowCoordinator::DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
     {
-        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr)
+        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr.m_value)
             return;
         titleGradientUpdater->set_enabled(false);
         // reset title text to white

@@ -7,30 +7,37 @@
 namespace Qosmetics::Core
 {
     struct QOSMETICS_CORE_EXPORT DescriptorComparator;
-    class QOSMETICS_CORE_EXPORT Descriptor
-    {
-    public:
-        Descriptor();
-        Descriptor(const Descriptor& other);
-        Descriptor(const rapidjson::Value& val, std::string_view filePath);
-        Descriptor(const rapidjson::Value& val);
-        Descriptor(std::string_view author, std::string_view name, std::string_view description, std::string_view filePath, std::string_view coverImage) : author(author), name(name), description(description), filePath(filePath), coverImage(coverImage){};
-        rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator) const;
+    class QOSMETICS_CORE_EXPORT Descriptor {
+        public:
+            Descriptor() = default;
+            Descriptor(Descriptor const& other) = default;
 
-        [[nodiscard]] std::string_view get_author() const;
-        [[nodiscard]] std::string_view get_name() const;
-        [[nodiscard]] std::string_view get_description() const;
-        [[nodiscard]] std::string_view get_filePath() const;
-        [[nodiscard]] std::string_view get_coverImage() const;
+            Descriptor(const rapidjson::Value& val, std::string_view filePath);
+            Descriptor(const rapidjson::Value& val);
+            Descriptor(std::string_view author, std::string_view name, std::string_view description, std::string_view filePath, std::string_view coverImage) : _author(author), _name(name), _description(description), _filePath(filePath), _coverImage(coverImage){};
+            rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator) const;
 
-    private:
-        std::string author;
-        std::string name;
-        std::string description;
-        std::string filePath;
-        std::string coverImage;
+            [[nodiscard]] std::string_view get_author() const;
+            __declspec(property(get=get_author)) std::string_view author;
 
-        friend DescriptorComparator;
+            [[nodiscard]] std::string_view get_name() const;
+            __declspec(property(get=get_name)) std::string_view name;
+
+            [[nodiscard]] std::string_view get_description() const;
+            __declspec(property(get=get_description)) std::string_view description;
+
+            [[nodiscard]] std::string_view get_filePath() const;
+            __declspec(property(get=get_filePath)) std::string_view filePath;
+
+            [[nodiscard]] std::string_view get_coverImage() const;
+            __declspec(property(get=get_coverImage)) std::string_view coverImage;
+
+        private:
+            std::string _author;
+            std::string _name;
+            std::string _description;
+            std::string _filePath;
+            std::string _coverImage;
     };
 
     struct QOSMETICS_CORE_EXPORT DescriptorComparator
