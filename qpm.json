@@ -5,7 +5,7 @@
   "info": {
     "name": "Qosmetics Core",
     "id": "qosmetics-core",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "url": "https://github.com/Qosmetics/Qosmetics-Core",
     "additionalData": {
       "overrideSoName": "libqosmetics-core.so",
@@ -28,7 +28,7 @@
       ],
       "qmod": [
         "pwsh ./scripts/build.ps1 -clean",
-        "qpm-rust qmod build",
+        "qpm qmod manifest",
         "pwsh ./scripts/createqmod.ps1 QosmeticsCore -clean"
       ]
     }
@@ -41,12 +41,12 @@
     },
     {
       "id": "beatsaber-hook",
-      "versionRange": "^5.1.6",
+      "versionRange": "^5.1.7",
       "additionalData": {}
     },
     {
       "id": "bs-cordl",
-      "versionRange": "^3500.0.0",
+      "versionRange": "^3700.0.0",
       "additionalData": {}
     },
     {
@@ -90,6 +90,13 @@
     {
       "id": "kaleb",
       "versionRange": "^0.1.7",
+      "additionalData": {
+        "private": true
+      }
+    },
+    {
+      "id": "web-utils",
+      "versionRange": "^0.6.0",
       "additionalData": {
         "private": true
       }

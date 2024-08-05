@@ -2,10 +2,6 @@
 
 #include "HMUI/Touchable.hpp"
 #include "UnityEngine/GameObject.hpp"
-#include "UnityEngine/Networking/DownloadHandler.hpp"
-#include "UnityEngine/Networking/DownloadHandlerTexture.hpp"
-#include "UnityEngine/Networking/UnityWebRequest.hpp"
-#include "UnityEngine/Networking/UnityWebRequestTexture.hpp"
 
 #include "Data/Creators.hpp"
 
@@ -14,9 +10,11 @@
 
 #include "assets.hpp"
 #include "bsml/shared/BSML.hpp"
+#include "bsml/shared/BSML/MainThreadScheduler.hpp"
 #include "bsml/shared/Helpers/getters.hpp"
 #include "bsml/shared/Helpers/utilities.hpp"
 #include "logging.hpp"
+#include "web-utils/shared/WebUtils.hpp"
 
 DEFINE_TYPE(Qosmetics::Core, QosmeticObjectTableCell);
 
@@ -39,35 +37,32 @@ namespace Qosmetics::Core
         return playerCell;
     }
 
-    void QosmeticObjectTableCell::PostParse()
-    {
-        get_gameObject()->AddComponent<HMUI::Touchable*>();
-        hover = get_gameObject()->GetComponent<HMUI::HoverHint*>();
-        if (!hover)
-            hover = get_gameObject()->AddComponent<HMUI::HoverHint*>();
-        hover->set_text("---");
-        hover->_hoverHintController = BSML::Helpers::GetHoverHintController();
-        image->_skew = 0.18f;
+    void QosmeticObjectTableCell::PostParse() {
+        gameObject->AddComponent<HMUI::Touchable*>();
+        _hover = gameObject->GetComponent<HMUI::HoverHint*>();
+        if (!_hover)
+            _hover = gameObject->AddComponent<HMUI::HoverHint*>();
 
-        backgroundImage->background->set_color(idleColor);
-        backgroundImage->background->set_color0({1.0f, 1.0f, 1.0f, 1.0f});
-        backgroundImage->background->set_color1({1.0f, 1.0f, 1.0f, 1.0f});
+        _hover->text = "---";
+        _hover->_hoverHintController = BSML::Helpers::GetHoverHintController();
+        _image->_skew = 0.18f;
+
+        _backgroundImage->background->color = idleColor;
+        _backgroundImage->background->color0 = {1.0f, 1.0f, 1.0f, 1.0f};
+        _backgroundImage->background->color1 = {1.0f, 1.0f, 1.0f, 1.0f};
     }
 
-    void QosmeticObjectTableCell::HighlightDidChange(HMUI::SelectableCell::TransitionType transitionType)
-    {
-        backgroundImage->background->set_color(get_highlighted() ? highlightedColor : idleColor);
+    void QosmeticObjectTableCell::HighlightDidChange(HMUI::SelectableCell::TransitionType transitionType) {
+        _backgroundImage->background->set_color(highlighted ? highlightedColor : idleColor);
     }
 
-    void QosmeticObjectTableCell::Select()
-    {
+    void QosmeticObjectTableCell::Select() {
         if (onSelect)
             onSelect(this);
     }
 
-    void QosmeticObjectTableCell::AttemptDelete()
-    {
-        deletionConfirmationModal->Show(this);
+    void QosmeticObjectTableCell::AttemptDelete() {
+        _deletionConfirmationModal->Show(this);
     }
 
     void QosmeticObjectTableCell::Delete()
@@ -76,93 +71,75 @@ namespace Qosmetics::Core
             onDelete(this);
     }
 
-    void QosmeticObjectTableCell::SetDescriptor(Descriptor descriptor)
-    {
+    void QosmeticObjectTableCell::SetDescriptor(Descriptor const& descriptor) {
         this->descriptor = descriptor;
-        set_name(descriptor.get_name());
-        set_sub(descriptor.get_author());
-        set_hover(descriptor.get_description());
-        auto coverImage = descriptor.get_coverImage();
-        DEBUG("Got Cover image {} for object {}", descriptor.get_coverImage(), descriptor.get_name());
-        if (coverImage != "")
+        name = descriptor.get_name();
+        sub = descriptor.get_author();
+        hover = descriptor.get_description();
+
+        auto coverImage = descriptor.coverImage;
+        DEBUG("Got Cover image {} for object {}", coverImage, descriptor.get_name());
+        if (coverImage.empty())
+            sprite = _tableData->DefaultSprite();
+        else
             LoadPreviewImage();
-        else
-            set_sprite(tableData->DefaultSprite());
     }
 
-    void QosmeticObjectTableCell::set_name(std::string_view nameText)
-    {
+    void QosmeticObjectTableCell::set_name(std::string_view nameText) {
         if (RainbowUtils::shouldRainbow(nameText))
-            this->name->set_text(RainbowUtils::rainbowify(nameText));
+            this->_name->text = RainbowUtils::rainbowify(nameText);
         else
-            this->name->set_text(nameText);
+            this->_name->text = nameText;
     }
 
-    void QosmeticObjectTableCell::set_sub(std::string_view subText)
-    {
+    void QosmeticObjectTableCell::set_sub(std::string_view subText) {
         auto color = Creators::GetCreatorColor(std::string(subText));
         if (RainbowUtils::shouldRainbow(color))
-        {
-            sub->set_text(RainbowUtils::rainbowify(subText));
-        }
+            _sub->text = RainbowUtils::rainbowify(subText);
         else
-        {
-            sub->set_text(subText);
-        }
-        sub->set_color(color);
+            _sub->text = subText;
+        _sub->color = color;
     }
 
-    void QosmeticObjectTableCell::set_hover(std::string_view hoverText)
-    {
-        hover->set_text(fmt::format("<i>{}</i>", hoverText));
+    void QosmeticObjectTableCell::set_hover(std::string_view hoverText) {
+        _hover->text = fmt::format("<i>{}</i>", hoverText);
     }
 
-    void QosmeticObjectTableCell::set_sprite(UnityEngine::Sprite* sprite)
-    {
-        image->set_sprite(sprite);
+    void QosmeticObjectTableCell::set_sprite(UnityEngine::Sprite* sprite) {
+        _image->sprite = sprite;
     }
 
-    custom_types::Helpers::Coroutine QosmeticObjectTableCell::DownloadPreviewImage()
-    {
-        UnityEngine::Networking::UnityWebRequest* www = UnityEngine::Networking::UnityWebRequestTexture::GetTexture(descriptor.get_coverImage());
-        co_yield reinterpret_cast<System::Collections::IEnumerator*>(www->SendWebRequest());
-        auto downloadHandlerTexture = reinterpret_cast<UnityEngine::Networking::DownloadHandlerTexture*>(www->get_downloadHandler());
-        auto texture = downloadHandlerTexture->get_texture();
-        auto sprite = BSML::Utilities::LoadSpriteFromTexture(texture);
-        tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
-        set_sprite(sprite);
-        co_return;
-    }
-
-    void QosmeticObjectTableCell::LoadPreviewImage()
-    {
+    void QosmeticObjectTableCell::LoadPreviewImage() {
         // check if image already cached
-        auto sprite = tableData->GetCachedSprite(descriptor.get_filePath());
-        if (sprite && sprite->m_CachedPtr)
-        {
-            set_sprite(sprite);
+        auto sprite = _tableData->GetCachedSprite(descriptor.filePath);
+        if (sprite && sprite->m_CachedPtr.m_value) {
+            this->sprite = sprite;
             return;
         }
 
         // check to see if it's a url
-        if (descriptor.get_coverImage().find("http") != std::string::npos)
-        {
-            DEBUG("Image was url, downloading texture...");
-            StartCoroutine(custom_types::Helpers::CoroutineHelper::New(DownloadPreviewImage()));
+        if (descriptor.coverImage.find("http") != std::string::npos) {
+            BSML::MainThreadScheduler::AwaitFuture<WebUtils::SpriteResponse>(
+                WebUtils::GetAsync<WebUtils::SpriteResponse>({descriptor.coverImage}),
+                [descriptor = this->descriptor, image = this->_image, tableData = this->_tableData](auto response) {
+                    if (response.IsSuccessful() && response.DataParsedSuccessful()) {
+                        auto sprite = response.responseData.value();
+                        tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
+                        image->set_sprite(sprite);
+                    }
+                }
+            );
             return;
         }
 
         // else just load the image from the zip
         ArrayW<uint8_t> bytes;
-        if (ZipUtils::GetBytesFromZipFile(descriptor.get_filePath(), descriptor.get_coverImage(), bytes))
-        {
+        if (ZipUtils::GetBytesFromZipFile(descriptor.filePath, descriptor.coverImage, bytes)) {
             auto sprite = BSML::Utilities::LoadSpriteRaw(bytes);
-            tableData->AddCachedSprite(descriptor.get_filePath(), sprite);
-            set_sprite(sprite);
-        }
-        else // if all fails, just set the default sprite
-        {
-            set_sprite(tableData->DefaultSprite());
+            _tableData->AddCachedSprite(descriptor.filePath, sprite);
+            this->sprite = sprite;
+        } else { // if all fails, just set the default sprite
+            this->sprite = _tableData->DefaultSprite();
         }
     }
 }

@@ -1,14 +1,16 @@
 #pragma once
 
+#include "custom-types/shared/coroutine.hpp"
+#include "custom-types/shared/macros.hpp"
+
 #include "HMUI/ViewController.hpp"
 #include "TMPro/TextMeshProUGUI.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/UI/VerticalLayoutGroup.hpp"
 
+#include "Data/Patrons.hpp"
 #include "bsml/shared/BSML/Components/Backgroundable.hpp"
-#include "custom-types/shared/coroutine.hpp"
-#include "custom-types/shared/macros.hpp"
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Core, CreditViewController, HMUI::ViewController,
                       DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, patronTexts);
@@ -20,7 +22,10 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Core, CreditViewController, HMUI::ViewControlle
                       DECLARE_INSTANCE_METHOD(bool, get_gay);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
-                      custom_types::Helpers::Coroutine GetPatreonSupporters();
+                      private :
+
+                      void HandlePatronResponse(PatronResponse response);
+                      void UsePatrons(Patrons const& patrons);
 
 )
 

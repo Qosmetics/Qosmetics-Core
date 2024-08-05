@@ -5,8 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace Qosmetics::Core::ZipUtils
-{
+namespace Qosmetics::Core::ZipUtils {
     /// @brief gets bytes from a zip file into the passed vector reference
     /// @param zipPath the filePath for the zip
     /// @param fileName which file to get from the zip

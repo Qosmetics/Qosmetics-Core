@@ -22,19 +22,17 @@ using namespace UnityEngine::UI;
 namespace Qosmetics::Core
 {
     static BSML::BSMLNodeParser<ImageButtonTag> imageButtonTagParser({"image-button"});
-    Button* ImageButtonTag::get_buttonPrefab() const
-    {
+    Button* ImageButtonTag::get_buttonPrefab() const {
         static SafePtrUnity<Button> buttonPrefab;
-        if (!buttonPrefab)
-        {
-            buttonPrefab = Resources::FindObjectsOfTypeAll<Button*>()->LastOrDefault([&](auto x)
-                                                                                     { return x->get_name() == "SettingsButton"; });
+        if (!buttonPrefab) {
+            buttonPrefab = Resources::FindObjectsOfTypeAll<Button*>()->LastOrDefault(
+                [&](auto x) { return x->get_name() == "SettingsButton"; }
+            );
         }
         return buttonPrefab.ptr();
     }
 
-    GameObject* ImageButtonTag::CreateObject(Transform* parent) const
-    {
+    GameObject* ImageButtonTag::CreateObject(Transform* parent) const {
         DEBUG("Creating ImageButton: {}", fmt::ptr(get_buttonPrefab()));
         auto button = Object::Instantiate(get_buttonPrefab(), parent, false);
         button->set_name("BSMLButton");
